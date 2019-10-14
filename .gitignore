@@ -1,3 +1,4 @@
 virtualenv/
 requirements.txt 
 manage.py
+__pycache__/ 
