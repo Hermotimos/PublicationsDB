@@ -1,14 +1,24 @@
 from django.db import models
 
 
+# TODO move Author and Location to another app in order to create division in admin !!!!
+
 class Author(models.Model):
     first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona')
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
+
+    class Meta:
+        verbose_name = 'Autor'
+        verbose_name_plural = 'Autorzy'
 
 
 class Location(models.Model):
     name = models.CharField(max_length=100, verbose_name="Miejscowość")
     # TODO add [bmw] for 'brak miejsca wydania' for basic locations
+
+    class Meta:
+        verbose_name = 'Miejscowość'
+        verbose_name_plural = 'Miejscowości'
 
 
 class BibliographicUnit(models.Model):
@@ -35,3 +45,7 @@ class BibliographicUnit(models.Model):
     periodical_pub_vol_lvl_2 = models.CharField(max_length=10, verbose_name="Numeracja wolumenu poziom 2")  # TODO make verbose_names more precise - consult client
     periodical_pub_vol_lvl_3 = models.CharField(max_length=10, verbose_name="Numeracja wolumenu poziom 3")  # TODO make verbose_names more precise - consult client
     periodical_pub_pages = models.CharField(max_length=20, verbose_name="Strony")
+
+    class Meta:
+        verbose_name = 'Opis bibliograficzny'
+        verbose_name_plural = 'Opisy bibliograficzne'
