@@ -35,11 +35,11 @@ class BibliographicUnit(models.Model):
     # case B: published within an independent bibliograhic unit:
     # TODO published_in = models.ManyToManyField(BibliographicUnit, related_name='dependent_bibliographic_units', blank=True, null=True, verbose_name='Opublikowane w:')
     # TODO this should relate to itself: https://stackoverflow.com/questions/11721157/django-many-to-many-m2m-relation-to-same-model
-    published_in = models.ManyToManyField('self', related_name='dependent_bibliographic_units', blank=True, null=True, verbose_name='Opublikowane w:')
+    published_in = models.ManyToManyField('self', related_name='dependent_bibliographic_units', verbose_name='Opublikowane w:')
 
     # case C: published within a periodical bibliographic unit:
     periodical_pub_title = models.CharField(max_length=1000, verbose_name="Tytuł periodyku", blank=True, null=True)
-    periodical_pub_year = models.CharField(max_length=100, verbose_name="Rocznik", blank=True, null=True)     
+    periodical_pub_year = models.CharField(max_length=100, verbose_name="Rocznik", blank=True, null=True)
     periodical_pub_vol_lvl_1 = models.CharField(max_length=100, verbose_name="Numeracja wolumenu poziom 1", blank=True, null=True)  # TODO make verbose_names more precise - consult client
     periodical_pub_vol_lvl_2 = models.CharField(max_length=100, verbose_name="Numeracja wolumenu poziom 2", blank=True, null=True)  # TODO make verbose_names more precise - consult client
     periodical_pub_vol_lvl_3 = models.CharField(max_length=100, verbose_name="Numeracja wolumenu poziom 3", blank=True, null=True)  # TODO make verbose_names more precise - consult client
