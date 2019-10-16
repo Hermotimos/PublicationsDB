@@ -1,5 +1,5 @@
 from django.db import models
-from PublicationsDB.categories.models import Subcategory
+from categories.models import Subcategory
 
 
 # TODO move Author and Location to another app in order to create division in admin !!!!

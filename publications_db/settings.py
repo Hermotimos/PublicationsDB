@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # own
-    'bibliography',
-    'categories',
+    'publications_db.apps.BibliografiaConfig',
+    'publications_db.apps.KategorieConfig',
+    'publications_db.apps.ElementyOpisuBibliograficznegoConfig',
+
 ]
 
 MIDDLEWARE = [
