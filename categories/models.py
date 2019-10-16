@@ -4,6 +4,10 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=1000)
 
+    class Meta:
+        verbose_name = 'Kategoria'
+        verbose_name_plural = 'Kategorie'
+
     def __str__(self):
         return self.name
 
@@ -11,6 +15,10 @@ class Category(models.Model):
 class Subcategory(models.Model):
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.PROTECT)
     name = models.CharField(max_length=1000)
+
+    class Meta:
+        verbose_name = 'Podkategoria'
+        verbose_name_plural = 'Podkategorie'
 
     def __str__(self):
         return f'{self.category}/{self.name}'
