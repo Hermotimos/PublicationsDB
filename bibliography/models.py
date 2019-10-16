@@ -31,11 +31,11 @@ class Location(models.Model):
 
 class EncompassingBibliographicUnit(models.Model):
     authorship = models.CharField(max_length=100, verbose_name='Rodzaj autorstwa (np. red., oprac.)', blank=True, null=True)
-    authors = models.ManyToManyField(Author, related_name='bibliographic_units', verbose_name='Autor/Autorzy')
-    translators = models.ManyToManyField(Translator, related_name='bibliographic_units', verbose_name='Tłumaczenie')
+    authors = models.ManyToManyField(Author, related_name='bibliographic_units_for_author', verbose_name='Autor/Autorzy')
+    translators = models.ManyToManyField(Translator, related_name='bibliographic_units_for_translator', verbose_name='Tłumaczenie')
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
 
-    published_location = models.ManyToManyField(Location, related_name='bibliographic_units', verbose_name='Miejsce/miejsca wydania')
+    published_location = models.ManyToManyField(Location, related_name='bibliographic_units_for_pub_locations', verbose_name='Miejsce/miejsca wydania')
     published_year = models.CharField(max_length=100, verbose_name="Rok wydania", blank=True, null=True)
     volumes = models.CharField(max_length=100, verbose_name="Tomy", blank=True, null=True)
     edition = models.CharField(max_length=100, verbose_name="Wydanie", blank=True, null=True)
