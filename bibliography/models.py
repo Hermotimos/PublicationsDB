@@ -1,5 +1,5 @@
 from django.db import models
-from categories.models import Category, Subcategory
+from PublicationsDB.categories.models import Subcategory
 
 
 # TODO move Author and Location to another app in order to create division in admin !!!!
@@ -73,7 +73,7 @@ class BibliographicUnit(models.Model):
     periodical_pages = models.CharField(max_length=100, verbose_name="Strony", blank=True, null=True)
 
     # Fields to add in future:
-    categories_and_subcategories = models.ManyToManyField(Subcategory, related_name='bibliographic_units')
+    categories_and_subcategories = models.ManyToManyField(Subcategory, related_name='bibliographic_units', verbose_name='Kategoria i podkategoria')
 
     class Meta:
         verbose_name = 'Opis bibliograficzny'
