@@ -1,33 +1,6 @@
 from django.db import models
 from categories.models import Subcategory
-
-
-# TODO move Author and Location to another app in order to create division in admin !!!!
-
-class Author(models.Model):
-    first_names = models.CharField(max_length=100, verbose_name='Inicjał/y')
-    last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
-
-    class Meta:
-        verbose_name = 'Autor'
-        verbose_name_plural = 'Autorzy'
-
-
-class Translator(models.Model):
-    first_names = models.CharField(max_length=100, verbose_name='Inicjał/y')
-    last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
-
-    class Meta:
-        verbose_name = 'Tłumacz'
-        verbose_name_plural = 'Tłumacze'
-
-
-class Location(models.Model):
-    name = models.CharField(max_length=500, verbose_name="Miejscowość")
-
-    class Meta:
-        verbose_name = 'Miejscowość'
-        verbose_name_plural = 'Miejscowości'
+from description_elements.models import Author, Translator, Location
 
 
 class EncompassingBibliographicUnit(models.Model):
