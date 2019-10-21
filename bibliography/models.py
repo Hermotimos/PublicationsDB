@@ -38,11 +38,11 @@ class BibliographicUnit(models.Model):
     # TODO: ask what else can possible get here ??
 
     # case B: published within another, independent bibliograhic unit:
-    encompassing_bibliographic_unit_title = models.ManyToManyField(EncompassingBibliographicUnit, related_name='dependent_bibliographic_units', verbose_name='Opublikowane w: (wydawnictwo zwarte)')
+    encompassing_bibliographic_unit_title = models.ForeignKey(EncompassingBibliographicUnit, related_name='dependent_bibliographic_units', verbose_name='Opublikowane w: (wydawnictwo zwarte)', blank=True, null=True, on_delete=models.PROTECT)
     encompassing_bibliographic_unit_pages = models.CharField(max_length=100, verbose_name="Strony", blank=True, null=True)
 
     # case C: published within a periodical bibliographic unit:
-    periodical_title = models.ManyToManyField(Periodical, related_name='contained_articles', verbose_name='Opublikowane w: (periodyk)')
+    periodical_title = models.ForeignKey(Periodical, related_name='contained_articles', verbose_name='Opublikowane w: (periodyk)', blank=True, null=True, on_delete=models.PROTECT)
     periodical_pages = models.CharField(max_length=100, verbose_name="Strony", blank=True, null=True)
 
     # Fields to add in future:
