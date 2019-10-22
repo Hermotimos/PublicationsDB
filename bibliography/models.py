@@ -56,7 +56,9 @@ class BibliographicUnitBook(models.Model):
 class BibliographicUnitPartOfBook(models.Model):
     authorship = models.CharField(max_length=100, verbose_name='Rodzaj autorstwa (np. red.)', blank=True, null=True)
     authors = models.ManyToManyField(Author, related_name='bib_units_parts_of_books', verbose_name='Autorstwo')
-    translators = models.ManyToManyField(Translator, related_name='bib_units_parts_of_books', verbose_name='Tłumaczenie')
+    translators = models.ManyToManyField(Translator,
+                                         related_name='bib_units_parts_of_books',
+                                         verbose_name='Tłumaczenie')
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
 
     encompassing_bibliographic_unit_title = models.ForeignKey(EncompassingBibliographicUnit,
@@ -79,7 +81,9 @@ class BibliographicUnitPartOfBook(models.Model):
 class BibliographicUnitPartOfPeriodical(models.Model):
     authorship = models.CharField(max_length=100, verbose_name='Rodzaj autorstwa (np. red.)', blank=True, null=True)
     authors = models.ManyToManyField(Author, related_name='bib_units_parts_of_periodicals', verbose_name='Autorstwo')
-    translators = models.ManyToManyField(Translator, related_name='bib_units_parts_of_periodicals', verbose_name='Tłumaczenie')
+    translators = models.ManyToManyField(Translator,
+                                         related_name='bib_units_parts_of_periodicals',
+                                         verbose_name='Tłumaczenie')
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
 
     periodical_title = models.ForeignKey(Periodical,
