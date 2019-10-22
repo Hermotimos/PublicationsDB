@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Author(models.Model):
-    first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona')
+    first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona', blank=True, null=True)
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
 
     class Meta:
@@ -11,7 +11,7 @@ class Author(models.Model):
         ordering = ['last_name', ]
 
     def __str__(self):
-        return f'{self.last_name} {self.first_names}'
+        return f'{self.last_name} {self.first_names}' if self.first_names else self.last_name
 
 
 class Translator(models.Model):
