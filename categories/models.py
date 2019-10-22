@@ -7,6 +7,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Kategoria'
         verbose_name_plural = 'Kategorie'
+        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -19,6 +20,7 @@ class Subcategory(models.Model):
     class Meta:
         verbose_name = 'Podkategoria'
         verbose_name_plural = 'Podkategorie'
+        ordering = ['category', 'name']
 
     def __str__(self):
         return f'{self.category}/{self.name}'
