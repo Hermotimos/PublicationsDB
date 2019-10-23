@@ -1,5 +1,5 @@
 from django.db import models
-from categories.models import Subcategory
+from categories.models import SubcategoryLevelFour
 from description_elements.models import Author, Translator, Location
 
 
@@ -114,7 +114,7 @@ class BibliographicUnitBook(models.Model):
     volumes = models.CharField(max_length=100, verbose_name='Tomy (np. "t. 1-2")', blank=True, null=True)
     edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
 
-    categories_and_subcategories = models.ManyToManyField(Subcategory,
+    categories_and_subcategories = models.ManyToManyField(SubcategoryLevelFour,
                                                           related_name='bib_units_books',
                                                           verbose_name='Kategoria i podkategoria')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
@@ -193,7 +193,7 @@ class BibliographicUnitPartOfBook(models.Model):
     encompassing_bibliographic_unit_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")',
                                                              blank=True, null=True)
 
-    categories_and_subcategories = models.ManyToManyField(Subcategory,
+    categories_and_subcategories = models.ManyToManyField(SubcategoryLevelFour,
                                                           related_name='bib_units_parts_of_books',
                                                           verbose_name='Kategoria i podkategoria')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
@@ -300,7 +300,7 @@ class BibliographicUnitPartOfPeriodical(models.Model):
                                          on_delete=models.PROTECT)
     periodical_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")', blank=True, null=True)
 
-    categories_and_subcategories = models.ManyToManyField(Subcategory,
+    categories_and_subcategories = models.ManyToManyField(SubcategoryLevelFour,
                                                           related_name='bib_units_parts_of_periodicals',
                                                           verbose_name='Kategoria i podkategoria')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
