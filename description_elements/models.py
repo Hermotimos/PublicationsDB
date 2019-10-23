@@ -6,8 +6,8 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
 
     class Meta:
-        verbose_name = 'Autor/Redaktor'
-        verbose_name_plural = 'Autorzy i redaktorzy'
+        verbose_name = '1. Autor/Redaktor'
+        verbose_name_plural = '1. Autorzy i redaktorzy'
         ordering = ['last_name', ]
 
     def __str__(self):
@@ -19,8 +19,8 @@ class Translator(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
 
     class Meta:
-        verbose_name = 'Tłumacz'
-        verbose_name_plural = 'Tłumacze'
+        verbose_name = '2. Tłumacz'
+        verbose_name_plural = '2. Tłumacze'
         ordering = ['last_name', ]
 
     def __str__(self):
@@ -31,15 +31,12 @@ class Location(models.Model):
     name = models.CharField(max_length=500, verbose_name="Miejscowość")
 
     class Meta:
-        verbose_name = 'Miejscowość'
-        verbose_name_plural = 'Miejscowości'
+        verbose_name = '3. Miejscowość'
+        verbose_name_plural = '3. Miejscowości'
         ordering = ['name', ]
 
     def __str__(self):
         return self.name
-
-
-
 
 
 class Periodical(models.Model):
@@ -58,8 +55,9 @@ class Periodical(models.Model):
         return f'"{title}"{year}{lvl1}{lvl2}{lvl3}'
 
     class Meta:
-        verbose_name = 'Periodyk'
-        verbose_name_plural = 'Periodyki'
+        verbose_name = '4. Periodyk'
+        verbose_name_plural = '4. Periodyki'
+
 
 class EncompassingBibliographicUnit(models.Model):
     authors = models.ManyToManyField(Author,
@@ -135,6 +133,6 @@ class EncompassingBibliographicUnit(models.Model):
         return f'{authors}{et_alii_authors}{title}{ed}{editorship}{editors}{et_alii_editors}{translators}{et_alii_translators}{vols}{locations}{year}'
 
     class Meta:
-        verbose_name = 'Wydawnictwo zwarte nadrzędne'
-        verbose_name_plural = 'Wydawnictwa zwarte nadrzędne'
+        verbose_name = '5. Wydawnictwo zwarte nadrzędne'
+        verbose_name_plural = '5. Wydawnictwa zwarte nadrzędne'
         ordering = ['sorting_name']
