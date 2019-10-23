@@ -6,8 +6,8 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
 
     class Meta:
-        verbose_name = 'Autor'
-        verbose_name_plural = 'Autorzy'
+        verbose_name = 'Autor/Redaktor'
+        verbose_name_plural = 'Autorzy i redaktorzy'
         ordering = ['last_name', ]
 
     def __str__(self):

@@ -288,8 +288,8 @@ class BibliographicUnitPartOfBook(models.Model):
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = '2. Opis bibliograficzny (w ramach wydawnictwa zwartego)'
-        verbose_name_plural = '2. Opisy bibliograficzne (w ramach wydawnictw zwartych)'
+        verbose_name = '2. Opis bibliograficzny (część wydawnictwa zwartego)'
+        verbose_name_plural = '2. Opisy bibliograficzne (części wydawnictw zwartych)'
         ordering = ['sorting_name']
 
 
