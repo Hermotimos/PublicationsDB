@@ -5,8 +5,8 @@ class Category(models.Model):
     name = models.CharField(max_length=1000, verbose_name='Kategoria')
 
     class Meta:
-        verbose_name = 'Kategoria'
-        verbose_name_plural = 'Kategorie'
+        verbose_name = 'Kategoria poz. 1'
+        verbose_name_plural = 'Kategorie poz. 1'
         ordering = ['name']
 
     def __str__(self):
@@ -16,13 +16,13 @@ class Category(models.Model):
 class SubcategoryLevelOne(models.Model):
     category = models.ForeignKey(Category,
                                  related_name='subcategories_lvl_1',
-                                 on_delete=models.PROTECT,
+                                 on_delete=models.CASCADE,
                                  verbose_name='Kategoria')
     name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 1')
 
     class Meta:
-        verbose_name = 'Podkategoria poz. 1'
-        verbose_name_plural = 'Podkategorie poz. 1'
+        verbose_name = 'Kategoria poz. 2'
+        verbose_name_plural = 'Kategorie poz. 2'
         ordering = ['category', 'name']
 
     def __str__(self):
@@ -35,13 +35,13 @@ class SubcategoryLevelOne(models.Model):
 class SubcategoryLevelTwo(models.Model):
     subcategory_lvl_1 = models.ForeignKey(SubcategoryLevelOne,
                                           related_name='subcategories_lvl_2',
-                                          on_delete=models.PROTECT,
+                                          on_delete=models.CASCADE,
                                           verbose_name='Podkategoria poz. 1')
     name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 2')
 
     class Meta:
-        verbose_name = 'Podkategoria poz. 2'
-        verbose_name_plural = 'Podkategorie poz. 2'
+        verbose_name = 'Kategoria poz. 3'
+        verbose_name_plural = 'Kategorie poz. 3'
         ordering = ['subcategory_lvl_1', 'name']
 
     def __str__(self):
@@ -54,13 +54,13 @@ class SubcategoryLevelTwo(models.Model):
 class SubcategoryLevelThree(models.Model):
     subcategory_lvl_2 = models.ForeignKey(SubcategoryLevelTwo,
                                           related_name='subcategories_lvl_3',
-                                          on_delete=models.PROTECT,
+                                          on_delete=models.CASCADE,
                                           verbose_name='Podkategoria poz. 2')
     name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 3')
 
     class Meta:
-        verbose_name = 'Podkategoria poz. 3'
-        verbose_name_plural = 'Podkategorie poz. 3'
+        verbose_name = 'Kategoria poz. 4'
+        verbose_name_plural = 'Kategorie poz. 4'
         ordering = ['subcategory_lvl_2', 'name']
 
     def __str__(self):
@@ -73,13 +73,13 @@ class SubcategoryLevelThree(models.Model):
 class SubcategoryLevelFour(models.Model):
     subcategory_lvl_3 = models.ForeignKey(SubcategoryLevelThree,
                                           related_name='subcategories_lvl_4',
-                                          on_delete=models.PROTECT,
+                                          on_delete=models.CASCADE,
                                           verbose_name='Podkategoria poz. 3')
     name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 4')
 
     class Meta:
-        verbose_name = 'Podkategoria poz. 4'
-        verbose_name_plural = 'Podkategorie poz. 4'
+        verbose_name = 'Kategoria poz. 5'
+        verbose_name_plural = 'Kategorie poz. 5'
         ordering = ['subcategory_lvl_3', 'name']
 
     def __str__(self):

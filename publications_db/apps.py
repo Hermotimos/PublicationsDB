@@ -4,7 +4,7 @@ from description_elements.apps import DescriptionElementsConfig
 
 
 class KategorieConfig(CategoriesConfig):
-    verbose_name = 'III. Kategorie i podkategorie'
+    verbose_name = 'III. Kategorie'
 
 
 class BibliografiaConfig(BibliographyConfig):
