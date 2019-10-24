@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def bibliography_main_view(request):
+    context = {
+
+    }
+    return render(request, 'bibliography/bibliography_main.html', context)
