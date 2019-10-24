@@ -259,3 +259,4 @@ class BibliographicUnitPartOfPeriodical(models.Model):
     class Meta:
         verbose_name = '3. Artykuł w periodyku'
         verbose_name_plural = '3. Artykuły w periodykach'
+        ordering = ['sorting_name']
