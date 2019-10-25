@@ -5,7 +5,7 @@ from .models import BibliographicUnitBook, BibliographicUnitPartOfBook, Bibliogr
 class BibliographicUnitBookAdmin(admin.ModelAdmin):
     def save_related(self, request, form, formsets, change):
         form.save_m2m()
-        # for formset in formsets:
+        # for formset in formsets:                                      # TODO seems to be redundant - but wait and see
         #     self.save_formset(request, form, formset, change=change)
         super(BibliographicUnitBookAdmin, self).save_model(request, form.instance, form, change)
 
