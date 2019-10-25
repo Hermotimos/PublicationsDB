@@ -66,13 +66,15 @@ class EncompassingBibliographicUnit(models.Model):
                                      blank=True)
     is_over_three_authors = models.BooleanField(verbose_name='Więcej niż trzech autorów?', default=False)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
-    editorship = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
-                                  blank=True, null=True)
+    editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
+                                      blank=True, null=True)
     editors = models.ManyToManyField(Author,
                                      related_name='encompassing_bib_units_as_editor',
                                      verbose_name='Redakcja/Opracowanie itp.',
                                      blank=True)
     is_over_three_editors = models.BooleanField(verbose_name='Więcej niż trzech red./oprac. itp.?', default=False)
+    translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
+                                          blank=True, null=True)
     translators = models.ManyToManyField(Translator,
                                          related_name='encompassing_bib_units_as_translator',
                                          verbose_name='Tłumaczenie',
@@ -97,9 +99,9 @@ class EncompassingBibliographicUnit(models.Model):
     def __str__(self):
         authors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        translators = f', tłum. {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
+        translators = f', {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
 
-        editorship = f', {self.editorship}' if self.editorship else ''
+        editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         et_alii_authors = ' i in.' if self.is_over_three_authors else ''
         et_alii_editors = ' i in.' if self.is_over_three_editors else ''
         et_alii_translators = ' i in.' if self.is_over_three_translators else ''
@@ -128,9 +130,9 @@ class EncompassingBibliographicUnit(models.Model):
         elif not self.published_locations and self.published_locations.all().count() == 0:
             year = ', [brw]'
         else:
-            ' [błąd instrukcji warunkowej!]'
+            year = ' [błąd instrukcji warunkowej!]'
 
-        return f'{authors}{et_alii_authors}{title}{ed}{editorship}{editors}{et_alii_editors}{translators}{et_alii_translators}{vols}{locations}{year}'
+        return f'{authors}{et_alii_authors}{title}{ed}{editors_abbrev}{editors}{et_alii_editors}{translators}{et_alii_translators}{vols}{locations}{year}'
 
     class Meta:
         verbose_name = '5. Wydawnictwo zwarte nadrzędne'
