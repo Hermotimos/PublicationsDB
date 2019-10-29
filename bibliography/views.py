@@ -32,7 +32,37 @@ def bibliography_main_view(request):
 
 
 def bibliography_index_view(request):
-    pass
+    books = [obj for obj in BibliographicUnitBook.objects.all()]
+    parts_of_books = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
+    parts_of_periodicals = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    all_descriptions = books + parts_of_books + parts_of_periodicals
+
+    categories_1 = list(CategoryLevelOne.objects.all())
+    categories_2 = list(CategoryLevelTwo.objects.all())
+    categories_3 = list(CategoryLevelThree.objects.all())
+
+    cat1_with_descs = [cat for cat in categories_1 if cat.categories_lvl_2.count() == 1]
+    cat2_with_descs = {}
+    cat3_with_descs = {}
+
+    for desc in all_descriptions:
+        if desc.cat_lvl_3 == 'n/a' and desc.cat_lvl_3.cat_lvl_2 == 'n/a':
+            if not cat1_with_descs[desc.cat_lvl_3.cat_lvl_2.cat_lvl_1]:
+                cat1_with_descs[desc.cat_lvl_3.cat_lvl_2.cat_lvl_1] = (desc, )
+            else:
+                cat1_with_descs[desc.cat_lvl_3.cat_lvl_2.cat_lvl_1].append(desc)
+
+    context = {
+        'page_title': 'Indeks tematyczny',
+        'descriptions': all_descriptions,
+        'categories': categories_1,
+        'subcategories_1': categories_2,
+        'subcategories_2': categories_3,
+        'cat1_with_descs': cat1_with_descs,
+        'cat2_with_descs': cat2_with_descs,
+        'cat3_with_descs': cat3_with_descs
+    }
+    return render(request, 'bibliography/bibliography_index.html', context)
 
 
 def bibliography_search_view(request):

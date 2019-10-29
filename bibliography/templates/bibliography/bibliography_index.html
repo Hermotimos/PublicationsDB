@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+<h1> fsdssd</h1>
+
+{% block content %}
+
+    {% for cat in categories %}
+        {% if cat in categories_without_subcategories %}
+            {% for desc in categories_without_subcategories|dict_lookup:cat %}
+                {{ desc }}
+            {% endfor %}
+        {% elif cat in categories_with_subcategories_lvl_1 %}
+            {% for subcat_lvl_1 in categories_with_subcategories_lvl_1|dict_lookup:cat %}
+                {{ subcat_lvl_1.0 }}
+                {% for desc in subcat_lvl_1 %}   <!--has to be dict-->
+                    {{ desc }}
+                {% endfor %}
+            {% endfor %}
+        {% elif cat in categories_with_subcategories_lvl_2 %}
+            TODO
+        {% else %}
+            <p>Błąd przy porządkowaniu kategorii !!!</p>
+        {% endif %}
+    {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
