@@ -51,39 +51,39 @@ class SubcategoryLevelTwo(models.Model):
             return f'{self.subcategory_lvl_1} / ---'
 
 
-class SubcategoryLevelThree(models.Model):
-    subcategory_lvl_2 = models.ForeignKey(SubcategoryLevelTwo,
-                                          related_name='subcategories_lvl_3',
-                                          on_delete=models.CASCADE,
-                                          verbose_name='Podkategoria poz. 2')
-    name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 3')
-
-    class Meta:
-        verbose_name = 'Kategoria poz. 4'
-        verbose_name_plural = 'Kategorie poz. 4'
-        ordering = ['subcategory_lvl_2', 'name']
-
-    def __str__(self):
-        if self.name != 'n/a':
-            return f'{self.subcategory_lvl_2} / {self.name}'
-        else:
-            return f'{self.subcategory_lvl_2} / ---'
-
-
-class SubcategoryLevelFour(models.Model):
-    subcategory_lvl_3 = models.ForeignKey(SubcategoryLevelThree,
-                                          related_name='subcategories_lvl_4',
-                                          on_delete=models.CASCADE,
-                                          verbose_name='Podkategoria poz. 3')
-    name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 4')
-
-    class Meta:
-        verbose_name = 'Kategoria poz. 5'
-        verbose_name_plural = 'Kategorie poz. 5'
-        ordering = ['subcategory_lvl_3', 'name']
-
-    def __str__(self):
-        if self.name != 'n/a':
-            return f'{self.subcategory_lvl_3} / {self.name}'
-        else:
-            return f'{self.subcategory_lvl_3} / ---'
+# class SubcategoryLevelThree(models.Model):
+#     subcategory_lvl_2 = models.ForeignKey(SubcategoryLevelTwo,
+#                                           related_name='subcategories_lvl_3',
+#                                           on_delete=models.CASCADE,
+#                                           verbose_name='Podkategoria poz. 2')
+#     name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 3')
+#
+#     class Meta:
+#         verbose_name = 'Kategoria poz. 4'
+#         verbose_name_plural = 'Kategorie poz. 4'
+#         ordering = ['subcategory_lvl_2', 'name']
+#
+#     def __str__(self):
+#         if self.name != 'n/a':
+#             return f'{self.subcategory_lvl_2} / {self.name}'
+#         else:
+#             return f'{self.subcategory_lvl_2} / ---'
+#
+#
+# class SubcategoryLevelFour(models.Model):
+#     subcategory_lvl_3 = models.ForeignKey(SubcategoryLevelThree,
+#                                           related_name='subcategories_lvl_4',
+#                                           on_delete=models.CASCADE,
+#                                           verbose_name='Podkategoria poz. 3')
+#     name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 4')
+#
+#     class Meta:
+#         verbose_name = 'Kategoria poz. 5'
+#         verbose_name_plural = 'Kategorie poz. 5'
+#         ordering = ['subcategory_lvl_3', 'name']
+#
+#     def __str__(self):
+#         if self.name != 'n/a':
+#             return f'{self.subcategory_lvl_3} / {self.name}'
+#         else:
+#             return f'{self.subcategory_lvl_3} / ---'
