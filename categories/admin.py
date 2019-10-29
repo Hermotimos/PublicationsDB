@@ -1,10 +1,7 @@
 from django.contrib import admin
-from .models import Category, SubcategoryLevelOne, SubcategoryLevelTwo
-# SubcategoryLevelThree, SubcategoryLevelFour
+from .models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
 
 
-admin.site.register(Category)
-admin.site.register(SubcategoryLevelOne)
-admin.site.register(SubcategoryLevelTwo)
-# admin.site.register(SubcategoryLevelThree)
-# admin.site.register(SubcategoryLevelFour)
+admin.site.register(CategoryLevelOne)
+admin.site.register(CategoryLevelTwo)
+admin.site.register(CategoryLevelThree)

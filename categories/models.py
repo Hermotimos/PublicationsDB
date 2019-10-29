@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Category(models.Model):
+class CategoryLevelOne(models.Model):
     name = models.CharField(max_length=1000, verbose_name='Kategoria')
 
     class Meta:
@@ -13,42 +13,42 @@ class Category(models.Model):
         return self.name
 
 
-class SubcategoryLevelOne(models.Model):
-    category = models.ForeignKey(Category,
-                                 related_name='subcategories_lvl_1',
-                                 on_delete=models.CASCADE,
-                                 verbose_name='Kategoria')
-    name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 1')
+class CategoryLevelTwo(models.Model):
+    cat_lvl_1 = models.ForeignKey(CategoryLevelOne,
+                                  related_name='categories_lvl_2',
+                                  on_delete=models.CASCADE,
+                                  verbose_name='Kategoria poz. 1')
+    name = models.CharField(max_length=1000, default='n/a', verbose_name='Kategoria poz. 2')
 
     class Meta:
         verbose_name = 'Kategoria poz. 2'
         verbose_name_plural = 'Kategorie poz. 2'
-        ordering = ['category', 'name']
+        ordering = ['cat_lvl_1', 'name']
 
     def __str__(self):
         if self.name != 'n/a':
-            return f'{self.category} / {self.name}'
+            return f'{self.cat_lvl_1} / {self.name}'
         else:
-            return f'{self.category} / ---'
+            return f'{self.cat_lvl_1} / ---'
 
 
-class SubcategoryLevelTwo(models.Model):
-    subcategory_lvl_1 = models.ForeignKey(SubcategoryLevelOne,
-                                          related_name='subcategories_lvl_2',
-                                          on_delete=models.CASCADE,
-                                          verbose_name='Podkategoria poz. 1')
-    name = models.CharField(max_length=1000, default='n/a', verbose_name='Podkategoria poz. 2')
+class CategoryLevelThree(models.Model):
+    cat_lvl_2 = models.ForeignKey(CategoryLevelTwo,
+                                  related_name='categories_lvl_3',
+                                  on_delete=models.CASCADE,
+                                  verbose_name='Kategoria poz. 2')
+    name = models.CharField(max_length=1000, default='n/a', verbose_name='Kategoria poz. 3')
 
     class Meta:
         verbose_name = 'Kategoria poz. 3'
         verbose_name_plural = 'Kategorie poz. 3'
-        ordering = ['subcategory_lvl_1', 'name']
+        ordering = ['cat_lvl_2', 'name']
 
     def __str__(self):
         if self.name != 'n/a':
-            return f'{self.subcategory_lvl_1} / {self.name}'
+            return f'{self.cat_lvl_2} / {self.name}'
         else:
-            return f'{self.subcategory_lvl_1} / ---'
+            return f'{self.cat_lvl_2} / ---'
 
 
 # class SubcategoryLevelThree(models.Model):
