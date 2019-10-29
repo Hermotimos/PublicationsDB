@@ -37,8 +37,10 @@ class BibliographicUnitBook(models.Model):
                                                           related_name='bib_units_books',
                                                           verbose_name='Kategoria i podkategoria')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
-    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole wypełniane automatycznie)',
                                     blank=True, null=True)
+    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
+                                   blank=True, null=True)
 
     def __str__(self):
         authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
@@ -82,7 +84,12 @@ class BibliographicUnitBook(models.Model):
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitBook, self).save(*args, **kwargs)
-        self.sorting_name = self.__str__()
+        self.description = self.__str__()
+        sorting_name = self.__str__().upper()
+        for char in sorting_name:
+            if char in ' ,.:;()-"':
+                sorting_name = sorting_name.replace(char, '')
+        self.sorting_name = sorting_name
         super(BibliographicUnitBook, self).save(*args, **kwargs)
 
     class Meta:
@@ -127,6 +134,8 @@ class BibliographicUnitPartOfBook(models.Model):
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
+    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
+                                   blank=True, null=True)
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
@@ -192,7 +201,12 @@ class BibliographicUnitPartOfBook(models.Model):
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
-        self.sorting_name = self.__str__()
+        self.description = self.__str__()
+        sorting_name = self.__str__().upper()
+        for char in sorting_name:
+            if char in ' ,.:;()-"':
+                sorting_name = sorting_name.replace(char, '')
+        self.sorting_name = sorting_name
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
 
     class Meta:
@@ -235,6 +249,8 @@ class BibliographicUnitPartOfPeriodical(models.Model):
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
+    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
+                                   blank=True, null=True)
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a periodical:
@@ -263,7 +279,12 @@ class BibliographicUnitPartOfPeriodical(models.Model):
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
-        self.sorting_name = self.__str__()
+        self.description = self.__str__()
+        sorting_name = self.__str__().upper()
+        for char in sorting_name:
+            if char in ' ,.:;()-"':
+                sorting_name = sorting_name.replace(char, '')
+        self.sorting_name = sorting_name
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
 
     class Meta:
