@@ -3,6 +3,20 @@ from bibliography.models import BibliographicUnitBook, BibliographicUnitPartOfBo
 from publications_db.utils import sort_pl
 
 
+def bibliography_full_view(request):
+    books = [obj.description for obj in BibliographicUnitBook.objects.all()]
+    parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
+    parts_of_periodicals = [obj.description for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    all_descriptions = books + parts_of_books + parts_of_periodicals
+    sorted_descriptions = sorted(all_descriptions, key=lambda desc: sort_pl(desc))
+
+    context = {
+        'page_title': 'Pełna bibliografia',
+        'descriptions': sorted_descriptions,
+    }
+    return render(request, 'bibliography/bibliography_full.html', context)
+
+
 def bibliography_main_view(request):
     books = [obj.description for obj in BibliographicUnitBook.objects.all()]
     parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
@@ -15,3 +29,15 @@ def bibliography_main_view(request):
         'descriptions': sorted_descriptions,
     }
     return render(request, 'bibliography/bibliography_main.html', context)
+
+
+def bibliography_index_view(request):
+    pass
+
+
+def bibliography_search_view(request):
+    pass
+
+
+def bibliography_search_results_view(request):
+    pass
