@@ -29,4 +29,3 @@ class BibliographicUnitPartOfPeriodicalAdmin(admin.ModelAdmin):
 admin.site.register(BibliographicUnitBook, BibliographicUnitBookAdmin)
 admin.site.register(BibliographicUnitPartOfBook, BibliographicUnitPartOfBookAdmin)
 admin.site.register(BibliographicUnitPartOfPeriodical, BibliographicUnitPartOfPeriodicalAdmin)
-
