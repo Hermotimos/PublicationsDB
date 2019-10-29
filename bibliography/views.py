@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from bibliography.models import BibliographicUnitBook, BibliographicUnitPartOfBook, BibliographicUnitPartOfPeriodical
-from publications_db.utils import sort_pl
+from publications_db.utils import replace_special_chars
 
 
 def bibliography_full_view(request):
@@ -8,7 +8,7 @@ def bibliography_full_view(request):
     parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
     parts_of_periodicals = [obj.description for obj in BibliographicUnitPartOfPeriodical.objects.all()]
     all_descriptions = books + parts_of_books + parts_of_periodicals
-    sorted_descriptions = sorted(all_descriptions, key=lambda desc: sort_pl(desc))
+    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc))
 
     context = {
         'page_title': 'Pełna bibliografia',
@@ -22,7 +22,7 @@ def bibliography_main_view(request):
     parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
     parts_of_periodicals = [obj.description for obj in BibliographicUnitPartOfPeriodical.objects.all()]
     all_descriptions = books + parts_of_books + parts_of_periodicals
-    sorted_descriptions = sorted(all_descriptions, key=lambda desc: sort_pl(desc))
+    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc))
 
     context = {
         'page_title': 'Strona główna',

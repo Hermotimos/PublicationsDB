@@ -1,6 +1,7 @@
 from django.db import models
 from categories.models import SubcategoryLevelTwo
 from description_elements.models import Author, Translator, Location, EncompassingBibliographicUnit, Periodical
+from publications_db.utils import replace_special_chars
 
 
 class BibliographicUnitBook(models.Model):
@@ -85,11 +86,7 @@ class BibliographicUnitBook(models.Model):
     def save(self, *args, **kwargs):
         super(BibliographicUnitBook, self).save(*args, **kwargs)
         self.description = self.__str__()
-        sorting_name = self.__str__().upper()
-        for char in sorting_name:
-            if char in ' ,.:;()-"':
-                sorting_name = sorting_name.replace(char, '')
-        self.sorting_name = sorting_name
+        self.sorting_name = replace_special_chars(self.__str__())
         super(BibliographicUnitBook, self).save(*args, **kwargs)
 
     class Meta:
@@ -202,11 +199,7 @@ class BibliographicUnitPartOfBook(models.Model):
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
         self.description = self.__str__()
-        sorting_name = self.__str__().upper()
-        for char in sorting_name:
-            if char in ' ,.:;()-"':
-                sorting_name = sorting_name.replace(char, '')
-        self.sorting_name = sorting_name
+        self.sorting_name = replace_special_chars(self.__str__())
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
 
     class Meta:
@@ -280,11 +273,7 @@ class BibliographicUnitPartOfPeriodical(models.Model):
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
         self.description = self.__str__()
-        sorting_name = self.__str__().upper()
-        for char in sorting_name:
-            if char in ' ,.:;()-"':
-                sorting_name = sorting_name.replace(char, '')
-        self.sorting_name = sorting_name
+        self.sorting_name = replace_special_chars(self.__str__())
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
 
     class Meta:
