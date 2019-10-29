@@ -11,6 +11,7 @@ def bibliography_main_view(request):
     sorted_descriptions = sorted(all_descriptions, key=lambda desc: sort_pl(desc))
 
     context = {
+        'page_title': 'Strona główna',
         'descriptions': sorted_descriptions,
     }
     return render(request, 'bibliography/bibliography_main.html', context)
