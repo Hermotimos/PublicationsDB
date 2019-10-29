@@ -41,3 +41,13 @@ def bibliography_search_view(request):
 
 def bibliography_search_results_view(request):
     pass
+
+
+def bibliography_reload_view(request):
+    for obj in BibliographicUnitBook.objects.all():
+        obj.save()
+    for obj in BibliographicUnitPartOfBook.objects.all():
+        obj.save()
+    for obj in BibliographicUnitPartOfPeriodical.objects.all():
+        obj.save()
+    return redirect('bibliography:main')

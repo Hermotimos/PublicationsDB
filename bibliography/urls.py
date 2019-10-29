@@ -9,4 +9,5 @@ urlpatterns = [
     path('index/', views.bibliography_index_view, name='index'),
     path('search/', views.bibliography_search_view, name='search'),
     path('search-results/', views.bibliography_search_results_view, name='search-results'),
+    path('reload/', views.bibliography_reload_view, name='reload'),
 ]
