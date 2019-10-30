@@ -2,7 +2,7 @@ from django.db import models
 
 
 class CategoryLevelOne(models.Model):
-    name = models.CharField(max_length=1000, verbose_name='Kategoria')
+    name = models.CharField(max_length=1000, verbose_name='Kategoria poz. 1')
 
     class Meta:
         verbose_name = 'Kategoria poz. 1'
@@ -18,7 +18,7 @@ class CategoryLevelTwo(models.Model):
                                   related_name='categories_lvl_2',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 1')
-    name = models.CharField(max_length=1000, default='n/a', verbose_name='Kategoria poz. 2')
+    name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 2')
 
     class Meta:
         verbose_name = 'Kategoria poz. 2'
@@ -26,10 +26,7 @@ class CategoryLevelTwo(models.Model):
         ordering = ['cat_lvl_1', 'name']
 
     def __str__(self):
-        if self.name != 'n/a':
-            return f'{self.cat_lvl_1} / {self.name}'
-        else:
-            return f'{self.cat_lvl_1} / ---'
+        return f'{self.cat_lvl_1} / {self.name}'
 
 
 class CategoryLevelThree(models.Model):
@@ -37,7 +34,7 @@ class CategoryLevelThree(models.Model):
                                   related_name='categories_lvl_3',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 2')
-    name = models.CharField(max_length=1000, default='n/a', verbose_name='Kategoria poz. 3')
+    name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 3')
 
     class Meta:
         verbose_name = 'Kategoria poz. 3'
@@ -45,10 +42,7 @@ class CategoryLevelThree(models.Model):
         ordering = ['cat_lvl_2', 'name']
 
     def __str__(self):
-        if self.name != 'n/a':
-            return f'{self.cat_lvl_2} / {self.name}'
-        else:
-            return f'{self.cat_lvl_2} / ---'
+        return f'{self.cat_lvl_2} / {self.name}'
 
 
 # class SubcategoryLevelThree(models.Model):
