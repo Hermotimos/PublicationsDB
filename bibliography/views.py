@@ -1,21 +1,7 @@
 from django.shortcuts import render, redirect
 from bibliography.models import BibliographicUnitBook, BibliographicUnitPartOfBook, BibliographicUnitPartOfPeriodical
-from categories.models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
+from categories.models import CategoryLevelOne
 from publications_db.utils import replace_special_chars
-
-
-def bibliography_full_view(request):
-    books = [obj.description for obj in BibliographicUnitBook.objects.all()]
-    parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
-    parts_of_periodicals = [obj.description for obj in BibliographicUnitPartOfPeriodical.objects.all()]
-    all_descriptions = books + parts_of_books + parts_of_periodicals
-    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc))
-
-    context = {
-        'page_title': 'Pełna bibliografia',
-        'descriptions': sorted_descriptions,
-    }
-    return render(request, 'bibliography/bibliography_full.html', context)
 
 
 def bibliography_main_view(request):
@@ -30,6 +16,20 @@ def bibliography_main_view(request):
         'descriptions': sorted_descriptions,
     }
     return render(request, 'bibliography/bibliography_main.html', context)
+
+
+def bibliography_full_view(request):
+    books = [obj.description for obj in BibliographicUnitBook.objects.all()]
+    parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
+    parts_of_periodicals = [obj.description for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    all_descriptions = books + parts_of_books + parts_of_periodicals
+    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc))
+
+    context = {
+        'page_title': 'Pełna bibliografia',
+        'descriptions': sorted_descriptions,
+    }
+    return render(request, 'bibliography/bibliography_full.html', context)
 
 
 def bibliography_index_view(request):
