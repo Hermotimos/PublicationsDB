@@ -6,22 +6,115 @@
 
 {% block content %}
 
-    {% for cat1 in cat1_with_cat2_with_cat3_dict %}
-        {{ cat1 }}<br>
-        {% for cat2 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1 %}
-            &emsp;{{ cat2 }}<br>
-            {% for cat3 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1|dict_lookup:cat2 %}
-                &emsp;&emsp;{{ cat3 }}<br>
-                {% for desc in descriptions %}
-                    {% if cat3 in desc.cat_lvl_3.all %}
-                        &emsp;&emsp;&emsp;&emsp;&#8226;{{ desc }}<br>
-                    {% endif %}
+<!--    {% for cat1 in cat1_with_cat2_with_cat3_dict %}-->
+<!--        <h3 class="hover-blue" data-toggle="collapse" data-target="#{{ cat1.name }}"><b>{{ cat1 }}</b></h3><br>-->
+<!--        <div id="{{ cat1.name }}" class="collapse">-->
+<!--            {% for cat2 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1 %}-->
+<!--                {% if cat2.name != '-&#45;&#45;' %}<h5>&emsp;<b>{{ cat2.name }}</b></h5><br>{% endif %}-->
+<!--    -->
+<!--                {% for cat3 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1|dict_lookup:cat2 %}-->
+<!--                    {% if cat3.name != '-&#45;&#45;' %}<h6>&emsp;&emsp;<b>{{ cat3.name }}</b></h6>{% endif %}-->
+<!--    -->
+<!--                    {% for desc in descriptions %}-->
+<!--                        {% if cat3 in desc.cat_lvl_3.all %}-->
+<!--                            <p class="description">&#8226;{{ desc }}</p>-->
+<!--                        {% endif %}-->
+<!--                    {% endfor %}-->
+<!--                    <br>-->
+<!--    -->
+<!--                {% endfor %}-->
+<!--                <br>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--        <br>-->
+<!--    {% endfor %}-->
+
+<br><br>-------------------<br><br>
+
+    <div class="panel-group" id="accordion1">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {% for cat1 in cat1_with_cat2_with_cat3_dict %}
+                    <h3 class="hover-blue panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion1" href="#{{ cat1.name }}"><b>{{ cat1 }}</b></a>
+                    </h3><br>
+                    <div id="{{ cat1.name }}" class="panel-collapse collapse">
+                        {% for cat2 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1 %}
+                        
+                            {% if cat2.name != '---' %}
+                                <div class="panel-body">
+                                    <div class="panel-group" id="accordion2">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h5 class="hover-blue panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion2" href="#{{ cat2.name }}">&emsp;<b>{{ cat2.name }}</b></a>
+                                                </h5><br>
+                                            </div>
+                                            
+      
+                                            <div id="{{ cat2.name }}" class="panel-collapse collapse in">
+                                                <div class="panel-body">
+                                                    {% for cat3 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1|dict_lookup:cat2 %}
+                                                    
+                                                        {% if cat3.name != '---' %}
+                                                            <div class="panel-body">
+                                                                <div class="panel-group" id="accordion3">
+                                                                    <div class="panel panel-default">
+                                                                        <div class="panel-heading">
+                                                                            <h6 class="hover-blue panel-title">
+                                                                                <a data-toggle="collapse" data-parent="#accordion3" href="#{{ cat3.name }}">&emsp;&emsp;<b>{{ cat3.name }}</b></a>
+                                                                            </h6>
+                                                                        </div>
+                                                                        <div id="{{ cat3.name }}" class="panel-collapse collapse in">
+                                                                            <div class="panel-body">
+                                                                                {% for desc in descriptions %}
+                                                                                    {% if cat3 in desc.cat_lvl_3.all %}
+                                                                                        <p class="description">&#8226;{{ desc }}</p>
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                            {% for desc in descriptions %}
+                                                                {% if cat3 in desc.cat_lvl_3.all %}
+                                                                    <p class="description">&#8226;{{ desc }}</p>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    
+                                                            <br>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                            {% else %}
+                                {% for cat3 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1|dict_lookup:cat2 %}
+                                    {% if cat3.name != '---' %}<h6>&emsp;&emsp;<b>{{ cat3.name }}</b></h6>{% endif %}
+                    
+                                    {% for desc in descriptions %}
+                                        {% if cat3 in desc.cat_lvl_3.all %}
+                                            <p class="description">&#8226;{{ desc }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <br>
+                                {% endfor %}
+                                <br>
+                            {% endif %}
+                        
+                        {% endfor %}
+                    </div>
+                    <br>
                 {% endfor %}
-            {% endfor %}
-            <br>
-        {% endfor %}
-        <br>
-    {% endfor %}
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}
 
