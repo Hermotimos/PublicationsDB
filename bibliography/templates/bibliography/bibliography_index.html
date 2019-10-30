@@ -6,8 +6,6 @@
 
 {% block content %}
 
-    <br><br>
-
     {% for cat1 in cat1_with_cat2_with_cat3_dict %}
         {{ cat1 }}<br>
         {% for cat2 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1 %}
