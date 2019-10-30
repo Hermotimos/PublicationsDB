@@ -100,12 +100,14 @@ p.description {
         cursor: pointer;
 }
 
-h3.panel-title {
-        margin-bottom: 25px;
-
+h4 {
+        margin-bottom: 15px;
 }
 
-h5.panel-title {
-        margin-bottom: 0px;
+h5 {
+        margin-bottom: 10px;
+}
 
+h6 {
+        margin-bottom: 10px;
 }
