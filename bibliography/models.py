@@ -185,8 +185,8 @@ class BibliographicUnitPartOfBook(models.Model):
             u_year = ' [błąd instrukcji warunkowej!]'
 
         unit = f', w: {u_authors}' \
-            f'<i>{u_title}</i>{vol}' \
-            f'{u_ed}{u_editors_abbrev}{u_editors}' \
+            f'<i>{u_title}</i>' \
+            f'{u_ed}{vol}{u_editors_abbrev}{u_editors}' \
             f'{u_translators_abbrev}{u_translators}' \
             f'{u_locations}{u_year}'
 
