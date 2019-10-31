@@ -1,8 +1,15 @@
 
+def remove_tags(text):
+    tags = ('<i>', '</i>', )
+    for tag in tags:
+        text = text.replace(tag, '')
+    return text
+
+
 def replace_special_chars(text):
     chars = (
         # DIACRITICS ETC
-        (' ', ''), ('<i>', ''), ('</i>', ''),
+        (' ', ''),
         # (',', ''), ('.', ''), (':', ''), (';', ''), ('(', ''), (')', ''), ('-', ''),
 
         # basic chars having variations in special chars below

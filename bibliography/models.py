@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.html import format_html
 from categories.models import CategoryLevelThree
 from description_elements.models import Author, Translator, Location, EncompassingBibliographicUnit, Periodical
-from publications_db.utils import replace_special_chars
+from publications_db.utils import replace_special_chars, remove_tags
 
 
 class BibliographicUnitBook(models.Model):
@@ -42,7 +42,7 @@ class BibliographicUnitBook(models.Model):
                                    blank=True, null=True)
 
     def __str__(self):
-        authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
+        authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
         translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
 
@@ -86,8 +86,9 @@ class BibliographicUnitBook(models.Model):
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitBook, self).save(*args, **kwargs)
-        self.description = self.__str__()
-        self.sorting_name = replace_special_chars(self.__str__())
+        name = remove_tags(self.__str__())
+        self.description = name
+        self.sorting_name = replace_special_chars(name)
         super(BibliographicUnitBook, self).save(*args, **kwargs)
 
     class Meta:
@@ -134,7 +135,7 @@ class BibliographicUnitPartOfBook(models.Model):
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
-        authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
+        authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
         translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
 
@@ -200,8 +201,9 @@ class BibliographicUnitPartOfBook(models.Model):
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
-        self.description = self.__str__()
-        self.sorting_name = replace_special_chars(self.__str__())
+        name = remove_tags(self.__str__())
+        self.description = name
+        self.sorting_name = replace_special_chars(name)
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
 
     class Meta:
@@ -274,8 +276,9 @@ class BibliographicUnitPartOfPeriodical(models.Model):
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
-        self.description = self.__str__()
-        self.sorting_name = replace_special_chars(self.__str__())
+        name = remove_tags(self.__str__())
+        self.description = name
+        self.sorting_name = replace_special_chars(name)
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
 
     class Meta:
