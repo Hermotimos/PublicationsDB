@@ -34,7 +34,7 @@ class BibliographicUnitBook(models.Model):
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='bib_units_books',
-                                       verbose_name='Kategoria i podkategoria')
+                                       verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole wypełniane automatycznie)',
                                     blank=True, null=True)
@@ -44,7 +44,7 @@ class BibliographicUnitBook(models.Model):
     def __str__(self):
         authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        translators = f' {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
+        translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
@@ -125,7 +125,7 @@ class BibliographicUnitPartOfBook(models.Model):
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='bib_units_parts_of_books',
-                                       verbose_name='Kategoria i podkategoria')
+                                       verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
@@ -136,7 +136,7 @@ class BibliographicUnitPartOfBook(models.Model):
         # PART 1: elements considering bibliographic unit being part of a book:
         authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        translators = f' {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
+        translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
@@ -237,7 +237,7 @@ class BibliographicUnitPartOfPeriodical(models.Model):
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='bib_units_parts_of_periodicals',
-                                       verbose_name='Kategoria i podkategoria')
+                                       verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
@@ -248,7 +248,7 @@ class BibliographicUnitPartOfPeriodical(models.Model):
         # PART 1: elements considering bibliographic unit being part of a periodical:
         authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        translators = f' {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
+        translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
