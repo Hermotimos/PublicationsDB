@@ -76,9 +76,9 @@ class BibliographicUnitBook(models.Model):
         elif self.published_year and self.published_locations.all().count() == 0:
             year = f', {self.published_year}'
         elif not self.published_year and self.published_locations.all().count() >= 1:
-            year = ' [brw]'
+            year = ' [b.r.]'
         elif not self.published_year and self.published_locations.all().count() == 0:
-            year = ', [bmw brw]'
+            year = ', [b.m. b.r.]'
         else:
             year = ' [błąd instrukcji warunkowej!]'
 
@@ -193,14 +193,14 @@ class BibliographicUnitPartOfBook(models.Model):
         elif unit.published_year and unit.published_locations.all().count() == 0:
             u_year = f', {unit.published_year}'
         elif not unit.published_year and unit.published_locations.all().count() >= 1:
-            u_year = ' [brw]'
-        elif not unit.published_locations and unit.published_locations.all().count() == 0:
-            u_year = ', [brw]'
+            u_year = ' [b.r.]'
+        elif not unit.published_year and unit.published_locations.all().count() == 0:
+            u_year = ', [b.m. b.r.]'
         else:
             u_year = ' [błąd instrukcji warunkowej!]'
 
         unit = f', w: {u_authors}{u_et_alii_authors}' \
-            f'{u_title}' \
+            f'<i>{u_title}</i>' \
             f'{u_ed}{u_editors_abbrev}{u_editors}{u_et_alii_editors}' \
             f'{u_translators_abbrev}{u_translators}{u_et_alii_translators}' \
             f'{vol}{u_locations}{u_year}'
