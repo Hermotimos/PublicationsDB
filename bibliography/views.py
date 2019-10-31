@@ -38,12 +38,41 @@ def bibliography_index_view(request):
     parts_of_periodicals = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
     all_descriptions = books + parts_of_books + parts_of_periodicals
 
+    # Version 1: shows all categories and subcategories regardless whether they contain any descriptions or not
+    # cat1_with_cat2_with_cat3_dict = {
+    #     cat1: {
+    #         cat2: [
+    #             cat3 for cat3 in cat2.categories_lvl_3.all()
+    #         ] for cat2 in cat1.categories_lvl_2.all()
+    #     } for cat1 in CategoryLevelOne.objects.all()
+    # }
+
+    # Version 2: shows only categories and subcategories containing at least 1 description
+
+    def is_not_empty_cat3(category3):
+        """Returns 0 for False if category is empty, else >0 for True if not empty"""
+        return category3.bib_units_books.count() \
+            + category3.bib_units_parts_of_books.count() \
+            + category3.bib_units_parts_of_periodicals.count()
+
+    def is_not_empty_cat2(category2):
+        for cat3 in category2.categories_lvl_3.all():
+            if is_not_empty_cat3(cat3):
+                return True
+        return False
+
+    def is_not_empty_cat1(category1):
+        for cat2 in category1.categories_lvl_2.all():
+            if is_not_empty_cat2(cat2):
+                return True
+        return False
+
     cat1_with_cat2_with_cat3_dict = {
         cat1: {
             cat2: [
-                cat3 for cat3 in cat2.categories_lvl_3.all()
-            ] for cat2 in cat1.categories_lvl_2.all()
-        } for cat1 in CategoryLevelOne.objects.all()
+                cat3 for cat3 in cat2.categories_lvl_3.all() if is_not_empty_cat3(cat3)
+            ] for cat2 in cat1.categories_lvl_2.all() if is_not_empty_cat2(cat2)
+        } for cat1 in CategoryLevelOne.objects.all() if is_not_empty_cat1(cat1)
     }
 
     context = {
