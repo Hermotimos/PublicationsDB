@@ -60,7 +60,7 @@ class Periodical(models.Model):
     class Meta:
         verbose_name = '4. Periodyk'
         verbose_name_plural = '4. Periodyki'
-        unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2']
+        unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2', 'vol_info_lvl_3']
 
 
 class EncompassingBibliographicUnit(models.Model):
