@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 from categories.models import CategoryLevelThree
 from description_elements.models import Author, Translator, Location, EncompassingBibliographicUnit, Periodical
 from publications_db.utils import replace_special_chars
@@ -81,7 +82,13 @@ class BibliographicUnitBook(models.Model):
         else:
             year = ' [błąd instrukcji warunkowej!]'
 
-        return f'{authors}{et_alii_authors}{title}{ed}{editors_abbrev}{editors}{et_alii_editors}{translators_abbrev}{translators}{et_alii_translators}{vols}{locations}{year}.{annotation}'
+        description = f'{authors}{et_alii_authors}' \
+            f'<i>{title}</i>' \
+            f'{ed}{editors_abbrev}{editors}{et_alii_editors}' \
+            f'{translators_abbrev}{translators}{et_alii_translators}' \
+            f'{vols}{locations}{year}.{annotation}'
+
+        return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitBook, self).save(*args, **kwargs)
@@ -192,9 +199,19 @@ class BibliographicUnitPartOfBook(models.Model):
         else:
             u_year = ' [błąd instrukcji warunkowej!]'
 
-        unit = f', w: {u_authors}{u_et_alii_authors}{u_title}{u_ed}{u_editors_abbrev}{u_editors}{u_et_alii_editors}{u_translators_abbrev}{u_translators}{u_et_alii_translators}{vol}{u_locations}{u_year}'
+        unit = f', w: {u_authors}{u_et_alii_authors}' \
+            f'{u_title}' \
+            f'{u_ed}{u_editors_abbrev}{u_editors}{u_et_alii_editors}' \
+            f'{u_translators_abbrev}{u_translators}{u_et_alii_translators}' \
+            f'{vol}{u_locations}{u_year}'
 
-        return f'{authors}{et_alii_authors}{title}{editors_abbrev}{editors}{et_alii_editors}{translators_abbrev}{translators}{et_alii_translators}{unit}{pages}.{annotation}'
+        description = f'{authors}{et_alii_authors}' \
+            f'<i>{title}</i>' \
+            f'{editors_abbrev}{editors}{et_alii_editors}' \
+            f'{translators_abbrev}{translators}{et_alii_translators}' \
+            f'{unit}{pages}.{annotation}'
+
+        return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
@@ -268,7 +285,13 @@ class BibliographicUnitPartOfPeriodical(models.Model):
         # PART 2: elements considering the periodical:
         periodical = f', {self.periodical}'
 
-        return f'{authors}{et_alii_authors}{title}{editors_abbrev}{editors}{et_alii_editors}{translators_abbrev}{translators}{et_alii_translators}{periodical}{pages}.{annotation}'
+        description = f'{authors}{et_alii_authors}' \
+            f'<i>{title}</i>' \
+            f'{editors_abbrev}{editors}{et_alii_editors}' \
+            f'{translators_abbrev}{translators}{et_alii_translators}' \
+            f'{periodical}{pages}.{annotation}'
+
+        return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
