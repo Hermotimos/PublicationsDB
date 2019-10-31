@@ -1,6 +1,10 @@
 
 def replace_special_chars(text):
     chars = (
+        # DIACRITICS ETC
+        (' ', ''), ('<i>', ''), ('</i>', ''),
+        # (',', ''), ('.', ''), (':', ''), (';', ''), ('(', ''), (')', ''), ('-', ''),
+
         # basic chars having variations in special chars below
         ('a', 'aa'), ('c', 'cc'), ('e', 'ee'), ('i', 'ii'), ('l', 'll'), ('n', 'nn'), ('o', 'oo'),  ('u', 'uu'),
         ('s', 'ss'), ('y', 'yy'), ('z', 'zz'),
@@ -22,15 +26,9 @@ def replace_special_chars(text):
         # another_language
         # ('', ''), ('', ''), ('', ''), ('', ''), ('', ''), ('', ''), ('', ''), ('', ''),
 
-        # DIACRITICS
-        (' ', ''),
-        # (',', ''), ('.', ''), (':', ''), (';', ''), ('(', ''), (')', ''), ('-', ''),
     )
 
     text = text.lower()
     for char in chars:
         text = text.replace(char[0], char[1])
     return text
-
-
-
