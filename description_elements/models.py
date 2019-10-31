@@ -10,6 +10,7 @@ class Author(models.Model):
         verbose_name = '1. Autor/Redaktor'
         verbose_name_plural = '1. Autorzy i redaktorzy'
         ordering = ['last_name', ]
+        unique_together = ['first_names', 'last_name']
 
     def __str__(self):
         return f'{self.last_name} {self.first_names}' if self.first_names else self.last_name
@@ -23,13 +24,14 @@ class Translator(models.Model):
         verbose_name = '2. Tłumacz'
         verbose_name_plural = '2. Tłumacze'
         ordering = ['last_name', ]
+        unique_together = ['first_names', 'last_name']
 
     def __str__(self):
-        return f'{self.first_names} {self.last_name}'
+        return f'{self.last_name} {self.first_names}'
 
 
 class Location(models.Model):
-    name = models.CharField(max_length=500, verbose_name="Miejscowość")
+    name = models.CharField(max_length=100, verbose_name="Miejscowość", unique=True)
 
     class Meta:
         verbose_name = '3. Miejscowość'
@@ -58,6 +60,7 @@ class Periodical(models.Model):
     class Meta:
         verbose_name = '4. Periodyk'
         verbose_name_plural = '4. Periodyki'
+        unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2', 'vol_info_lvl_3']
 
 
 class EncompassingBibliographicUnit(models.Model):
