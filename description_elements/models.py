@@ -44,10 +44,10 @@ class Location(models.Model):
 
 class Periodical(models.Model):
     title = models.CharField(max_length=1000, verbose_name='Tytuł periodyku', blank=True, null=True)
-    published_year = models.CharField(max_length=100, verbose_name='Rok wydania', blank=True, null=True)
-    vol_info_lvl_1 = models.CharField(max_length=100, verbose_name='Numeracja wolumenu poziom 1', blank=True, null=True)
-    vol_info_lvl_2 = models.CharField(max_length=100, verbose_name='Numeracja wolumenu poziom 2', blank=True, null=True)
-    vol_info_lvl_3 = models.CharField(max_length=100, verbose_name='Numeracja wolumenu poziom 3', blank=True, null=True)
+    published_year = models.CharField(max_length=20, verbose_name='Rok wydania', blank=True, null=True)
+    vol_info_lvl_1 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 1', blank=True, null=True)
+    vol_info_lvl_2 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 2', blank=True, null=True)
+    vol_info_lvl_3 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 3', blank=True, null=True)
 
     def __str__(self):
         title = self.title
@@ -60,7 +60,7 @@ class Periodical(models.Model):
     class Meta:
         verbose_name = '4. Periodyk'
         verbose_name_plural = '4. Periodyki'
-        unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2', 'vol_info_lvl_3']
+        unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2']
 
 
 class EncompassingBibliographicUnit(models.Model):
