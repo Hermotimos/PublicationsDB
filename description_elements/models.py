@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 
 class Author(models.Model):
@@ -132,7 +133,13 @@ class EncompassingBibliographicUnit(models.Model):
         else:
             year = ' [błąd instrukcji warunkowej!]'
 
-        return f'{authors}{et_alii_authors}{title}{ed}{editors_abbrev}{editors}{et_alii_editors}{translators}{et_alii_translators}{vols}{locations}{year}'
+        description = f'{authors}{et_alii_authors}' \
+            f'<i>{title}</i>' \
+            f'{ed}{editors_abbrev}{editors}{et_alii_editors}' \
+            f'{translators}{et_alii_translators}' \
+            f'{vols}{locations}{year}'
+
+        return format_html(f'{description}')
 
     class Meta:
         verbose_name = '5. Wydawnictwo zwarte nadrzędne'
