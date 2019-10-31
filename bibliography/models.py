@@ -10,7 +10,6 @@ class BibliographicUnitBook(models.Model):
                                      related_name='bib_units_books_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
-    is_over_three_authors = models.BooleanField(verbose_name='Więcej niż trzech autorów?', default=False)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
@@ -18,14 +17,12 @@ class BibliographicUnitBook(models.Model):
                                      related_name='bib_units_books_as_editor',
                                      verbose_name='Redakcja/Opracowanie itp.',
                                      blank=True)
-    is_over_three_editors = models.BooleanField(verbose_name='Więcej niż trzech red./oprac. itp.?', default=False)
     translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
                                           blank=True, null=True)
     translators = models.ManyToManyField(Translator,
                                          related_name='bib_units_books_as_translator',
                                          verbose_name='Tłumaczenie',
                                          blank=True)
-    is_over_three_translators = models.BooleanField(verbose_name='Więcej niż trzech tłumaczy?', default=False)
 
     published_locations = models.ManyToManyField(Location,
                                                  related_name='bib_units_books',
@@ -51,9 +48,6 @@ class BibliographicUnitBook(models.Model):
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
-        et_alii_authors = ' i in.' if self.is_over_three_authors else ''
-        et_alii_editors = ' i in.' if self.is_over_three_editors else ''
-        et_alii_translators = ' i in.' if self.is_over_three_translators else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', {self.title}'
@@ -82,10 +76,10 @@ class BibliographicUnitBook(models.Model):
         else:
             year = ' [błąd instrukcji warunkowej!]'
 
-        description = f'{authors}{et_alii_authors}' \
+        description = f'{authors}' \
             f'<i>{title}</i>' \
-            f'{ed}{editors_abbrev}{editors}{et_alii_editors}' \
-            f'{translators_abbrev}{translators}{et_alii_translators}' \
+            f'{ed}{editors_abbrev}{editors}' \
+            f'{translators_abbrev}{translators}' \
             f'{vols}{locations}{year}.{annotation}'
 
         return format_html(f'{description}')
@@ -107,7 +101,6 @@ class BibliographicUnitPartOfBook(models.Model):
                                      related_name='bib_units_parts_of_books_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
-    is_over_three_authors = models.BooleanField(verbose_name='Więcej niż trzech autorów?', default=False)
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
@@ -115,22 +108,20 @@ class BibliographicUnitPartOfBook(models.Model):
                                      related_name='bib_units_parts_of_books_as_editor',
                                      verbose_name='Redakcja/Opracowanie itp.',
                                      blank=True)
-    is_over_three_editors = models.BooleanField(verbose_name='Więcej niż trzech red./oprac. itp.?', default=False)
     translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
                                           blank=True, null=True)
     translators = models.ManyToManyField(Translator,
                                          related_name='bib_units_parts_of_books_as_translator',
                                          verbose_name='Tłumaczenie',
                                          blank=True)
-    is_over_three_translators = models.BooleanField(verbose_name='Więcej niż trzech tłumaczy?', default=False)
 
     encompassing_bibliographic_unit = models.ForeignKey(EncompassingBibliographicUnit,
                                                         related_name='dependent_bibliographic_units',
                                                         verbose_name='Opublikowane w: (wydawnictwo zwarte)',
                                                         on_delete=models.PROTECT)
     in_volume = models.CharField(max_length=100, verbose_name='Tom (np. "t. 2")', blank=True, null=True)
-    encompassing_bibliographic_unit_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")',
-                                                             blank=True, null=True)
+    # encompassing_bibliographic_unit_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")',
+    #                                                          blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='bib_units_parts_of_books',
@@ -149,9 +140,6 @@ class BibliographicUnitPartOfBook(models.Model):
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
-        et_alii_authors = ' i in.' if self.is_over_three_authors else ''
-        et_alii_editors = ' i in.' if self.is_over_three_editors else ''
-        et_alii_translators = ' i in.' if self.is_over_three_translators else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', {self.title}'
@@ -159,7 +147,7 @@ class BibliographicUnitPartOfBook(models.Model):
             title = self.title
 
         vol = f', {self.in_volume}' if self.in_volume else ''
-        pages = f', {self.encompassing_bibliographic_unit_pages}' if self.encompassing_bibliographic_unit_pages else ''
+        # pages = f', {self.encompassing_bibliographic_unit_pages}' if self.encompassing_bibliographic_unit_pages else ''
         annotation = f' [{self.annotation}]' if self.annotation else ''
 
         # PART 2: elements considering encompassing bibliographic unit:
@@ -170,9 +158,6 @@ class BibliographicUnitPartOfBook(models.Model):
 
         u_editors_abbrev = f', {unit.editors_abbrev}' if unit.editors_abbrev else ''
         u_translators_abbrev = f', {unit.translators_abbrev}' if unit.translators_abbrev else ''
-        u_et_alii_editors = ' i in.' if unit.is_over_three_editors else ''
-        u_et_alii_authors = ' i in.' if unit.is_over_three_authors else ''
-        u_et_alii_translators = ' i in.' if unit.is_over_three_translators else ''
 
         if unit.title and unit.authors.all().count() > 0:
             u_title = f', {unit.title}'
@@ -199,17 +184,17 @@ class BibliographicUnitPartOfBook(models.Model):
         else:
             u_year = ' [błąd instrukcji warunkowej!]'
 
-        unit = f', w: {u_authors}{u_et_alii_authors}' \
-            f'<i>{u_title}</i>' \
-            f'{u_ed}{u_editors_abbrev}{u_editors}{u_et_alii_editors}' \
-            f'{u_translators_abbrev}{u_translators}{u_et_alii_translators}' \
-            f'{vol}{u_locations}{u_year}'
+        unit = f', w: {u_authors}' \
+            f'<i>{u_title}</i>{vol}' \
+            f'{u_ed}{u_editors_abbrev}{u_editors}' \
+            f'{u_translators_abbrev}{u_translators}' \
+            f'{u_locations}{u_year}'
 
-        description = f'{authors}{et_alii_authors}' \
+        description = f'{authors}' \
             f'<i>{title}</i>' \
-            f'{editors_abbrev}{editors}{et_alii_editors}' \
-            f'{translators_abbrev}{translators}{et_alii_translators}' \
-            f'{unit}{pages}.{annotation}'
+            f'{editors_abbrev}{editors}' \
+            f'{translators_abbrev}{translators}' \
+            f'{unit}.{annotation}'                                   # IF PAGES: f'{unit}{pages}.{annotation}'
 
         return format_html(f'{description}')
 
@@ -230,7 +215,6 @@ class BibliographicUnitPartOfPeriodical(models.Model):
                                      related_name='bib_units_parts_of_periodicals_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
-    is_over_three_authors = models.BooleanField(verbose_name='Więcej niż trzech autorów?', default=False)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
@@ -238,20 +222,18 @@ class BibliographicUnitPartOfPeriodical(models.Model):
                                      related_name='bib_units_parts_of_periodicals_as_editor',
                                      verbose_name='Redakcja/Opracowanie itp.',
                                      blank=True)
-    is_over_three_editors = models.BooleanField(verbose_name='Więcej niż trzech red./oprac. itp.?', default=False)
     translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
                                           blank=True, null=True)
     translators = models.ManyToManyField(Translator,
                                          related_name='bib_units_parts_of_periodicals_as_translator',
                                          verbose_name='Tłumaczenie',
                                          blank=True)
-    is_over_three_translators = models.BooleanField(verbose_name='Więcej niż trzech tłumaczy?', default=False)
 
     periodical = models.ForeignKey(Periodical,
                                    related_name='contained_articles',
                                    verbose_name='Opublikowane w: (periodyk)',
                                    on_delete=models.PROTECT)
-    periodical_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")', blank=True, null=True)
+    # periodical_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")', blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='bib_units_parts_of_periodicals',
@@ -270,26 +252,23 @@ class BibliographicUnitPartOfPeriodical(models.Model):
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
-        et_alii_authors = ' i in.' if self.is_over_three_authors else ''
-        et_alii_editors = ' i in.' if self.is_over_three_editors else ''
-        et_alii_translators = ' i in.' if self.is_over_three_translators else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', {self.title}'
         else:
             title = self.title
 
-        pages = f', {self.periodical_pages}' if self.periodical_pages else ''
+        # pages = f', {self.periodical_pages}' if self.periodical_pages else ''
         annotation = f' [{self.annotation}]' if self.annotation else ''
 
         # PART 2: elements considering the periodical:
         periodical = f', {self.periodical}'
 
-        description = f'{authors}{et_alii_authors}' \
+        description = f'{authors}' \
             f'<i>{title}</i>' \
-            f'{editors_abbrev}{editors}{et_alii_editors}' \
-            f'{translators_abbrev}{translators}{et_alii_translators}' \
-            f'{periodical}{pages}.{annotation}'
+            f'{editors_abbrev}{editors}' \
+            f'{translators_abbrev}{translators}' \
+            f'{periodical}.{annotation}'                                # IF PAGES: f'{periodical}{pages}.{annotation}'
 
         return format_html(f'{description}')
 

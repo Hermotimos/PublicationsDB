@@ -65,7 +65,6 @@ class EncompassingBibliographicUnit(models.Model):
                                      related_name='encompassing_bib_units_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
-    is_over_three_authors = models.BooleanField(verbose_name='Więcej niż trzech autorów?', default=False)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
@@ -73,14 +72,12 @@ class EncompassingBibliographicUnit(models.Model):
                                      related_name='encompassing_bib_units_as_editor',
                                      verbose_name='Redakcja/Opracowanie itp.',
                                      blank=True)
-    is_over_three_editors = models.BooleanField(verbose_name='Więcej niż trzech red./oprac. itp.?', default=False)
     translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
                                           blank=True, null=True)
     translators = models.ManyToManyField(Translator,
                                          related_name='encompassing_bib_units_as_translator',
                                          verbose_name='Tłumaczenie',
                                          blank=True)
-    is_over_three_translators = models.BooleanField(verbose_name='Więcej niż trzech tłumaczy?', default=False)
 
     edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
     volumes = models.CharField(max_length=100, verbose_name='Tomy', blank=True, null=True)
@@ -103,9 +100,6 @@ class EncompassingBibliographicUnit(models.Model):
         translators = f', {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
 
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
-        et_alii_authors = ' i in.' if self.is_over_three_authors else ''
-        et_alii_editors = ' i in.' if self.is_over_three_editors else ''
-        et_alii_translators = ' i in.' if self.is_over_three_translators else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', {self.title}'
@@ -133,10 +127,10 @@ class EncompassingBibliographicUnit(models.Model):
         else:
             year = ' [błąd instrukcji warunkowej!]'
 
-        description = f'{authors}{et_alii_authors}' \
+        description = f'{authors}' \
             f'<i>{title}</i>' \
-            f'{ed}{editors_abbrev}{editors}{et_alii_editors}' \
-            f'{translators}{et_alii_translators}' \
+            f'{ed}{editors_abbrev}{editors}' \
+            f'{translators}' \
             f'{vols}{locations}{year}'
 
         return format_html(f'{description}')
