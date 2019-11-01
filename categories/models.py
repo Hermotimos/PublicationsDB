@@ -12,6 +12,16 @@ class CategoryLevelOne(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        super(CategoryLevelOne, self).save(*args, **kwargs)
+        if self.categories_lvl_2.count() == 0:
+            self.categories_lvl_2.create()
+
+        elif self.categories_lvl_2.count() > 0:
+            for cat2 in CategoryLevelTwo.objects.filter(cat_lvl_1=self):
+                if cat2.name == '---':
+                    cat2.delete()
+
 
 class CategoryLevelTwo(models.Model):
     cat_lvl_1 = models.ForeignKey(CategoryLevelOne,
@@ -28,6 +38,21 @@ class CategoryLevelTwo(models.Model):
     def __str__(self):
         return f'{self.cat_lvl_1} / {self.name}'
 
+    def save(self, *args, **kwargs):
+        super(CategoryLevelTwo, self).save(*args, **kwargs)
+        if self.categories_lvl_3.count() == 0:
+            self.categories_lvl_3.create()
+
+        elif self.categories_lvl_3.count() > 0:
+            for cat3 in CategoryLevelThree.objects.filter(cat_lvl_2=self):
+                if cat3.name == '---':
+                    cat3.delete()
+
+        if self.cat_lvl_1.categories_lvl_2.count() > 1:
+            for cat2 in self.cat_lvl_1.categories_lvl_2.all():
+                if cat2.name == '---':
+                    cat2.delete()
+
 
 class CategoryLevelThree(models.Model):
     cat_lvl_2 = models.ForeignKey(CategoryLevelTwo,
@@ -43,6 +68,14 @@ class CategoryLevelThree(models.Model):
 
     def __str__(self):
         return f'{self.cat_lvl_2} / {self.name}'
+
+    def save(self, *args, **kwargs):
+        super(CategoryLevelThree, self).save(*args, **kwargs)
+
+        if self.cat_lvl_2.categories_lvl_3.count() > 1:
+            for cat3 in self.cat_lvl_2.categories_lvl_3.all():
+                if cat3.name == '---':
+                    cat3.delete()
 
 
 # class SubcategoryLevelThree(models.Model):
