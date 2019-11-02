@@ -5,11 +5,11 @@ from publications_db.utils import replace_special_chars
 
 
 def bibliography_main_view(request):
-    books = [obj.description for obj in BibliographicUnitBook.objects.all()]
-    parts_of_books = [obj.description for obj in BibliographicUnitPartOfBook.objects.all()]
-    parts_of_periodicals = [obj.description for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    books = [obj for obj in BibliographicUnitBook.objects.all()]
+    parts_of_books = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
+    parts_of_periodicals = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
     all_descriptions = books + parts_of_books + parts_of_periodicals
-    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc))
+    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
         'page_title': 'Strona główna',

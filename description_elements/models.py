@@ -82,7 +82,7 @@ class EncompassingBibliographicUnit(models.Model):
                                          verbose_name='Tłumaczenie',
                                          blank=True)
 
-    edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
+    # edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
     volumes = models.CharField(max_length=100, verbose_name='Tomy', blank=True, null=True)
     published_locations = models.ManyToManyField(Location,
                                                  related_name='encompassing_bib_units',
@@ -109,7 +109,7 @@ class EncompassingBibliographicUnit(models.Model):
         else:
             title = self.title
 
-        ed = f', {self.edition}' if self.edition else ''
+        # ed = f', {self.edition}' if self.edition else ''
         vols = f', {self.volumes}' if self.volumes else ''
 
         if self.published_locations.all().count() == 1:
@@ -125,14 +125,14 @@ class EncompassingBibliographicUnit(models.Model):
             year = f', {self.published_year}'
         elif not self.published_year and self.published_locations.all().count() >= 1:
             year = ' [brw]'
-        elif not self.published_locations and self.published_locations.all().count() == 0:
-            year = ', [brw]'
+        elif not self.published_year and self.published_locations.all().count() == 0:
+            year = ', [b.m.], [b.r.]'
         else:
             year = ' [błąd instrukcji warunkowej!]'
 
         description = f'{authors}' \
             f'<i>{title}</i>' \
-            f'{ed}{editors_abbrev}{editors}' \
+            f'{editors_abbrev}{editors}' \
             f'{translators}' \
             f'{vols}{locations}{year}'
 
