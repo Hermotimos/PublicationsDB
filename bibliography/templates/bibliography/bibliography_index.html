@@ -12,31 +12,35 @@
             <!--  COLLAPSIBLE LVL 2  -->
             {% for cat2 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1 %}
                 {% if cat2.name != '---' %}
-                    <h5><b class="hover-blue cat2" data-toggle="collapse" data-target="#{{ cat2.name }}">&emsp;{{ cat2.name }}</b></h5>
+                    <h5><b class="hover-blue cat2" data-toggle="collapse" data-target="#{{ cat2.name }}">{{ cat2.name }}</b></h5>
                     <div id="{{ cat2.name }}" class="panel-collapse collapse in">
                         
                         <!--  COLLAPSIBLE LVL 3  -->
                         {% for cat3 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1|dict_lookup:cat2 %}
                             {% if cat3.name != '---' %}
-                                <h6><b class="hover-blue" data-toggle="collapse" data-target="#{{ cat3.name }}">&emsp;&emsp;{{ cat3.name }}</b></h6>
+                                <h6><b class="hover-blue" data-toggle="collapse" data-target="#{{ cat3.name }}">{{ cat3.name }}</b></h6>
                                 <div id="{{ cat3.name }}" class="panel-collapse collapse in">
                                     <div class="panel-body">
+                                        <ul>
                                         {% for desc in descriptions %}
                                             {% if cat3 in desc.cat_lvl_3.all %}
-                                                <p class="description">&#8226; {{ desc }}</p>
+                                                <li class="description">{{ desc }}</li>
                                             {% endif %}
                                         {% endfor %}
+                                        </ul>
                                         <br>
                                     </div>
                                 </div>
                                 
                             <!--  IF NO COLLAPSIBLE AT LVL 3  -->
                             {% else %}
+                                <ul>
                                 {% for desc in descriptions %}
                                     {% if cat3 in desc.cat_lvl_3.all %}
-                                        <p class="description">&#8226; {{ desc }}</p>
+                                        <li class="description">{{ desc }}</li>
                                     {% endif %}
                                 {% endfor %}
+                                </ul>
                                 <br>
                             {% endif %}
                         
@@ -47,12 +51,14 @@
                 <!--  IF NO COLLAPSIBLE AT LVL 2  -->
                 {% else %}
                     {% for cat3 in cat1_with_cat2_with_cat3_dict|dict_lookup:cat1|dict_lookup:cat2 %}
-                        {% if cat3.name != '---' %}<h6>&emsp;&nbsp;<b>{{ cat3.name }}</b></h6>{% endif %}
-                        {% for desc in descriptions %}
-                            {% if cat3 in desc.cat_lvl_3.all %}
-                                <p class="description">&#8226; {{ desc }}</p>
-                            {% endif %}
-                        {% endfor %}
+                        {% if cat3.name != '---' %}<h6><b>{{ cat3.name }}</b></h6>{% endif %}
+                            <ul>
+                            {% for desc in descriptions %}
+                                {% if cat3 in desc.cat_lvl_3.all %}
+                                    <li class="description">{{ desc }}</li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
                     {% endfor %}
                     <br>
                 {% endif %}
