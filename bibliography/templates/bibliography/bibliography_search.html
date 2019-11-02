@@ -6,7 +6,7 @@
         <h2>Formularz wyszukiwania</h2>
         <br>
         <form method="GET" action="">
-            <input type="text" name="search1" placeholder="Wyszukaj w:"/>
+            <input type="text" name="search1" placeholder="Wyszukaj w:" value="{{ request.GET.search1 }}"/>
             <select id="option1" name="option1">
                 <option value="all">Wszystkie pola</option>
                 <option value="author">Autor/Redaktor</option>
@@ -15,7 +15,7 @@
             </select>
             <br><br>
             
-            <input type="text" name="search2" placeholder="Wyszukaj w:"/>
+            <input type="text" name="search2" placeholder="Wyszukaj w:" value="{{ request.GET.search2 }}"/>
             <select id="option2" name="option2">
                 <option value="all">Wszystkie pola</option>
                 <option value="author">Autor/Redaktor</option>
