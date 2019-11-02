@@ -112,3 +112,7 @@ h5 {
 h6 {
         margin-bottom: 10px;
         margin-left: 40px;}
+
+p.operator {
+        margin-bottom: 0px;
+}

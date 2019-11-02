@@ -6,7 +6,8 @@
         <h2>Formularz wyszukiwania</h2>
         <br>
         <form method="GET" action="">
-            <input type="text" name="search1" placeholder="Wyszukaj w:" value="{{ request.GET.search1 }}"/>
+            <!--  COL 1   -->
+            <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}"/>
             <select id="option1" name="option1">
                 <option value="all">Wszystkie pola</option>
                 <option value="author">Autor/Redaktor</option>
@@ -14,8 +15,15 @@
                 <option value="year">Rok wydania</option>
             </select>
             <br><br>
+            <label>Operator logiczny:</label>
+            <select id="operator" name="operator">
+                <option value="none">---</option>
+                <option value="or">OR</option>
+                <option value="not">NOT</option>
+            </select>
+            <br><br>
             
-            <input type="text" name="search2" placeholder="Wyszukaj w:" value="{{ request.GET.search2 }}"/>
+            <input type="text" name="search2" placeholder="Szukane słowo/fraza" value="{{ request.GET.search2 }}"/>
             <select id="option2" name="option2">
                 <option value="all">Wszystkie pola</option>
                 <option value="author">Autor/Redaktor</option>
@@ -24,6 +32,8 @@
             </select>
             <br><br>
             
+
+            
             <br><br>
             <button class="btn btn-dark" type="submit">Wyszukaj</button>
             <a href="{% url 'bibliography:search' %}" class="btn btn-dark text-right">Nowe wyszukiwanie</a>
@@ -31,11 +41,18 @@
     </div>
     
     <br>
-    <h2>Wyniki wyszukiwania:</h2>
+    {% if is_searching %}
+        <h2>Wyniki wyszukiwania:</h2>
+        {% if sorted_results %}
+            {% for description in sorted_results %}
+                <li>{{ description }}</li>
+            {% endfor %}
+        {% else %}
+            <p>Brak pozycji spełniających wybrane kryteria wyszukiwania.</p>
+        {% endif %}
+    {% endif %}
     <br>
-    {% for description in sorted_results %}
-        <li>{{ description }}</li>
-    {% endfor %}
-
+    {{ descriptions_1_2 }}<br><br>
+    {{ descriptions_3_4 }}
 {% endblock content %}
 
