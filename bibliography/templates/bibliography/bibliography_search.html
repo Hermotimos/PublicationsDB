@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <form method="GET" action="">
+            <input type="text" name="search1" placeholder="Szukaj"/>
+            <select id="option1" name="option1">
+                <option value="all">Wszystkie pola</option>
+                <option value="author">Autor/Redaktor</option>
+                <option value="title">Tytuł</option>
+                <option value="year">Rok wydania</option>
+            </select>
+            <br><br>
+            
+            <br><br>
+            <input type="submit" value="Szukaj">
+        </form>
+    </div>
+    
+    <br>
+
+    {% for description in sorted_results %}
+        <li>{{ description }}</li>
+    {% endfor %}
+
+{% endblock content %}
+

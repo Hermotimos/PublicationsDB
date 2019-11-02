@@ -48,7 +48,6 @@ def bibliography_index_view(request):
     # }
 
     # Version 2: shows only categories and subcategories containing at least 1 description
-
     def is_not_empty_cat3(category3):
         """Returns 0 for False if category is empty, else >0 for True if not empty"""
         return category3.bib_units_books.count() \
@@ -84,7 +83,41 @@ def bibliography_index_view(request):
 
 
 def bibliography_search_view(request):
-    pass
+    books_qs = BibliographicUnitBook.objects.all()
+    parts_of_books_qs = BibliographicUnitPartOfBook.objects.all()
+    parts_of_periodicals_qs = BibliographicUnitPartOfPeriodical.objects.all()
+
+    query1 = request.GET.get('search1')
+    option1 = request.GET.get('option1')
+    if query1:
+        if option1 == 'all':
+            books_qs = books_qs.filter(description__icontains=query1)
+            parts_of_books_qs = parts_of_books_qs.filter(description__icontains=query1)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(description__icontains=query1)
+        elif option1 == 'author':
+            books_qs = books_qs.filter(authors__last_name__icontains=query1)
+            parts_of_books_qs = parts_of_books_qs.filter(authors__last_name__icontains=query1)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(authors__last_name__icontains=query1)
+        elif option1 == 'title':
+            books_qs = books_qs.filter(title__icontains=query1)
+            parts_of_books_qs = parts_of_books_qs.filter(title__icontains=query1)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(title__icontains=query1)
+        elif option1 == 'year':
+            books_qs = books_qs.filter(published_year__icontains=query1)
+            parts_of_books_qs = parts_of_books_qs.filter(encompassing_bibliographic_unit__published_year__icontains=query1)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(periodical__published_year__icontains=query1)
+
+    books = [obj for obj in books_qs]
+    parts_of_books = [obj for obj in parts_of_books_qs]
+    parts_of_periodicals = [obj for obj in parts_of_periodicals_qs]
+    descriptions = books + parts_of_books + parts_of_periodicals
+    sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
+
+    context = {
+        'page_title': 'Wyszukiwanie',
+        'sorted_results': sorted_results,
+    }
+    return render(request, 'bibliography/bibliography_search.html', context)
 
 
 def bibliography_search_results_view(request):
