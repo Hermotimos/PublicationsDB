@@ -10,14 +10,16 @@
             <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}"/>
             <select id="option1" name="option1">
                 <option value="all">Wszystkie pola</option>
-                <option value="author">Autor/Redaktor</option>
+                <option value="author">Autor</option>
                 <option value="title">Tytuł</option>
                 <option value="year">Rok wydania</option>
             </select>
+            
             <br><br>
             <label>Operator logiczny:</label>
             <select id="operator" name="operator">
                 <option value="none">---</option>
+                <option value="and">AND</option>
                 <option value="or">OR</option>
                 <option value="not">NOT</option>
             </select>
@@ -26,13 +28,11 @@
             <input type="text" name="search2" placeholder="Szukane słowo/fraza" value="{{ request.GET.search2 }}"/>
             <select id="option2" name="option2">
                 <option value="all">Wszystkie pola</option>
-                <option value="author">Autor/Redaktor</option>
+                <option value="author">Autor</option>
                 <option value="title">Tytuł</option>
                 <option value="year">Rok wydania</option>
             </select>
             <br><br>
-            
-
             
             <br><br>
             <button class="btn btn-dark" type="submit">Wyszukaj</button>
