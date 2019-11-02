@@ -96,6 +96,8 @@ def bibliography_search_view(request):
     query4 = request.GET.get('search4')
     option4 = request.GET.get('option4')
 
+    # TODO add 'editors' field to filters (if client wants it) - together or separate from author?
+
     if query1:
         if option1 == 'all':
             books_qs = books_qs.filter(description__icontains=query1)
