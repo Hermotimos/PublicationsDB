@@ -89,6 +89,13 @@ def bibliography_search_view(request):
 
     query1 = request.GET.get('search1')
     option1 = request.GET.get('option1')
+    query2 = request.GET.get('search2')
+    option2 = request.GET.get('option2')
+    query3 = request.GET.get('search3')
+    option3 = request.GET.get('option3')
+    query4 = request.GET.get('search4')
+    option4 = request.GET.get('option4')
+
     if query1:
         if option1 == 'all':
             books_qs = books_qs.filter(description__icontains=query1)
@@ -106,6 +113,24 @@ def bibliography_search_view(request):
             books_qs = books_qs.filter(published_year__icontains=query1)
             parts_of_books_qs = parts_of_books_qs.filter(encompassing_bibliographic_unit__published_year__icontains=query1)
             parts_of_periodicals_qs = parts_of_periodicals_qs.filter(periodical__published_year__icontains=query1)
+
+    if query2:
+        if option2 == 'all':
+            books_qs = books_qs.filter(description__icontains=query2)
+            parts_of_books_qs = parts_of_books_qs.filter(description__icontains=query2)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(description__icontains=query2)
+        elif option2 == 'author':
+            books_qs = books_qs.filter(authors__last_name__icontains=query2)
+            parts_of_books_qs = parts_of_books_qs.filter(authors__last_name__icontains=query2)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(authors__last_name__icontains=query2)
+        elif option2 == 'title':
+            books_qs = books_qs.filter(title__icontains=query2)
+            parts_of_books_qs = parts_of_books_qs.filter(title__icontains=query2)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(title__icontains=query2)
+        elif option2 == 'year':
+            books_qs = books_qs.filter(published_year__icontains=query2)
+            parts_of_books_qs = parts_of_books_qs.filter(encompassing_bibliographic_unit__published_year__icontains=query2)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(periodical__published_year__icontains=query2)
 
     books = [obj for obj in books_qs]
     parts_of_books = [obj for obj in parts_of_books_qs]
