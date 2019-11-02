@@ -88,12 +88,12 @@ def bibliography_search_view(request):
     parts_of_periodicals_qs = BibliographicUnitPartOfPeriodical.objects.all()
 
     query1 = request.GET.get('search1')
-    option1 = request.GET.get('option1')
     query2 = request.GET.get('search2')
-    option2 = request.GET.get('option2')
     query3 = request.GET.get('search3')
-    option3 = request.GET.get('option3')
     query4 = request.GET.get('search4')
+    option1 = request.GET.get('option1')
+    option2 = request.GET.get('option2')
+    option3 = request.GET.get('option3')
     option4 = request.GET.get('option4')
 
     # TODO add 'editors' field to filters (if client wants it) - together or separate from author?
@@ -113,8 +113,8 @@ def bibliography_search_view(request):
             parts_of_periodicals_qs = parts_of_periodicals_qs.filter(title__icontains=query1)
         elif option1 == 'year':
             books_qs = books_qs.filter(published_year__icontains=query1)
-            parts_of_books_qs = parts_of_books_qs.filter(encompassing_bibliographic_unit__published_year__icontains=query1)
-            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(periodical__published_year__icontains=query1)
+            parts_of_books_qs = parts_of_books_qs.filter(published_year__icontains=query1)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(published_year__icontains=query1)
 
     if query2:
         if option2 == 'all':
@@ -131,8 +131,8 @@ def bibliography_search_view(request):
             parts_of_periodicals_qs = parts_of_periodicals_qs.filter(title__icontains=query2)
         elif option2 == 'year':
             books_qs = books_qs.filter(published_year__icontains=query2)
-            parts_of_books_qs = parts_of_books_qs.filter(encompassing_bibliographic_unit__published_year__icontains=query2)
-            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(periodical__published_year__icontains=query2)
+            parts_of_books_qs = parts_of_books_qs.filter(published_year__icontains=query2)
+            parts_of_periodicals_qs = parts_of_periodicals_qs.filter(published_year__icontains=query2)
 
     books = [obj for obj in books_qs]
     parts_of_books = [obj for obj in parts_of_books_qs]

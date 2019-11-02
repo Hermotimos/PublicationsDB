@@ -132,6 +132,10 @@ class BibliographicUnitPartOfBook(models.Model):
                                     blank=True, null=True)
     description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
                                    blank=True, null=True)
+    # following field is needed to simplify bibliography_search_view():
+    published_year = models.CharField(max_length=100,
+                                      verbose_name="Rok wydania wydawnictwa nadrzędnego (pole wypełniane automatycznie)",
+                                      blank=True, null=True)
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
@@ -201,6 +205,7 @@ class BibliographicUnitPartOfBook(models.Model):
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
         name = remove_tags(self.__str__())
         self.description = name
+        self.published_year = self.encompassing_bibliographic_unit.published_year
         self.sorting_name = replace_special_chars(name)
         super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
 
@@ -243,6 +248,10 @@ class BibliographicUnitPartOfPeriodical(models.Model):
                                     blank=True, null=True)
     description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
                                    blank=True, null=True)
+    # following field is needed to simplify bibliography_search_view():
+    published_year = models.CharField(max_length=100,
+                                      verbose_name="Rok wydania periodyku (pole wypełniane automatycznie)",
+                                      blank=True, null=True)
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a periodical:
@@ -275,6 +284,7 @@ class BibliographicUnitPartOfPeriodical(models.Model):
         name = remove_tags(self.__str__())
         self.description = name
         self.sorting_name = replace_special_chars(name)
+        self.published_year = self.periodical.published_year
         super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
 
     class Meta:

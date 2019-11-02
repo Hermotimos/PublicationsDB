@@ -6,7 +6,7 @@ from django import forms
 class BibliographicUnitBookAdminForm(forms.ModelForm):
     class Meta:
         model = BibliographicUnitBook
-        exclude = []
+        exclude = ['sorting_name', 'description', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
             'editors': forms.SelectMultiple(attrs={'size': 20}),
@@ -30,7 +30,7 @@ class BibliographicUnitBookAdminForm(forms.ModelForm):
 class BibliographicUnitPartOfBookAdminForm(forms.ModelForm):
     class Meta:
         model = BibliographicUnitBook
-        exclude = []
+        exclude = ['sorting_name', 'description', 'published_year', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
             'editors': forms.SelectMultiple(attrs={'size': 20}),
@@ -51,7 +51,7 @@ class BibliographicUnitPartOfBookAdminForm(forms.ModelForm):
 class BibliographicUnitPartOfPeriodicalAdminForm(forms.ModelForm):
     class Meta:
         model = BibliographicUnitBook
-        exclude = []
+        exclude = ['sorting_name', 'description', 'published_year', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
             'editors': forms.SelectMultiple(attrs={'size': 20}),
