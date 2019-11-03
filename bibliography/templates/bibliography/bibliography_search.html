@@ -7,7 +7,7 @@
         <br>
         <form method="GET" action="">
             <!--  COL 1   -->
-            <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}"/>
+            <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}" required/>
             <select id="option1" name="option1">
                 <option value="all">Wszystkie pola</option>
                 <option value="author">Autor</option>
