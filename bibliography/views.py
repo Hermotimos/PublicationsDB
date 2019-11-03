@@ -154,65 +154,60 @@ def bibliography_search_view(request):
         # CASE 2.2: both queries with 'OR' operator:
         elif query1 and query2 and operator == 'or':
             if option2 == 'all':
-                books_2 = books_2.filter(description__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(description__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(description__icontains=query2)
+                books_2 = books_2.filter(description__icontains=query2).union(books_1)
+                parts_of_books_2 = parts_of_books_2.filter(description__icontains=query2).union(parts_of_books_1)
+                parts_of_periodicals_2 = parts_of_periodicals_2.filter(description__icontains=query2).\
+                    union(parts_of_periodicals_1)
             elif option2 == 'author':
-                books_2 = books_2.filter(authors__last_name__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(authors__last_name__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(authors__last_name__icontains=query2)
+                books_2 = books_2.filter(authors__last_name__icontains=query2).union(books_1)
+                parts_of_books_2 = parts_of_books_2.filter(authors__last_name__icontains=query2).union(parts_of_books_1)
+                parts_of_periodicals_2 = parts_of_periodicals_2.filter(authors__last_name__icontains=query2).\
+                    union(parts_of_periodicals_1)
             elif option2 == 'title':
-                books_2 = books_2.filter(title__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(title__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(title__icontains=query2)
+                books_2 = books_2.filter(title__icontains=query2).union(books_1)
+                parts_of_books_2 = parts_of_books_2.filter(title__icontains=query2).union(parts_of_books_1)
+                parts_of_periodicals_2 = parts_of_periodicals_2.filter(title__icontains=query2).\
+                    union(parts_of_periodicals_1)
             elif option2 == 'year':
-                books_2 = books_2.filter(published_year__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(published_year__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(published_year__icontains=query2)
-
-            books_1 = [obj for obj in books_1]
-            parts_of_books_1 = [obj for obj in parts_of_books_1]
-            parts_of_periodicals_1 = [obj for obj in parts_of_periodicals_1]
-            descriptions_1 = books_1 + parts_of_books_1 + parts_of_periodicals_1
+                books_2 = books_2.filter(published_year__icontains=query2).union(books_1)
+                parts_of_books_2 = parts_of_books_2.filter(published_year__icontains=query2).union(parts_of_books_1)
+                parts_of_periodicals_2 = parts_of_periodicals_2.filter(published_year__icontains=query2).\
+                    union(parts_of_periodicals_1)
 
             books_2 = [obj for obj in books_2]
             parts_of_books_2 = [obj for obj in parts_of_books_2]
             parts_of_periodicals_2 = [obj for obj in parts_of_periodicals_2]
-            descriptions_2 = books_2 + parts_of_books_2 + parts_of_periodicals_2    # TODO - distinct !!!!
+            descriptions_2 = books_2 + parts_of_books_2 + parts_of_periodicals_2
 
-            descriptions = descriptions_1 + descriptions_2
+            descriptions = descriptions_2
 
         # CASE 2.3: both queries with 'NOT' operator:
         elif query1 and query2 and operator == 'not':
             if option2 == 'all':
-                books_2 = books_2.filter(description__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(description__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(description__icontains=query2)
+                books_2 = books_1.exclude(description__icontains=query2)
+                parts_of_books_2 = parts_of_books_1.exclude(description__icontains=query2)
+                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(description__icontains=query2)
             elif option2 == 'author':
-                books_2 = books_2.filter(authors__last_name__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(authors__last_name__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(authors__last_name__icontains=query2)
+                books_2 = books_1.exclude(authors__last_name__icontains=query2)
+                parts_of_books_2 = parts_of_books_1.exclude(authors__last_name__icontains=query2)
+                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(authors__last_name__icontains=query2)
             elif option2 == 'title':
-                books_2 = books_2.filter(title__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(title__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(title__icontains=query2)
+                books_2 = books_1.exclude(title__icontains=query2)
+                parts_of_books_2 = parts_of_books_1.exclude(title__icontains=query2)
+                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(title__icontains=query2)
             elif option2 == 'year':
-                books_2 = books_2.filter(published_year__icontains=query2)
-                parts_of_books_2 = parts_of_books_2.filter(published_year__icontains=query2)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(published_year__icontains=query2)
+                books_2 = books_1.exclude(published_year__icontains=query2)
+                parts_of_books_2 = parts_of_books_1.exclude(published_year__icontains=query2)
+                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(published_year__icontains=query2)
 
             books_2 = [obj for obj in books_2]
             parts_of_books_2 = [obj for obj in parts_of_books_2]
             parts_of_periodicals_2 = [obj for obj in parts_of_periodicals_2]
+            descriptions_2 = books_2 + parts_of_books_2 + parts_of_periodicals_2
 
-            books_1 = [obj for obj in books_1 if obj not in books_2]
-            parts_of_books_1 = [obj for obj in parts_of_books_1 if obj not in parts_of_books_2]
-            parts_of_periodicals_1 = [obj for obj in parts_of_periodicals_1 if obj not in parts_of_periodicals_2]
-            descriptions_1 = books_1 + parts_of_books_1 + parts_of_periodicals_1
+            descriptions = descriptions_2
 
-            descriptions = descriptions_1
-
-        # CASE 2.4: query1 without any operator (option == 'none') regardless of query2:
+        # CASE 2.4: query1 without any operator (operator option == 'none') regardless of query2:
         else:
             books_1 = [obj for obj in books_1]
             parts_of_books_1 = [obj for obj in parts_of_books_1]
