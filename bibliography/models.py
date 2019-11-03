@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
+
 from categories.models import CategoryLevelThree
 from description_elements.models import Author, Translator, Location, EncompassingBibliographicUnit, Periodical
 from publications_db.utils import replace_special_chars, remove_tags

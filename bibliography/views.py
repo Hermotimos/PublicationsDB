@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.db.models import Q
 
 from bibliography.models import BibliographicUnitBook, BibliographicUnitPartOfBook, BibliographicUnitPartOfPeriodical
 from categories.models import CategoryLevelOne
@@ -229,10 +228,6 @@ def bibliography_search_view(request):
         'is_searching': is_searching
     }
     return render(request, 'bibliography/bibliography_search.html', context)
-
-
-def bibliography_search_results_view(request):
-    pass
 
 
 def bibliography_reload_view(request):
