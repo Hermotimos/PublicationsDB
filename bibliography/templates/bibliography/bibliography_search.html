@@ -55,12 +55,13 @@
         
     </div>
     
-    <br>
+    <br><br>
     {% if is_searching %}
         <h2>Wyniki wyszukiwania:</h2>
+        <br>
         {% if results %}
-            {% for description in results %}
-                <li>{{ description }}</li>
+            {% for result in results %}
+                <li>{{ result.description|safe }}</li>
             {% endfor %}
         {% else %}
             <p>Brak pozycji spełniających wybrane kryteria wyszukiwania.</p>

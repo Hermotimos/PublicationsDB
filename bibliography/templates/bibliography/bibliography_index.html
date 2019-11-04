@@ -23,7 +23,7 @@
                                     <div class="panel-body">
                                         <ul>
                                         {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                            <li class="description">{{ unit.description }}</li>
+                                            <li class="description">{{ unit.description|safe }}</li>
                                         {% endfor %}
                                         </ul>
                                         <br>
@@ -34,7 +34,7 @@
                             {% else %}
                                 <ul>
                                 {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                    <li class="description">{{ unit.description }}</li>
+                                    <li class="description">{{ unit.description|safe }}</li>
                                 {% endfor %}
                                 </ul>
                                 <br>
@@ -50,7 +50,7 @@
                         {% if cat3.name != '---' %}<h6><b>{{ cat3.name }}</b></h6>{% endif %}
                             <ul>
                             {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                <li class="description">{{ unit.description }}</li>
+                                <li class="description">{{ unit.description|safe }}</li>
                             {% endfor %}
                             </ul>
                     {% endfor %}

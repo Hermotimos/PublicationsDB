@@ -51,9 +51,9 @@ class Book(models.Model):
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
-            title = f', {self.title}'
+            title = f', <i>{self.title}</i>'
         else:
-            title = self.title
+            title = f'<i>{self.title}</i>'
 
         # ed = f', {self.edition}' if self.edition else ''
         vols = f', {self.volumes}' if self.volumes else ''
@@ -78,7 +78,7 @@ class Book(models.Model):
             year = ' [błąd instrukcji warunkowej!]'
 
         description = f'{authors}' \
-            f'<i>{title}</i>' \
+            f'{title}' \
             f'{editors_abbrev}{editors}' \
             f'{translators_abbrev}{translators}' \
             f'{vols}{locations}{year}.{annotation}'
@@ -87,9 +87,8 @@ class Book(models.Model):
 
     def save(self, *args, **kwargs):
         super(Book, self).save(*args, **kwargs)
-        name = remove_tags(self.__str__())
-        self.description = name
-        self.sorting_name = replace_special_chars(name)
+        self.description = self.__str__()
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
         super(Book, self).save(*args, **kwargs)
 
     class Meta:
@@ -147,9 +146,9 @@ class Chapter(models.Model):
         # translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
-            title = f', {self.title}'
+            title = f', <i>{self.title}</i>'
         else:
-            title = self.title
+            title = f'<i>{self.title}</i>'
 
         vol = f', {self.in_volume}' if self.in_volume else ''
         pages = f', {self.encompassing_bibliographic_unit_pages}' if self.encompassing_bibliographic_unit_pages else ''
@@ -165,9 +164,9 @@ class Chapter(models.Model):
         u_translators_abbrev = f', {unit.translators_abbrev}' if unit.translators_abbrev else ''
 
         if unit.title and unit.authors.all().count() > 0:
-            u_title = f', {unit.title}'
+            u_title = f', <i>{unit.title}</i>'
         else:
-            u_title = unit.title
+            u_title = f'<i>{unit.title}</i>'
 
         # u_ed = f', {unit.edition}' if unit.edition else ''
 
@@ -190,12 +189,12 @@ class Chapter(models.Model):
             u_year = ' [błąd instrukcji warunkowej!]'
 
         unit = f', w: {u_authors}' \
-            f'<i>{u_title}</i>' \
+            f'{u_title}' \
             f'{vol}{u_editors_abbrev}{u_editors}' \
             f'{u_translators_abbrev}{u_translators}' \
             f'{u_locations}{u_year}'
 
-        description = f'{authors}<i>{title}</i>{unit}{pages}.{annotation}'
+        description = f'{authors}{title}{unit}{pages}.{annotation}'
         # f'{editors_abbrev}{editors}' \
         # f'{translators_abbrev}{translators}' \
 
@@ -203,10 +202,9 @@ class Chapter(models.Model):
 
     def save(self, *args, **kwargs):
         super(Chapter, self).save(*args, **kwargs)
-        name = remove_tags(self.__str__())
-        self.description = name
+        self.description = self.__str__()
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
         self.published_year = self.encompassing_bibliographic_unit.published_year
-        self.sorting_name = replace_special_chars(name)
         super(Chapter, self).save(*args, **kwargs)
 
     class Meta:
@@ -261,7 +259,7 @@ class Article(models.Model):
         # translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
-            title = f', {self.title}'
+            title = f', <i>{self.title}</i>'
         else:
             title = self.title
 
@@ -269,7 +267,7 @@ class Article(models.Model):
         annotation = f' [{self.annotation}]' if self.annotation else ''
         periodical = f', {self.periodical}'
 
-        description = f'{authors}<i>{title}</i>{periodical}{pages}.{annotation}'
+        description = f'{authors}{title}{periodical}{pages}.{annotation}'
         # f'{editors_abbrev}{editors}' \
         # f'{translators_abbrev}{translators}' \
 
@@ -277,9 +275,8 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         super(Article, self).save(*args, **kwargs)
-        name = remove_tags(self.__str__())
-        self.description = name
-        self.sorting_name = replace_special_chars(name)
+        self.description = self.__str__()
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
         self.published_year = self.periodical.published_year
         super(Article, self).save(*args, **kwargs)
 
