@@ -34,7 +34,7 @@ class BibliographicUnitBook(models.Model):
     # edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
-                                       related_name='bib_units_books',
+                                       related_name='books',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole wypełniane automatycznie)',
@@ -126,7 +126,7 @@ class BibliographicUnitPartOfBook(models.Model):
                                                              blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
-                                       related_name='bib_units_parts_of_books',
+                                       related_name='chapters',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
@@ -242,7 +242,7 @@ class BibliographicUnitPartOfPeriodical(models.Model):
     periodical_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")', blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
-                                       related_name='bib_units_parts_of_periodicals',
+                                       related_name='articles',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',

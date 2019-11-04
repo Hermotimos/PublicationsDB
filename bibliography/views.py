@@ -9,9 +9,9 @@ from publications_db.utils import replace_special_chars
 
 def bibliography_main_view(request):
     books = [obj for obj in BibliographicUnitBook.objects.all()]
-    parts_of_books = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
-    parts_of_periodicals = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
-    all_descriptions = books + parts_of_books + parts_of_periodicals
+    chapters = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
+    articles = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    all_descriptions = books + chapters + articles
     sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
@@ -23,9 +23,9 @@ def bibliography_main_view(request):
 
 def bibliography_full_view(request):
     books = [obj for obj in BibliographicUnitBook.objects.all()]
-    parts_of_books = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
-    parts_of_periodicals = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
-    all_descriptions = books + parts_of_books + parts_of_periodicals
+    chapters = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
+    articles = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    all_descriptions = books + chapters + articles
     sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
@@ -38,9 +38,9 @@ def bibliography_full_view(request):
 @query_debugger
 def bibliography_index_view(request):
     books = [obj for obj in BibliographicUnitBook.objects.all()]
-    parts_of_books = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
-    parts_of_periodicals = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
-    all_descriptions = books + parts_of_books + parts_of_periodicals
+    chapters = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
+    articles = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    all_descriptions = books + chapters + articles
 
     # Version 1: shows all categories and subcategories regardless whether they contain any descriptions or not
     # index = {
@@ -60,14 +60,11 @@ def bibliography_index_view(request):
             cat2: {
                 cat3: [
                     unit for unit in
-                    list(cat3.bib_units_books.all())
-                    + list(cat3.bib_units_parts_of_books.all())
-                    + list(cat3.bib_units_parts_of_periodicals.all())
+                    list(cat3.books.all())
+                    + list(cat3.chapters.all())
+                    + list(cat3.articles.all())
                 ]
-                for cat3 in cat2.categories_lvl_3.all().prefetch_related(
-                    'bib_units_parts_of_books',
-                    'bib_units_parts_of_books',
-                    'bib_units_parts_of_periodicals')
+                for cat3 in cat2.categories_lvl_3.all().prefetch_related('books', 'chapters', 'articles')
             } for cat2 in cat1.categories_lvl_2.all()
         }
 
@@ -77,9 +74,9 @@ def bibliography_index_view(request):
 
     # def is_not_empty_cat3(category3):
     #     """Returns 0 for False if category is empty, else >0 for True if not empty"""
-    #     return category3.bib_units_books.count() \
-    #         + category3.bib_units_parts_of_books.count() \
-    #         + category3.bib_units_parts_of_periodicals.count()
+    #     return category3.books.count() \
+    #         + category3.chapters.count() \
+    #         + category3.articles.count()
     #
     # def is_not_empty_cat2(category2):
     #     for cat3 in category2.categories_lvl_3.all():
@@ -112,8 +109,8 @@ def bibliography_index_view(request):
 @query_debugger
 def bibliography_search_view(request):
     books_1 = books_2 = BibliographicUnitBook.objects.all().prefetch_related('authors')
-    parts_of_books_1 = parts_of_books_2 = BibliographicUnitPartOfBook.objects.all().prefetch_related('authors')
-    parts_of_periodicals_1 = parts_of_periodicals_2 = BibliographicUnitPartOfPeriodical.objects.all().prefetch_related('authors')
+    chapters_1 = chapters_2 = BibliographicUnitPartOfBook.objects.all().prefetch_related('authors')
+    articles_1 = articles_2 = BibliographicUnitPartOfPeriodical.objects.all().prefetch_related('authors')
 
     search1 = request.GET.get('search1')
     search2 = request.GET.get('search2')
@@ -127,9 +124,9 @@ def bibliography_search_view(request):
     if not search1:
         is_searching = False
         books = [obj for obj in books_1]
-        parts_of_books = [obj for obj in parts_of_books_1]
-        parts_of_periodicals = [obj for obj in parts_of_periodicals_1]
-        descriptions = books + parts_of_books + parts_of_periodicals
+        chapters = [obj for obj in chapters_1]
+        articles = [obj for obj in articles_1]
+        descriptions = books + chapters + articles
         sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
 
     # CASE 2: search1 not empty:
@@ -139,44 +136,44 @@ def bibliography_search_view(request):
         # Preparation of query1 results:
         if option1 == 'all':
             books_1 = books_1.filter(description__icontains=search1)
-            parts_of_books_1 = parts_of_books_1.filter(description__icontains=search1)
-            parts_of_periodicals_1 = parts_of_periodicals_1.filter(description__icontains=search1)
+            chapters_1 = chapters_1.filter(description__icontains=search1)
+            articles_1 = articles_1.filter(description__icontains=search1)
         elif option1 == 'author':
             books_1 = books_1.filter(authors__last_name__icontains=search1)
-            parts_of_books_1 = parts_of_books_1.filter(authors__last_name__icontains=search1)
-            parts_of_periodicals_1 = parts_of_periodicals_1.filter(authors__last_name__icontains=search1)
+            chapters_1 = chapters_1.filter(authors__last_name__icontains=search1)
+            articles_1 = articles_1.filter(authors__last_name__icontains=search1)
         elif option1 == 'title':
             books_1 = books_1.filter(title__icontains=search1)
-            parts_of_books_1 = parts_of_books_1.filter(title__icontains=search1)
-            parts_of_periodicals_1 = parts_of_periodicals_1.filter(title__icontains=search1)
+            chapters_1 = chapters_1.filter(title__icontains=search1)
+            articles_1 = articles_1.filter(title__icontains=search1)
         elif option1 == 'year':
             books_1 = books_1.filter(published_year__icontains=search1)
-            parts_of_books_1 = parts_of_books_1.filter(published_year__icontains=search1)
-            parts_of_periodicals_1 = parts_of_periodicals_1.filter(published_year__icontains=search1)
+            chapters_1 = chapters_1.filter(published_year__icontains=search1)
+            articles_1 = articles_1.filter(published_year__icontains=search1)
 
         # CASE 2.1: both queries with 'AND' operator:
         if search1 and search2 and operator == 'and':
             if option2 == 'all':
                 books_2 = books_1.filter(description__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.filter(description__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.filter(description__icontains=search2)
+                chapters_2 = chapters_1.filter(description__icontains=search2)
+                articles_2 = articles_1.filter(description__icontains=search2)
             elif option2 == 'author':
                 books_2 = books_1.filter(authors__last_name__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.filter(authors__last_name__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.filter(authors__last_name__icontains=search2)
+                chapters_2 = chapters_1.filter(authors__last_name__icontains=search2)
+                articles_2 = articles_1.filter(authors__last_name__icontains=search2)
             elif option2 == 'title':
                 books_2 = books_1.filter(title__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.filter(title__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.filter(title__icontains=search2)
+                chapters_2 = chapters_1.filter(title__icontains=search2)
+                articles_2 = articles_1.filter(title__icontains=search2)
             elif option2 == 'year':
                 books_2 = books_1.filter(published_year__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.filter(published_year__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.filter(published_year__icontains=search2)
+                chapters_2 = chapters_1.filter(published_year__icontains=search2)
+                articles_2 = articles_1.filter(published_year__icontains=search2)
 
             books_2 = [obj for obj in books_2]
-            parts_of_books_2 = [obj for obj in parts_of_books_2]
-            parts_of_periodicals_2 = [obj for obj in parts_of_periodicals_2]
-            descriptions_2 = books_2 + parts_of_books_2 + parts_of_periodicals_2
+            chapters_2 = [obj for obj in chapters_2]
+            articles_2 = [obj for obj in articles_2]
+            descriptions_2 = books_2 + chapters_2 + articles_2
 
             descriptions = descriptions_2
 
@@ -184,29 +181,25 @@ def bibliography_search_view(request):
         elif search1 and search2 and operator == 'or':
             if option2 == 'all':
                 books_2 = books_2.filter(description__icontains=search2).union(books_1)
-                parts_of_books_2 = parts_of_books_2.filter(description__icontains=search2).union(parts_of_books_1)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(description__icontains=search2).\
-                    union(parts_of_periodicals_1)
+                chapters_2 = chapters_2.filter(description__icontains=search2).union(chapters_1)
+                articles_2 = articles_2.filter(description__icontains=search2).union(articles_1)
             elif option2 == 'author':
                 books_2 = books_2.filter(authors__last_name__icontains=search2).union(books_1)
-                parts_of_books_2 = parts_of_books_2.filter(authors__last_name__icontains=search2).union(parts_of_books_1)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(authors__last_name__icontains=search2).\
-                    union(parts_of_periodicals_1)
+                chapters_2 = chapters_2.filter(authors__last_name__icontains=search2).union(chapters_1)
+                articles_2 = articles_2.filter(authors__last_name__icontains=search2).union(articles_1)
             elif option2 == 'title':
                 books_2 = books_2.filter(title__icontains=search2).union(books_1)
-                parts_of_books_2 = parts_of_books_2.filter(title__icontains=search2).union(parts_of_books_1)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(title__icontains=search2).\
-                    union(parts_of_periodicals_1)
+                chapters_2 = chapters_2.filter(title__icontains=search2).union(chapters_1)
+                articles_2 = articles_2.filter(title__icontains=search2).union(articles_1)
             elif option2 == 'year':
                 books_2 = books_2.filter(published_year__icontains=search2).union(books_1)
-                parts_of_books_2 = parts_of_books_2.filter(published_year__icontains=search2).union(parts_of_books_1)
-                parts_of_periodicals_2 = parts_of_periodicals_2.filter(published_year__icontains=search2).\
-                    union(parts_of_periodicals_1)
+                chapters_2 = chapters_2.filter(published_year__icontains=search2).union(chapters_1)
+                articles_2 = articles_2.filter(published_year__icontains=search2).union(articles_1)
 
             books_2 = [obj for obj in books_2]
-            parts_of_books_2 = [obj for obj in parts_of_books_2]
-            parts_of_periodicals_2 = [obj for obj in parts_of_periodicals_2]
-            descriptions_2 = books_2 + parts_of_books_2 + parts_of_periodicals_2
+            chapters_2 = [obj for obj in chapters_2]
+            articles_2 = [obj for obj in articles_2]
+            descriptions_2 = books_2 + chapters_2 + articles_2
 
             descriptions = descriptions_2
 
@@ -214,34 +207,34 @@ def bibliography_search_view(request):
         elif search1 and search2 and operator == 'not':
             if option2 == 'all':
                 books_2 = books_1.exclude(description__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.exclude(description__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(description__icontains=search2)
+                chapters_2 = chapters_1.exclude(description__icontains=search2)
+                articles_2 = articles_1.exclude(description__icontains=search2)
             elif option2 == 'author':
                 books_2 = books_1.exclude(authors__last_name__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.exclude(authors__last_name__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(authors__last_name__icontains=search2)
+                chapters_2 = chapters_1.exclude(authors__last_name__icontains=search2)
+                articles_2 = articles_1.exclude(authors__last_name__icontains=search2)
             elif option2 == 'title':
                 books_2 = books_1.exclude(title__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.exclude(title__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(title__icontains=search2)
+                chapters_2 = chapters_1.exclude(title__icontains=search2)
+                articles_2 = articles_1.exclude(title__icontains=search2)
             elif option2 == 'year':
                 books_2 = books_1.exclude(published_year__icontains=search2)
-                parts_of_books_2 = parts_of_books_1.exclude(published_year__icontains=search2)
-                parts_of_periodicals_2 = parts_of_periodicals_1.exclude(published_year__icontains=search2)
+                chapters_2 = chapters_1.exclude(published_year__icontains=search2)
+                articles_2 = articles_1.exclude(published_year__icontains=search2)
 
             books_2 = [obj for obj in books_2]
-            parts_of_books_2 = [obj for obj in parts_of_books_2]
-            parts_of_periodicals_2 = [obj for obj in parts_of_periodicals_2]
-            descriptions_2 = books_2 + parts_of_books_2 + parts_of_periodicals_2
+            chapters_2 = [obj for obj in chapters_2]
+            articles_2 = [obj for obj in articles_2]
+            descriptions_2 = books_2 + chapters_2 + articles_2
 
             descriptions = descriptions_2
 
         # CASE 2.4: search1 without any operator (operator option == 'none') regardless of search2:
         else:
             books_1 = [obj for obj in books_1]
-            parts_of_books_1 = [obj for obj in parts_of_books_1]
-            parts_of_periodicals_1 = [obj for obj in parts_of_periodicals_1]
-            descriptions_1 = books_1 + parts_of_books_1 + parts_of_periodicals_1
+            chapters_1 = [obj for obj in chapters_1]
+            articles_1 = [obj for obj in articles_1]
+            descriptions_1 = books_1 + chapters_1 + articles_1
             descriptions = descriptions_1
 
         sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
