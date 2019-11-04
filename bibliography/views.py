@@ -12,11 +12,10 @@ def bibliography_main_view(request):
     chapters = [obj for obj in Chapter.objects.all()]
     articles = [obj for obj in Article.objects.all()]
     results = books + chapters + articles
-    sorted_descriptions = sorted(results, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
         'page_title': 'Strona główna',
-        'results': sorted_descriptions,
+        'results': sorted(results, key=lambda desc: replace_special_chars(desc.description)),
     }
     return render(request, 'bibliography/bibliography_main.html', context)
 
@@ -27,11 +26,10 @@ def bibliography_full_view(request):
     chapters = [obj for obj in Chapter.objects.all()]
     articles = [obj for obj in Article.objects.all()]
     results = books + chapters + articles
-    sorted_descriptions = sorted(results, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
         'page_title': 'Pełna bibliografia',
-        'results': sorted_descriptions,
+        'results': sorted(results, key=lambda desc: replace_special_chars(desc.description)),
     }
     return render(request, 'bibliography/bibliography_full.html', context)
 
@@ -44,7 +42,6 @@ def bibliography_index_view(request):
 
     cat1_qs = CategoryLevelOne.objects.all().prefetch_related('categories2')
     index = {}
-
     for cat1 in cat1_qs:
         index[cat1] = {
             cat2: {
@@ -226,11 +223,9 @@ def bibliography_search_view(request):
             descriptions_1 = books_1 + chapters_1 + articles_1
             descriptions = descriptions_1
 
-    sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
-
     context = {
         'page_title': 'Wyszukiwanie',
-        'sorted_results': sorted_results,
+        'results': sorted(descriptions, key=lambda desc: replace_special_chars(desc.description)),
         'is_searching': is_searching
     }
     return render(request, 'bibliography/bibliography_search.html', context)

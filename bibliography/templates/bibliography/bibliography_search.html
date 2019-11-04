@@ -43,8 +43,8 @@
     <br>
     {% if is_searching %}
         <h2>Wyniki wyszukiwania:</h2>
-        {% if sorted_results %}
-            {% for description in sorted_results %}
+        {% if results %}
+            {% for description in results %}
                 <li>{{ description }}</li>
             {% endfor %}
         {% else %}
