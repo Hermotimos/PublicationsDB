@@ -25,7 +25,7 @@ class CategoryLevelOne(models.Model):
 
 class CategoryLevelTwo(models.Model):
     cat_lvl_1 = models.ForeignKey(CategoryLevelOne,
-                                  related_name='categories_lvl_2',
+                                  related_name='categories2',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 1')
     name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 2')
@@ -40,23 +40,23 @@ class CategoryLevelTwo(models.Model):
 
     def save(self, *args, **kwargs):
         super(CategoryLevelTwo, self).save(*args, **kwargs)
-        if self.categories_lvl_3.count() == 0:
-            self.categories_lvl_3.create()
+        if self.categories3.count() == 0:
+            self.categories3.create()
 
-        elif self.categories_lvl_3.count() > 0:
+        elif self.categories3.count() > 0:
             for cat3 in CategoryLevelThree.objects.filter(cat_lvl_2=self):
                 if cat3.name == '---':
                     cat3.delete()
 
-        if self.cat_lvl_1.categories_lvl_2.count() > 1:
-            for cat2 in self.cat_lvl_1.categories_lvl_2.all():
+        if self.cat_lvl_1.categories2.count() > 1:
+            for cat2 in self.cat_lvl_1.categories2.all():
                 if cat2.name == '---':
                     cat2.delete()
 
 
 class CategoryLevelThree(models.Model):
     cat_lvl_2 = models.ForeignKey(CategoryLevelTwo,
-                                  related_name='categories_lvl_3',
+                                  related_name='categories3',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 2')
     name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 3')
@@ -72,7 +72,7 @@ class CategoryLevelThree(models.Model):
     def save(self, *args, **kwargs):
         super(CategoryLevelThree, self).save(*args, **kwargs)
 
-        if self.cat_lvl_2.categories_lvl_3.count() > 1:
-            for cat3 in self.cat_lvl_2.categories_lvl_3.all():
+        if self.cat_lvl_2.categories3.count() > 1:
+            for cat3 in self.cat_lvl_2.categories3.all():
                 if cat3.name == '---':
                     cat3.delete()

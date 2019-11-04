@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import BibliographicUnitBook, BibliographicUnitPartOfBook, BibliographicUnitPartOfPeriodical
+from .models import Book, Chapter, Article
 from django import forms
 
 
 class BibliographicUnitBookAdminForm(forms.ModelForm):
     class Meta:
-        model = BibliographicUnitBook
+        model = Book
         exclude = ['sorting_name', 'description', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
@@ -29,7 +29,7 @@ class BibliographicUnitBookAdminForm(forms.ModelForm):
 
 class BibliographicUnitPartOfBookAdminForm(forms.ModelForm):
     class Meta:
-        model = BibliographicUnitBook
+        model = Book
         exclude = ['sorting_name', 'description', 'published_year', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
@@ -50,7 +50,7 @@ class BibliographicUnitPartOfBookAdminForm(forms.ModelForm):
 
 class BibliographicUnitPartOfPeriodicalAdminForm(forms.ModelForm):
     class Meta:
-        model = BibliographicUnitBook
+        model = Book
         exclude = ['sorting_name', 'description', 'published_year', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
@@ -80,6 +80,6 @@ class BibliographicUnitPartOfPeriodicalAdmin(admin.ModelAdmin):
     form = BibliographicUnitPartOfPeriodicalAdminForm
 
 
-admin.site.register(BibliographicUnitBook, BibliographicUnitBookAdmin)
-admin.site.register(BibliographicUnitPartOfBook, BibliographicUnitPartOfBookAdmin)
-admin.site.register(BibliographicUnitPartOfPeriodical, BibliographicUnitPartOfPeriodicalAdmin)
+admin.site.register(Book, BibliographicUnitBookAdmin)
+admin.site.register(Chapter, BibliographicUnitPartOfBookAdmin)
+admin.site.register(Article, BibliographicUnitPartOfPeriodicalAdmin)

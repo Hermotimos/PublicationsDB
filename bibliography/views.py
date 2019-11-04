@@ -1,58 +1,58 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
 
-from bibliography.models import BibliographicUnitBook, BibliographicUnitPartOfBook, BibliographicUnitPartOfPeriodical
+from bibliography.models import Book, Chapter, Article
 from bibliography.utils import query_debugger
 from categories.models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
 from publications_db.utils import replace_special_chars
 
 
 def bibliography_main_view(request):
-    books = [obj for obj in BibliographicUnitBook.objects.all()]
-    chapters = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
-    articles = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
-    all_descriptions = books + chapters + articles
-    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc.description))
+    books = [obj for obj in Book.objects.all()]
+    chapters = [obj for obj in Chapter.objects.all()]
+    articles = [obj for obj in Article.objects.all()]
+    results = books + chapters + articles
+    sorted_descriptions = sorted(results, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
         'page_title': 'Strona główna',
-        'descriptions': sorted_descriptions,
+        'results': sorted_descriptions,
     }
     return render(request, 'bibliography/bibliography_main.html', context)
 
 
 def bibliography_full_view(request):
-    books = [obj for obj in BibliographicUnitBook.objects.all()]
-    chapters = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
-    articles = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
-    all_descriptions = books + chapters + articles
-    sorted_descriptions = sorted(all_descriptions, key=lambda desc: replace_special_chars(desc.description))
+    books = [obj for obj in Book.objects.all()]
+    chapters = [obj for obj in Chapter.objects.all()]
+    articles = [obj for obj in Article.objects.all()]
+    results = books + chapters + articles
+    sorted_descriptions = sorted(results, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
         'page_title': 'Pełna bibliografia',
-        'descriptions': sorted_descriptions,
+        'results': sorted_descriptions,
     }
     return render(request, 'bibliography/bibliography_full.html', context)
 
 
 @query_debugger
 def bibliography_index_view(request):
-    books = [obj for obj in BibliographicUnitBook.objects.all()]
-    chapters = [obj for obj in BibliographicUnitPartOfBook.objects.all()]
-    articles = [obj for obj in BibliographicUnitPartOfPeriodical.objects.all()]
+    books = [obj for obj in Book.objects.all()]
+    chapters = [obj for obj in Chapter.objects.all()]
+    articles = [obj for obj in Article.objects.all()]
     all_descriptions = books + chapters + articles
 
     # Version 1: shows all categories and subcategories regardless whether they contain any descriptions or not
     # index = {
     #     cat1: {
     #         cat2: [
-    #             cat3 for cat3 in cat2.categories_lvl_3.all()
-    #         ] for cat2 in cat1.categories_lvl_2.all()
+    #             cat3 for cat3 in cat2.categories3.all()
+    #         ] for cat2 in cat1.categories2.all()
     #     } for cat1 in CategoryLevelOne.objects.all()
     # }
 
     # Version 2: shows all categories and subcategories regardless whether they contain any descriptions or not
-    cat1_qs = CategoryLevelOne.objects.all().prefetch_related('categories_lvl_2')
+    cat1_qs = CategoryLevelOne.objects.all().prefetch_related('categories2')
     index = {}
 
     for cat1 in cat1_qs:
@@ -64,8 +64,8 @@ def bibliography_index_view(request):
                     + list(cat3.chapters.all())
                     + list(cat3.articles.all())
                 ]
-                for cat3 in cat2.categories_lvl_3.all().prefetch_related('books', 'chapters', 'articles')
-            } for cat2 in cat1.categories_lvl_2.all()
+                for cat3 in cat2.categories3.all().prefetch_related('books', 'chapters', 'articles')
+            } for cat2 in cat1.categories2.all()
         }
 
 
@@ -79,13 +79,13 @@ def bibliography_index_view(request):
     #         + category3.articles.count()
     #
     # def is_not_empty_cat2(category2):
-    #     for cat3 in category2.categories_lvl_3.all():
+    #     for cat3 in category2.categories3.all():
     #         if is_not_empty_cat3(cat3):
     #             return True
     #     return False
     #
     # def is_not_empty_cat1(category1):
-    #     for cat2 in category1.categories_lvl_2.all():
+    #     for cat2 in category1.categories2.all():
     #         if is_not_empty_cat2(cat2):
     #             return True
     #     return False
@@ -93,8 +93,8 @@ def bibliography_index_view(request):
     # index = {
     #     cat1: {
     #         cat2: [
-    #             cat3 for cat3 in cat2.categories_lvl_3.all() if is_not_empty_cat3(cat3)
-    #         ] for cat2 in cat1.categories_lvl_2.all() if is_not_empty_cat2(cat2)
+    #             cat3 for cat3 in cat2.categories3.all() if is_not_empty_cat3(cat3)
+    #         ] for cat2 in cat1.categories2.all() if is_not_empty_cat2(cat2)
     #     } for cat1 in CategoryLevelOne.objects.all() if is_not_empty_cat1(cat1)
     # }
 
@@ -108,9 +108,9 @@ def bibliography_index_view(request):
 
 @query_debugger
 def bibliography_search_view(request):
-    books_1 = books_2 = BibliographicUnitBook.objects.all().prefetch_related('authors')
-    chapters_1 = chapters_2 = BibliographicUnitPartOfBook.objects.all().prefetch_related('authors')
-    articles_1 = articles_2 = BibliographicUnitPartOfPeriodical.objects.all().prefetch_related('authors')
+    books_1 = books_2 = Book.objects.all().prefetch_related('authors')
+    chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
+    articles_1 = articles_2 = Article.objects.all().prefetch_related('authors')
 
     search1 = request.GET.get('search1')
     search2 = request.GET.get('search2')
@@ -127,7 +127,6 @@ def bibliography_search_view(request):
         chapters = [obj for obj in chapters_1]
         articles = [obj for obj in articles_1]
         descriptions = books + chapters + articles
-        sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
 
     # CASE 2: search1 not empty:
     else:
@@ -237,7 +236,7 @@ def bibliography_search_view(request):
             descriptions_1 = books_1 + chapters_1 + articles_1
             descriptions = descriptions_1
 
-        sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
+    sorted_results = sorted(descriptions, key=lambda desc: replace_special_chars(desc.description))
 
     context = {
         'page_title': 'Wyszukiwanie',
@@ -248,10 +247,10 @@ def bibliography_search_view(request):
 
 
 def bibliography_reload_view(request):
-    for obj in BibliographicUnitBook.objects.all():
+    for obj in Book.objects.all():
         obj.save()
-    for obj in BibliographicUnitPartOfBook.objects.all():
+    for obj in Chapter.objects.all():
         obj.save()
-    for obj in BibliographicUnitPartOfPeriodical.objects.all():
+    for obj in Article.objects.all():
         obj.save()
     return redirect('bibliography:main')

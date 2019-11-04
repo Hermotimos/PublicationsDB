@@ -6,27 +6,27 @@ from description_elements.models import Author, Translator, Location, Encompassi
 from publications_db.utils import replace_special_chars, remove_tags
 
 
-class BibliographicUnitBook(models.Model):
+class Book(models.Model):
     authors = models.ManyToManyField(Author,
-                                     related_name='bib_units_books_as_author',
+                                     related_name='books_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
     editors = models.ManyToManyField(Author,
-                                     related_name='bib_units_books_as_editor',
+                                     related_name='books_as_editor',
                                      verbose_name='Redakcja/Opracowanie itp.',
                                      blank=True)
     translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
                                           blank=True, null=True)
     translators = models.ManyToManyField(Translator,
-                                         related_name='bib_units_books_as_translator',
+                                         related_name='books_as_translator',
                                          verbose_name='Tłumaczenie',
                                          blank=True)
 
     published_locations = models.ManyToManyField(Location,
-                                                 related_name='bib_units_books',
+                                                 related_name='books',
                                                  verbose_name='Miejsce/miejsca wydania',
                                                  blank=True)
     published_year = models.CharField(max_length=100, verbose_name="Rok wydania", blank=True, null=True)
@@ -86,11 +86,11 @@ class BibliographicUnitBook(models.Model):
         return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
-        super(BibliographicUnitBook, self).save(*args, **kwargs)
+        super(Book, self).save(*args, **kwargs)
         name = remove_tags(self.__str__())
         self.description = name
         self.sorting_name = replace_special_chars(name)
-        super(BibliographicUnitBook, self).save(*args, **kwargs)
+        super(Book, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '1. Wydawnictwo zwarte'
@@ -98,22 +98,22 @@ class BibliographicUnitBook(models.Model):
         ordering = ['sorting_name']
 
 
-class BibliographicUnitPartOfBook(models.Model):
+class Chapter(models.Model):
     authors = models.ManyToManyField(Author,
-                                     related_name='bib_units_parts_of_books_as_author',
+                                     related_name='chapters_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
     # editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
     #                                   blank=True, null=True)
     # editors = models.ManyToManyField(Author,
-    #                                  related_name='bib_units_parts_of_books_as_editor',
+    #                                  related_name='chapters_as_editor',
     #                                  verbose_name='Redakcja/Opracowanie itp.',
     #                                  blank=True)
     # translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
     #                                       blank=True, null=True)
     # translators = models.ManyToManyField(Translator,
-    #                                      related_name='bib_units_parts_of_books_as_translator',
+    #                                      related_name='chapters_as_translator',
     #                                      verbose_name='Tłumaczenie',
     #                                      blank=True)
 
@@ -203,12 +203,12 @@ class BibliographicUnitPartOfBook(models.Model):
         return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
-        super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
+        super(Chapter, self).save(*args, **kwargs)
         name = remove_tags(self.__str__())
         self.description = name
         self.published_year = self.encompassing_bibliographic_unit.published_year
         self.sorting_name = replace_special_chars(name)
-        super(BibliographicUnitPartOfBook, self).save(*args, **kwargs)
+        super(Chapter, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '2. Rozdział/artykuł/hasło itp. w wydawnictwie zwartym'
@@ -216,22 +216,22 @@ class BibliographicUnitPartOfBook(models.Model):
         ordering = ['sorting_name']
 
 
-class BibliographicUnitPartOfPeriodical(models.Model):
+class Article(models.Model):
     authors = models.ManyToManyField(Author,
-                                     related_name='bib_units_parts_of_periodicals_as_author',
+                                     related_name='articles_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     # editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
     #                                   blank=True, null=True)
     # editors = models.ManyToManyField(Author,
-    #                                  related_name='bib_units_parts_of_periodicals_as_editor',
+    #                                  related_name='articles_as_editor',
     #                                  verbose_name='Redakcja/Opracowanie itp.',
     #                                  blank=True)
     # translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
     #                                       blank=True, null=True)
     # translators = models.ManyToManyField(Translator,
-    #                                      related_name='bib_units_parts_of_periodicals_as_translator',
+    #                                      related_name='articles_as_translator',
     #                                      verbose_name='Tłumaczenie',
     #                                      blank=True)
 
@@ -281,12 +281,12 @@ class BibliographicUnitPartOfPeriodical(models.Model):
         return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
-        super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
+        super(Article, self).save(*args, **kwargs)
         name = remove_tags(self.__str__())
         self.description = name
         self.sorting_name = replace_special_chars(name)
         self.published_year = self.periodical.published_year
-        super(BibliographicUnitPartOfPeriodical, self).save(*args, **kwargs)
+        super(Article, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '3. Artykuł w periodyku'
