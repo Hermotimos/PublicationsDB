@@ -14,10 +14,10 @@ class CategoryLevelOne(models.Model):
 
     def save(self, *args, **kwargs):
         super(CategoryLevelOne, self).save(*args, **kwargs)
-        if self.categories_lvl_2.count() == 0:
-            self.categories_lvl_2.create()
+        if self.categories2.count() == 0:
+            self.categories2.create()
 
-        elif self.categories_lvl_2.count() > 0:
+        elif self.categories2.count() > 0:
             for cat2 in CategoryLevelTwo.objects.filter(cat_lvl_1=self):
                 if cat2.name == '---':
                     cat2.delete()
