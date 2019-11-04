@@ -141,7 +141,6 @@ class Chapter(models.Model):
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
         authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
-
         # editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
         # translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
         # editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
@@ -211,8 +210,8 @@ class Chapter(models.Model):
         super(Chapter, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = '2. Rozdział/artykuł/hasło itp. w wydawnictwie zwartym'
-        verbose_name_plural = '2. Rozdziały/artykuły/hasła itp. w wydawnictwach zwartych'
+        verbose_name = '2. Rozdział/artykuł/hasło w wydawnictwie zwartym'
+        verbose_name_plural = '2. Rozdziały/artykuły/hasła w wydawnictwach zwartych'
         ordering = ['sorting_name']
 
 
@@ -255,9 +254,7 @@ class Article(models.Model):
                                       blank=True, null=True)
 
     def __str__(self):
-        # PART 1: elements considering bibliographic unit being part of a periodical:
         authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
-
         # editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
         # translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
         # editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
@@ -270,8 +267,6 @@ class Article(models.Model):
 
         pages = f', {self.periodical_pages}' if self.periodical_pages else ''
         annotation = f' [{self.annotation}]' if self.annotation else ''
-
-        # PART 2: elements considering the periodical:
         periodical = f', {self.periodical}'
 
         description = f'{authors}<i>{title}</i>{periodical}{pages}.{annotation}'
