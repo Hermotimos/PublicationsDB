@@ -21,6 +21,7 @@ def bibliography_main_view(request):
     return render(request, 'bibliography/bibliography_main.html', context)
 
 
+@query_debugger
 def bibliography_full_view(request):
     books = [obj for obj in Book.objects.all()]
     chapters = [obj for obj in Chapter.objects.all()]
@@ -37,21 +38,10 @@ def bibliography_full_view(request):
 
 @query_debugger
 def bibliography_index_view(request):
-    books = [obj for obj in Book.objects.all()]
-    chapters = [obj for obj in Chapter.objects.all()]
-    articles = [obj for obj in Article.objects.all()]
-    all_descriptions = books + chapters + articles
+    # VERSION 1: shows all categories and subcategories regardless whether they contain any descriptions or not
+    # Number of Queries : 53
+    # Finished in : 0.11s
 
-    # Version 1: shows all categories and subcategories regardless whether they contain any descriptions or not
-    # index = {
-    #     cat1: {
-    #         cat2: [
-    #             cat3 for cat3 in cat2.categories3.all()
-    #         ] for cat2 in cat1.categories2.all()
-    #     } for cat1 in CategoryLevelOne.objects.all()
-    # }
-
-    # Version 2: shows all categories and subcategories regardless whether they contain any descriptions or not
     cat1_qs = CategoryLevelOne.objects.all().prefetch_related('categories2')
     index = {}
 
@@ -63,14 +53,13 @@ def bibliography_index_view(request):
                     list(cat3.books.all())
                     + list(cat3.chapters.all())
                     + list(cat3.articles.all())
-                ]
-                for cat3 in cat2.categories3.all().prefetch_related('books', 'chapters', 'articles')
+                ] for cat3 in cat2.categories3.all().prefetch_related('books', 'chapters', 'articles')
             } for cat2 in cat1.categories2.all()
         }
 
-
-    # Version 3: shows only categories and subcategories containing at least 1 description
-    # THIS VERSION IS TO BE AVOIDED - is very costly
+    # VERSION 2 [VERY COSTLY]: shows only categories and subcategories containing at least 1 description
+    # Number of Queries: 376
+    # Finished in: 0.36s
 
     # def is_not_empty_cat3(category3):
     #     """Returns 0 for False if category is empty, else >0 for True if not empty"""
@@ -92,15 +81,19 @@ def bibliography_index_view(request):
     #
     # index = {
     #     cat1: {
-    #         cat2: [
-    #             cat3 for cat3 in cat2.categories3.all() if is_not_empty_cat3(cat3)
-    #         ] for cat2 in cat1.categories2.all() if is_not_empty_cat2(cat2)
+    #         cat2: {
+    #             cat3: [
+    #                 unit for unit in
+    #                 list(cat3.books.all())
+    #                 + list(cat3.chapters.all())
+    #                 + list(cat3.articles.all())
+    #             ] for cat3 in cat2.categories3.all() if is_not_empty_cat3(cat3)
+    #         } for cat2 in cat1.categories2.all() if is_not_empty_cat2(cat2)
     #     } for cat1 in CategoryLevelOne.objects.all() if is_not_empty_cat1(cat1)
     # }
 
     context = {
         'page_title': 'Indeks tematyczny',
-        'descriptions': all_descriptions,
         'index': index,
     }
     return render(request, 'bibliography/bibliography_index.html', context)
