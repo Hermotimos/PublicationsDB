@@ -35,7 +35,7 @@
             </select>
             <br><br><br>
             
-            <input type="checkbox" name="is_categories" value="True"> Wyszukać w tematach?<br>
+            <input type="checkbox" name="is_categories" value="True"> Wyszukaj w tematach<br>
             <br>
             <select name="categories" size ="15" multiple>
 <!--                <option value="none">-&#45;&#45;</option>-->
@@ -46,7 +46,7 @@
             <br>
             <small>Aby wybrać wiele opcji przytrzymaj na klawiaturze Ctrl (Windows) / Command (Mac).</small>
             
-            <br><br>{{ categories}}
+            <br><br>
             <br><br>
             <button class="btn btn-dark" type="submit">Wyszukaj</button>
             <a href="{% url 'bibliography:search' %}" class="btn btn-dark text-right">Nowe wyszukiwanie</a>
