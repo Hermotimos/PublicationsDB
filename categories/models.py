@@ -29,6 +29,7 @@ class CategoryLevelTwo(models.Model):
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 1')
     name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 2')
+    full_name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 2 pełna nazwa')
 
     class Meta:
         verbose_name = 'Kategoria poz. 2'
@@ -39,7 +40,11 @@ class CategoryLevelTwo(models.Model):
         return f'{self.cat_lvl_1} / {self.name}'
 
     def save(self, *args, **kwargs):
+        # super(CategoryLevelTwo, self).save(*args, **kwargs)
+        full_name = self.__str__()
+        self.full_name = full_name.replace(' / ---', '')
         super(CategoryLevelTwo, self).save(*args, **kwargs)
+
         if self.categories3.count() == 0:
             self.categories3.create()
 
@@ -60,6 +65,7 @@ class CategoryLevelThree(models.Model):
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 2')
     name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 3')
+    full_name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 3 pełna nazwa')
 
     class Meta:
         verbose_name = 'Kategoria poz. 3'
@@ -70,6 +76,9 @@ class CategoryLevelThree(models.Model):
         return f'{self.cat_lvl_2} / {self.name}'
 
     def save(self, *args, **kwargs):
+        # super(CategoryLevelThree, self).save(*args, **kwargs)
+        full_name = self.__str__()
+        self.full_name = full_name.replace(' / ---', '')
         super(CategoryLevelThree, self).save(*args, **kwargs)
 
         if self.cat_lvl_2.categories3.count() > 1:

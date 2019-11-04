@@ -98,15 +98,30 @@ def bibliography_index_view(request):
 
 @query_debugger
 def bibliography_search_view(request):
-    books_1 = books_2 = Book.objects.all().prefetch_related('authors')
-    chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
-    articles_1 = articles_2 = Article.objects.all().prefetch_related('authors')
-
     search1 = request.GET.get('search1')
     search2 = request.GET.get('search2')
     option1 = request.GET.get('option1')
     option2 = request.GET.get('option2')
     operator = request.GET.get('operator')
+    categories = request.GET.getlist('categories')
+    is_categories = request.GET.get('is_categories')
+
+    categories3 = [obj.full_name for obj in CategoryLevelThree.objects.all()]
+    # TODO make it a dict and use pk in form and then in filtering
+
+    if is_categories:
+        # TODO: following does not work: no results
+        books_1 = books_2 = Book.objects.all().filter(cat_lvl_3__full_name__in=categories).prefetch_related('authors')
+        chapters_1 = chapters_2 = Chapter.objects.all().filter(cat_lvl_3__name__in=categories).prefetch_related('authors')
+        articles_1 = articles_2 = Article.objects.all().filter(cat_lvl_3__name__in=categories).prefetch_related('authors')
+    else:
+        books_1 = books_2 = Book.objects.all().prefetch_related('authors')
+        chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
+        articles_1 = articles_2 = Article.objects.all().prefetch_related('authors')
+
+
+
+
 
     # TODO add 'editors' field to filters (if client wants it) - together or separate from author?
 
@@ -226,7 +241,9 @@ def bibliography_search_view(request):
     context = {
         'page_title': 'Wyszukiwanie',
         'results': sorted(descriptions, key=lambda desc: replace_special_chars(desc.description)),
-        'is_searching': is_searching
+        'is_searching': is_searching,
+        'categories3': categories3,
+        'categories': categories
     }
     return render(request, 'bibliography/bibliography_search.html', context)
 
@@ -238,4 +255,10 @@ def bibliography_reload_view(request):
         obj.save()
     for obj in Article.objects.all():
         obj.save()
+
+    for obj in CategoryLevelTwo.objects.all():
+        obj.save()
+    for obj in CategoryLevelThree.objects.all():
+        obj.save()
+
     return redirect('bibliography:main')
