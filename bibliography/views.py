@@ -116,10 +116,7 @@ def bibliography_search_view(request):
     # CASE 1: search1 is empty (empty form submitted or only search2) => show all objects:
     if not search1:
         is_searching = False
-        books = [obj for obj in books_1]
-        chapters = [obj for obj in chapters_1]
-        articles = [obj for obj in articles_1]
-        descriptions = books + chapters + articles
+        descriptions = []
 
     # CASE 2: search1 not empty:
     else:
