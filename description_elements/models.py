@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
+from publications_db.utils import replace_special_chars, remove_tags
 
 
 class Author(models.Model):
@@ -48,6 +49,8 @@ class Periodical(models.Model):
     vol_info_lvl_1 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 1', blank=True, null=True)
     vol_info_lvl_2 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 2', blank=True, null=True)
     vol_info_lvl_3 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 3', blank=True, null=True)
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
+                                    blank=True, null=True)
 
     def __str__(self):
         title = self.title
@@ -57,10 +60,16 @@ class Periodical(models.Model):
         lvl3 = f', {self.vol_info_lvl_3}' if self.vol_info_lvl_3 else ''
         return f'"{title}"{year}{lvl1}{lvl2}{lvl3}'
 
+    def save(self, *args, **kwargs):
+        super(Periodical, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(Periodical, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = '4. Periodyk'
         verbose_name_plural = '4. Periodyki'
         unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2', 'vol_info_lvl_3']
+        ordering = ['sorting_name']
 
 
 class EncompassingBibliographicUnit(models.Model):
@@ -91,11 +100,6 @@ class EncompassingBibliographicUnit(models.Model):
     published_year = models.CharField(max_length=100, verbose_name='Rok wydania', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
-        self.sorting_name = self.__str__()
-        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
 
     def __str__(self):
         authors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.authors.all()) if self.authors.all() else ''
@@ -137,6 +141,11 @@ class EncompassingBibliographicUnit(models.Model):
             f'{vols}{locations}{year}'
 
         return format_html(f'{description}')
+
+    def save(self, *args, **kwargs):
+        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '5. Wydawnictwo zwarte nadrzędne'

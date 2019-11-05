@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from django.db.models import Count
 
 from bibliography.models import Book, Chapter, Article
 from bibliography.utils import query_debugger
 from categories.models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
+from description_elements.models import EncompassingBibliographicUnit, Periodical
 from publications_db.utils import replace_special_chars
 
 
@@ -259,6 +259,11 @@ def bibliography_reload_view(request):
     for obj in CategoryLevelTwo.objects.all():
         obj.save()
     for obj in CategoryLevelThree.objects.all():
+        obj.save()
+
+    for obj in EncompassingBibliographicUnit.objects.all():
+        obj.save()
+    for obj in Periodical.objects.all():
         obj.save()
 
     return redirect('bibliography:main')
