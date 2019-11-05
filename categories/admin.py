@@ -1,9 +1,12 @@
+from django import forms
 from django.contrib import admin
 from .models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
 
 
 class CategoryLevelTwoInline(admin.TabularInline):
     model = CategoryLevelTwo
+
+    exclude = ['full_name']
     extra = 5
     verbose_name = 'Kategorie poz. 2 w ramach wybranej Kategorii poz. 1'
     verbose_name_plural = 'Kategorie poz. 2 w ramach wybranej Kategorii poz. 1 (istniejące + puste pola do wprowadzenia nowych)'
@@ -11,19 +14,36 @@ class CategoryLevelTwoInline(admin.TabularInline):
 
 class CategoryLevelThreeInline(admin.TabularInline):
     model = CategoryLevelThree
+
+    exclude = ['full_name']
     extra = 5
     verbose_name = 'Kategorie poz. 3 w ramach wybranej Kategorii poz. 2'
     verbose_name_plural = 'Kategorie poz. 3 w ramach wybranej Kategorii poz. 2 (istniejące + puste pola do wprowadzenia nowych)'
 
 
+class CategoryLevelTwoAdminForm(forms.ModelForm):
+    class Meta:
+        model = CategoryLevelTwo
+
+        exclude = ['full_name']
+
+
+class CategoryLevelThreeAdminForm(forms.ModelForm):
+    class Meta:
+        model = CategoryLevelThree
+
+        exclude = ['full_name']
+
+
 class CategoryLevelOneAdmin(admin.ModelAdmin):
-    list_display = ['name']
     inlines = [CategoryLevelTwoInline, ]
+    list_display = ['name']
 
 
 class CategoryLevelTwoAdmin(admin.ModelAdmin):
-    list_display = ['get_cat_lvl_2_str', 'get_cat_lvl_1_name', 'get_cat_lvl_2_name']
+    form = CategoryLevelTwoAdminForm
     inlines = [CategoryLevelThreeInline, ]
+    list_display = ['get_cat_lvl_2_str', 'get_cat_lvl_1_name', 'get_cat_lvl_2_name']
 
     def get_cat_lvl_2_str(self, obj):
         return obj
@@ -40,6 +60,7 @@ class CategoryLevelTwoAdmin(admin.ModelAdmin):
 
 
 class CategoryLevelThreeAdmin(admin.ModelAdmin):
+    form = CategoryLevelThreeAdminForm
     list_display = ['get_cat_lvl_3_str', 'get_cat_lvl_1_name', 'get_cat_lvl_2_name', 'get_cat_lvl_3_name']
 
     def get_cat_lvl_3_str(self, obj):
