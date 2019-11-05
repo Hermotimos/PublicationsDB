@@ -9,7 +9,7 @@ def remove_tags(text):
 def replace_special_chars(text):
     chars = (
         # DIACRITICS ETC
-        (' ', ''),
+        (' ', ''), ('[', ''), (']', ''),
         # (',', ''), ('.', ''), (':', ''), (';', ''), ('(', ''), (')', ''), ('-', ''),
 
         # basic chars having variations in special chars below

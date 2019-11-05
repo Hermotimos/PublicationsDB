@@ -87,7 +87,7 @@ class Book(models.Model):
 
     def save(self, *args, **kwargs):
         super(Book, self).save(*args, **kwargs)
-        self.description = self.__str__()
+        self.description = remove_tags(self.__str__())
         self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
         super(Book, self).save(*args, **kwargs)
 
@@ -202,7 +202,7 @@ class Chapter(models.Model):
 
     def save(self, *args, **kwargs):
         super(Chapter, self).save(*args, **kwargs)
-        self.description = self.__str__()
+        self.description = remove_tags(self.__str__())
         self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
         self.published_year = self.encompassing_bibliographic_unit.published_year
         super(Chapter, self).save(*args, **kwargs)
@@ -275,7 +275,7 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         super(Article, self).save(*args, **kwargs)
-        self.description = self.__str__()
+        self.description = remove_tags(self.__str__())
         self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
         self.published_year = self.periodical.published_year
         super(Article, self).save(*args, **kwargs)
