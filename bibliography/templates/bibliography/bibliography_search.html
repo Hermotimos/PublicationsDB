@@ -10,7 +10,7 @@
             <!--  COL 1   -->
             <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}" required/>
             <select id="option1" name="option1">
-                <option value="all">Wszystkie pola</option>
+                <option value="all">Pełny opis</option>
                 <option value="author">Autor</option>
                 <option value="title">Tytuł</option>
                 <option value="year">Rok wydania</option>
@@ -22,23 +22,22 @@
                 <option value="none">---</option>
                 <option value="and">AND</option>
                 <option value="or">OR</option>
-                <option value="not">NOT</option>
+                <option value="not">AND NOT</option>
             </select>
             <br><br>
             
             <input type="text" name="search2" placeholder="Szukane słowo/fraza" value="{{ request.GET.search2 }}"/>
             <select id="option2" name="option2">
-                <option value="all">Wszystkie pola</option>
+                <option value="all">Pełny opis</option>
                 <option value="author">Autor</option>
                 <option value="title">Tytuł</option>
                 <option value="year">Rok wydania</option>
             </select>
             <br><br><br>
             
-            <input type="checkbox" name="is_categories" value="True"> Wyszukaj w tematach<br>
+            <input type="checkbox" name="is_categories" value="True"> Wyszukaj jedynie w wybranych kategoriach:<br>
             <br>
             <select name="categories" size ="15" multiple>
-<!--                <option value="none">-&#45;&#45;</option>-->
                 {% for cat3 in categories3 %}
                     <option value="{{ cat3 }}">{{ cat3 }}</option>
                 {% endfor %}
@@ -57,14 +56,19 @@
     
     <br><br>
     {% if is_searching %}
-        <h2>Wyniki wyszukiwania:</h2>
-        <br>
-        {% if results %}
-            {% for result in results %}
-                <li>{{ result.description|safe }}</li>
-            {% endfor %}
-        {% else %}
-            <p>Brak pozycji spełniających wybrane kryteria wyszukiwania.</p>
+        <h2>Kwerenda:</h2>
+        <small> {{ query_text|safe|linebreaksbr }}</small>
+        <br><br><br>
+        {% if is_valid_search %}
+            <h2>Wyniki:</h2>
+            <br>
+            {% if results %}
+                {% for result in results %}
+                    <li class="description">{{ result.description|safe }}</li>
+                {% endfor %}
+            {% else %}
+                <p>Brak pozycji spełniających wybrane kryteria wyszukiwania.</p>
+            {% endif %}
         {% endif %}
     {% endif %}
     <br>
