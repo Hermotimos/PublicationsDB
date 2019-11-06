@@ -108,8 +108,9 @@ def bibliography_search_view(request):
     option1 = request.GET.get('option1')
     option2 = request.GET.get('option2')
     operator = request.GET.get('operator')
+
     categories = request.GET.getlist('categories')
-    is_categories = request.GET.get('is_categories')
+    is_categories = True if categories else False
     categories_text = '' if not is_categories \
         else f'\nZawęź wyszukiwanie do wybranych kategorii: ' \
         f'{"; ".join(value for key, value in categories3.items() if str(key) in categories)}'
@@ -125,8 +126,6 @@ def bibliography_search_view(request):
         books_1 = books_2 = Book.objects.all().prefetch_related('authors')
         chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
         articles_1 = articles_2 = Article.objects.all().prefetch_related('authors')
-
-    # TODO add 'editors' field to filters (if client wants it) - together or separate from author?
 
     if search1:
         is_searching = True

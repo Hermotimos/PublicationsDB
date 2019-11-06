@@ -100,18 +100,22 @@ li.description {
         cursor: pointer;
 }
 
-h4 {
-        margin-bottom: 15px;
-}
 
 h5 {
         margin-bottom: 10px;
-        margin-left: 20px;
+        margin-left: 10px;
 }
 
 h6 {
         margin-bottom: 10px;
-        margin-left: 40px;}
+        margin-left: 40px;
+}
+
+h6.left {
+        margin-bottom: 10px;
+        margin-left: 60px;
+}
+
 
 p.operator {
         margin-bottom: 0px;
