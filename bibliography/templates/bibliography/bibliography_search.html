@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% load static %}
 
 {% block content %}
@@ -36,10 +37,11 @@
             <br><br><br>
             
             <input type="checkbox" name="is_categories" value="True"> Wyszukaj jedynie w wybranych kategoriach:<br>
-            <br>
+            <br>{{ categories3 }}
             <select name="categories" size ="15" multiple>
-                {% for cat3 in categories3 %}
-                    <option value="{{ cat3 }}">{{ cat3 }}</option>
+                <option value="none">---</option>
+                {% for key, value in categories3.items %}
+                    <option value="{{ key }}">{{ value }}</option>
                 {% endfor %}
             </select>
             <br>

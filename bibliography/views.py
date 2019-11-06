@@ -99,7 +99,7 @@ def bibliography_index_view(request):
 @query_debugger
 def bibliography_search_view(request):
     is_searching = is_valid_search = False
-    categories3 = [obj.full_name for obj in CategoryLevelThree.objects.all()] # TODO make it a dict and use pk in form and then in filtering
+    categories3 = {obj.id: obj.full_name for obj in CategoryLevelThree.objects.all()}
     descriptions = []
     query_text = ''
 
@@ -114,10 +114,12 @@ def bibliography_search_view(request):
         else f'\n"Zawęź wyszukiwanie do kategorii: {"; ".join(cat for cat in categories)}"'
 
     if is_categories:
-        # TODO: following does not work: no results
-        books_1 = books_2 = Book.objects.all().filter(cat_lvl_3__full_name__in=categories)          # TODO prefetch_related('authors')
-        chapters_1 = chapters_2 = Chapter.objects.all().filter(cat_lvl_3__name__in=categories)      # TODO prefetch_related('authors')
-        articles_1 = articles_2 = Article.objects.all().filter(cat_lvl_3__name__in=categories)      # TODO prefetch_related('authors')
+        books_1 = books_2 = Book.objects.all().filter(cat_lvl_3__id__in=categories).\
+            prefetch_related('authors').distinct()
+        chapters_1 = chapters_2 = Chapter.objects.all().filter(cat_lvl_3__id__in=categories).\
+            prefetch_related('authors').distinct()
+        articles_1 = articles_2 = Article.objects.all().filter(cat_lvl_3__id__in=categories).\
+            prefetch_related('authors').distinct()
     else:
         books_1 = books_2 = Book.objects.all().prefetch_related('authors')
         chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
