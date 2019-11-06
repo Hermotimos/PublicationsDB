@@ -14,13 +14,15 @@ class CategoryLevelOne(models.Model):
 
     def save(self, *args, **kwargs):
         super(CategoryLevelOne, self).save(*args, **kwargs)
-        if self.categories2.count() == 0:
-            self.categories2.create()
 
-        elif self.categories2.count() > 0:
-            for cat2 in CategoryLevelTwo.objects.filter(cat_lvl_1=self):
-                if cat2.name == '---':
-                    cat2.delete()
+        subcategories = self.categories2.all()
+
+        if subcategories.count() == 0:
+            self.categories2.create()
+        elif subcategories.count() > 0 and any(cat.name != '---' for cat in subcategories.all()):
+            for cat in subcategories.all():
+                if cat.name == '---':
+                    cat.delete()
 
 
 class CategoryLevelTwo(models.Model):
@@ -41,22 +43,24 @@ class CategoryLevelTwo(models.Model):
 
     def save(self, *args, **kwargs):
         # super(CategoryLevelTwo, self).save(*args, **kwargs)
-        full_name = self.__str__()
-        self.formatted_name = full_name.replace(' / ---', '')
+        formatted_name = self.__str__()
+        self.formatted_name = formatted_name.replace(' / ---', '')
         super(CategoryLevelTwo, self).save(*args, **kwargs)
 
-        if self.categories3.count() == 0:
+        subcategories = self.categories3
+        sister_categories = self.cat_lvl_1.categories2.all()
+
+        if subcategories.count() == 0:
             self.categories3.create()
+        elif subcategories.count() > 0 and any(cat.name != '---' for cat in subcategories.all()):
+            for cat in subcategories.all():
+                if cat.name == '---':
+                    cat.delete()
 
-        elif self.categories3.count() > 0:
-            for cat3 in CategoryLevelThree.objects.filter(cat_lvl_2=self):
-                if cat3.name == '---':
-                    cat3.delete()
-
-        if self.cat_lvl_1.categories2.count() > 1:
-            for cat2 in self.cat_lvl_1.categories2.all():
-                if cat2.name == '---':
-                    cat2.delete()
+        if sister_categories.count() > 1:
+            for cat in sister_categories.all() and any(cat.name != '---' for cat in sister_categories.all()):
+                if cat.name == '---':
+                    cat.delete()
 
 
 class CategoryLevelThree(models.Model):
@@ -77,8 +81,8 @@ class CategoryLevelThree(models.Model):
 
     def save(self, *args, **kwargs):
         # super(CategoryLevelThree, self).save(*args, **kwargs)
-        full_name = self.__str__()
-        self.formatted_name = full_name.replace(' / ---', '')
+        formatted_name = self.__str__()
+        self.formatted_name = formatted_name.replace(' / ---', '')
         super(CategoryLevelThree, self).save(*args, **kwargs)
 
         if self.cat_lvl_2.categories3.count() > 1:
