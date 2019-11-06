@@ -99,7 +99,7 @@ def bibliography_index_view(request):
 @query_debugger
 def bibliography_search_view(request):
     is_searching = is_valid_search = False
-    categories3 = {obj.id: obj.full_name for obj in CategoryLevelThree.objects.all()}
+    categories3 = {obj.id: obj.formatted_name for obj in CategoryLevelThree.objects.all()}
     descriptions = []
     query_text = ''
 
