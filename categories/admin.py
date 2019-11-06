@@ -6,7 +6,7 @@ from .models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
 class CategoryLevelTwoInline(admin.TabularInline):
     model = CategoryLevelTwo
 
-    exclude = ['full_name']
+    exclude = ['formatted_name']
     extra = 5
     verbose_name = 'Kategorie poz. 2 w ramach wybranej Kategorii poz. 1'
     verbose_name_plural = 'Kategorie poz. 2 w ramach wybranej Kategorii poz. 1 (istniejące + puste pola do wprowadzenia nowych)'
@@ -15,7 +15,7 @@ class CategoryLevelTwoInline(admin.TabularInline):
 class CategoryLevelThreeInline(admin.TabularInline):
     model = CategoryLevelThree
 
-    exclude = ['full_name']
+    exclude = ['formatted_name']
     extra = 5
     verbose_name = 'Kategorie poz. 3 w ramach wybranej Kategorii poz. 2'
     verbose_name_plural = 'Kategorie poz. 3 w ramach wybranej Kategorii poz. 2 (istniejące + puste pola do wprowadzenia nowych)'
@@ -25,14 +25,14 @@ class CategoryLevelTwoAdminForm(forms.ModelForm):
     class Meta:
         model = CategoryLevelTwo
 
-        exclude = ['full_name']
+        exclude = ['formatted_name']
 
 
 class CategoryLevelThreeAdminForm(forms.ModelForm):
     class Meta:
         model = CategoryLevelThree
 
-        exclude = ['full_name']
+        exclude = ['formatted_name']
 
 
 class CategoryLevelOneAdmin(admin.ModelAdmin):
