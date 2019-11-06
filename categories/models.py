@@ -57,8 +57,8 @@ class CategoryLevelTwo(models.Model):
                 if cat.name == '---':
                     cat.delete()
 
-        if sister_categories.count() > 1:
-            for cat in sister_categories.all() and any(cat.name != '---' for cat in sister_categories.all()):
+        if sister_categories.count() > 1 and any(cat.name != '---' for cat in sister_categories.all()):
+            for cat in sister_categories.all():
                 if cat.name == '---':
                     cat.delete()
 
