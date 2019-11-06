@@ -111,7 +111,8 @@ def bibliography_search_view(request):
     categories = request.GET.getlist('categories')
     is_categories = request.GET.get('is_categories')
     categories_text = '' if not is_categories \
-        else f'\n"Zawęź wyszukiwanie do kategorii: {"; ".join(cat for cat in categories)}"'
+        else f'\nZawęź wyszukiwanie do wybranych kategorii: ' \
+        f'{"; ".join(value for key, value in categories3.items() if str(key) in categories)}'
 
     if is_categories:
         books_1 = books_2 = Book.objects.all().filter(cat_lvl_3__id__in=categories).\
@@ -168,7 +169,7 @@ def bibliography_search_view(request):
                 articles_1 = articles_1.filter(published_year__icontains=search1)
                 option1_text = 'Rok wydania'
 
-            query_text = f'Wyszukaj opisy spełniające warunek:\n"{search1}" w polu "{option1_text}"{categories_text}'
+            query_text = f'Wyszukaj opisy spełniające warunek: "{search1}" w polu "{option1_text}"{categories_text}'
 
             # CASE 3.1: search1 and search2 and 'AND' operator:
             if search1 and search2 and operator == 'and':
@@ -198,7 +199,7 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_2]
                 descriptions = books + chapters + articles
 
-                query_text = f'Wyszukaj opisy spełniające oba warunki:\n' \
+                query_text = f'Wyszukaj opisy spełniające oba warunki: ' \
                     f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}"{categories_text}'
 
             # CASE 3.2: search1 and search2 and 'OR' operator:
@@ -229,7 +230,7 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_2]
                 descriptions = books + chapters + articles
 
-                query_text = f'Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków:\n' \
+                query_text = f'Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków: ' \
                     f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}"{categories_text}'
 
             # CASE 3.3: search1 and search2 and 'AND NOT' operator:
@@ -260,7 +261,7 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_2]
                 descriptions = books + chapters + articles
 
-                query_text = f'Wyszukaj opisy spełniające oba warunki:\n' \
+                query_text = f'Wyszukaj opisy spełniające oba warunki: ' \
                     f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}"{categories_text}'
 
             # CASE 3.4: search1 and not search2 and not operator:
@@ -278,7 +279,7 @@ def bibliography_search_view(request):
         'is_valid_search': is_valid_search,
         'is_searching': is_searching,
         'categories3': categories3,
-        'query_text': query_text
+        'query_text': query_text,
     }
     return render(request, 'bibliography/bibliography_search.html', context)
 

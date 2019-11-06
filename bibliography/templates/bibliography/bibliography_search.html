@@ -37,7 +37,7 @@
             <br><br><br>
             
             <input type="checkbox" name="is_categories" value="True"> Wyszukaj jedynie w wybranych kategoriach:<br>
-            <br>{{ categories3 }}
+            <br>
             <select name="categories" size ="15" multiple>
                 <option value="none">---</option>
                 {% for key, value in categories3.items %}
@@ -73,8 +73,5 @@
             {% endif %}
         {% endif %}
     {% endif %}
-    <br>
-    {{ descriptions_1_2 }}<br><br>
-    {{ descriptions_3_4 }}
 {% endblock content %}
 
