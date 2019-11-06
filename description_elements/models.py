@@ -58,7 +58,7 @@ class Periodical(models.Model):
         lvl1 = f', {self.vol_info_lvl_1}' if self.vol_info_lvl_1 else ''
         lvl2 = f', {self.vol_info_lvl_2}' if self.vol_info_lvl_2 else ''
         lvl3 = f', {self.vol_info_lvl_3}' if self.vol_info_lvl_3 else ''
-        return f'"{title}"{year}{lvl1}{lvl2}{lvl3}'
+        return f'„{title}”{year}{lvl1}{lvl2}{lvl3}'
 
     def save(self, *args, **kwargs):
         super(Periodical, self).save(*args, **kwargs)
