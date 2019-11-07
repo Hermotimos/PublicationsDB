@@ -199,6 +199,13 @@ class Chapter(models.Model):
 
         return format_html(f'{description}')
 
+    def save(self, *args, **kwargs):
+        super(Chapter, self).save(*args, **kwargs)
+        self.description = self.__str__()
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        self.published_year = self.encompassing_bibliographic_unit.published_year
+        super(Chapter, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = '2. Rozdział/artykuł/hasło w wydawnictwie zwartym'
         verbose_name_plural = '2. Rozdziały/artykuły/hasła w wydawnictwach zwartych'
@@ -264,6 +271,13 @@ class Article(models.Model):
 
         return format_html(f'{description}')
 
+    def save(self, *args, **kwargs):
+        super(Article, self).save(*args, **kwargs)
+        self.description = self.__str__()
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        self.published_year = self.periodical.published_year
+        super(Article, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = '3. Artykuł w periodyku'
         verbose_name_plural = '3. Artykuły w periodykach'
@@ -272,13 +286,6 @@ class Article(models.Model):
 
 def save_again(sender, instance, **kwargs):
     """Saves sender instance again to populate fields based on m2m fields of the same model"""
-    instance.description = instance.__str__()
-    instance.sorting_name = replace_special_chars(remove_tags(instance.__str__()))
-    if isinstance(instance, Chapter):
-        instance.published_year = instance.encompassing_bibliographic_unit.published_year
-    elif isinstance(instance, Article):
-        instance.sorting_name = replace_special_chars(remove_tags(instance.__str__()))
-        instance.published_year = instance.periodical.published_year
     instance.save()
 
 
