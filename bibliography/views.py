@@ -15,7 +15,7 @@ def bibliography_main_view(request):
 
     context = {
         'page_title': 'Strona główna',
-        'results': sorted(results, key=lambda desc: replace_special_chars(desc.description)),
+        'results': sorted(results, key=lambda desc: replace_special_chars(desc.sorting_name)),
     }
     return render(request, 'bibliography/bibliography_main.html', context)
 
@@ -29,7 +29,7 @@ def bibliography_full_view(request):
 
     context = {
         'page_title': 'Pełna bibliografia',
-        'results': sorted(results, key=lambda desc: replace_special_chars(desc.description)),
+        'results': sorted(results, key=lambda desc: replace_special_chars(desc.sorting_name)),
     }
     return render(request, 'bibliography/bibliography_full.html', context)
 
@@ -292,7 +292,7 @@ def bibliography_search_view(request):
 
     context = {
         'page_title': 'Wyszukiwanie',
-        'results': sorted(descriptions, key=lambda desc: replace_special_chars(desc.description)),
+        'results': sorted(descriptions, key=lambda desc: replace_special_chars(desc.sorting_name)),
         'is_valid_search': is_valid_search,
         'is_searching': is_searching,
         'categories3': categories3,
