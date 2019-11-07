@@ -173,8 +173,6 @@ def bibliography_search_view(request):
                 articles_1 = articles_1.filter(published_year__icontains=search1)
                 option1_text = 'Rok wydania'
 
-            query_text = f'Wyszukaj opisy spełniające warunek: "{search1}" w polu "{option1_text}"{categories_text}'
-
             # CASE 3.1: search1 and search2 and 'AND' operator:
             if search1 and search2 and operator == 'and':
                 if option2 == 'all':
@@ -290,7 +288,7 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_1]
                 descriptions = books + chapters + articles
 
-                query_text = query_text
+                query_text = f'Wyszukaj opisy spełniające warunek: "{search1}" w polu "{option1_text}"{categories_text}'
 
     context = {
         'page_title': 'Wyszukiwanie',
