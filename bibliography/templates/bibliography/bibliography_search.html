@@ -8,12 +8,13 @@
         <form method="GET" action="">
             <h2>Wyszukiwanie tekstowe</h2>
             <br>
-            <!--  COL 1   -->
+            
             <div>
                 <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}" required/>
                 <select id="option1" name="option1">
                     <option value="all">Pełny opis</option>
-                    <option value="author">Autor</option>
+                    <option value="author">Nazwisko autora</option>
+                    <option value="editor">Nazwisko redaktora</option>
                     <option value="title">Tytuł</option>
                     <option value="year">Rok wydania</option>
                 </select>
@@ -31,12 +32,13 @@
                 <input type="text" name="search2" placeholder="Szukane słowo/fraza" value="{{ request.GET.search2 }}"/>
                 <select id="option2" name="option2">
                     <option value="all">Pełny opis</option>
-                    <option value="author">Autor</option>
+                    <option value="author">Nazwisko autora</option>
+                    <option value="editor">Nazwisko redaktora</option>
                     <option value="title">Tytuł</option>
                     <option value="year">Rok wydania</option>
                 </select>
             </div>
-<br><br>
+            <br><br>
             
             <p> Wybierz kategorie, aby zawęzić zakres tematyczny wyszukiwania:</p>
             <select name="categories" size ="15" multiple>
@@ -46,8 +48,8 @@
             </select>
             <br>
             <small>Aby wybrać wiele opcji przytrzymaj na klawiaturze Ctrl (Windows) / Command (Mac).</small>
-            
             <br><br>
+            
             <button class="btn btn-dark" type="submit">Wyszukaj</button>
             <a href="{% url 'bibliography:search' %}" class="btn btn-dark text-right">Nowe wyszukiwanie</a>
         </form>

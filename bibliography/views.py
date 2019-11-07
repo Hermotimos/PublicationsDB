@@ -157,6 +157,11 @@ def bibliography_search_view(request):
                 chapters_1 = chapters_1.filter(authors__last_name__icontains=search1)
                 articles_1 = articles_1.filter(authors__last_name__icontains=search1)
                 option1_text = 'Autor'
+            elif option1 == 'editor':
+                books_1 = books_1.filter(editors__last_name__icontains=search1)
+                chapters_1 = chapters_1.none()
+                articles_1 = chapters_1.none()
+                option1_text = 'Redaktor'
             elif option1 == 'title':
                 books_1 = books_1.filter(title__icontains=search1)
                 chapters_1 = chapters_1.filter(title__icontains=search1)
@@ -182,6 +187,11 @@ def bibliography_search_view(request):
                     chapters_2 = chapters_1.filter(authors__last_name__icontains=search2)
                     articles_2 = articles_1.filter(authors__last_name__icontains=search2)
                     option2_text = 'Autor'
+                elif option1 == 'editor':
+                    books_2 = books_1.filter(editors__last_name__icontains=search2)
+                    chapters_2 = chapters_1.none()
+                    articles_2 = chapters_1.none()
+                    option2_text = 'Redaktor'
                 elif option2 == 'title':
                     books_2 = books_1.filter(title__icontains=search2)
                     chapters_2 = chapters_1.filter(title__icontains=search2)
@@ -213,6 +223,11 @@ def bibliography_search_view(request):
                     chapters_2 = chapters_2.filter(authors__last_name__icontains=search2).union(chapters_1)
                     articles_2 = articles_2.filter(authors__last_name__icontains=search2).union(articles_1)
                     option2_text = 'Autor'
+                elif option2 == 'editor':
+                    books_2 = books_2.filter(editors__last_name__icontains=search2).union(books_1)
+                    chapters_2 = chapters_1.none()
+                    articles_2 = chapters_1.none()
+                    option2_text = 'Redaktor'
                 elif option2 == 'title':
                     books_2 = books_2.filter(title__icontains=search2).union(books_1)
                     chapters_2 = chapters_2.filter(title__icontains=search2).union(chapters_1)
@@ -244,6 +259,11 @@ def bibliography_search_view(request):
                     chapters_2 = chapters_1.exclude(authors__last_name__icontains=search2)
                     articles_2 = articles_1.exclude(authors__last_name__icontains=search2)
                     option2_text = 'Autor'
+                elif option2 == 'editor':
+                    books_2 = books_1.exclude(editors__last_name__icontains=search2)
+                    chapters_2 = chapters_1.none()
+                    articles_2 = chapters_1.none()
+                    option2_text = 'Redaktor'
                 elif option2 == 'title':
                     books_2 = books_1.exclude(title__icontains=search2)
                     chapters_2 = chapters_1.exclude(title__icontains=search2)
