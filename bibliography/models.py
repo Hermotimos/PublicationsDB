@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import m2m_changed
 from django.utils.html import format_html
 
 from categories.models import CategoryLevelThree
@@ -7,10 +8,7 @@ from publications_db.utils import replace_special_chars, remove_tags
 
 
 class Book(models.Model):
-    authors = models.ManyToManyField(Author,
-                                     related_name='books_as_author',
-                                     verbose_name='Autorstwo',
-                                     blank=True)
+    authors = models.ManyToManyField(Author, related_name='books_as_author', verbose_name='Autorstwo', blank=True)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
@@ -37,9 +35,9 @@ class Book(models.Model):
                                        related_name='books',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
-    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole wypełniane automatycznie)',
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
-    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
+    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',
                                    blank=True, null=True)
 
     def __str__(self):
@@ -100,10 +98,7 @@ class Book(models.Model):
 
 
 class Chapter(models.Model):
-    authors = models.ManyToManyField(Author,
-                                     related_name='chapters_as_author',
-                                     verbose_name='Autorstwo',
-                                     blank=True)
+    authors = models.ManyToManyField(Author, related_name='chapters_as_author', verbose_name='Autorstwo', blank=True)
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
     # editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
     #                                   blank=True, null=True)
@@ -130,13 +125,13 @@ class Chapter(models.Model):
                                        related_name='chapters',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
-    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
-    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
+    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',
                                    blank=True, null=True)
     # following field is needed to simplify bibliography_search_view():
     published_year = models.CharField(max_length=100,
-                                      verbose_name="Rok wydania wydawnictwa nadrzędnego (pole wypełniane automatycznie)",
+                                      verbose_name="Rok wydania wydawnictwa nadrzędnego (pole automatyczne)",
                                       blank=True, null=True)
 
     def __str__(self):
@@ -204,13 +199,6 @@ class Chapter(models.Model):
 
         return format_html(f'{description}')
 
-    def save(self, *args, **kwargs):
-        super(Chapter, self).save(*args, **kwargs)
-        self.description = self.__str__()
-        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
-        self.published_year = self.encompassing_bibliographic_unit.published_year
-        super(Chapter, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name = '2. Rozdział/artykuł/hasło w wydawnictwie zwartym'
         verbose_name_plural = '2. Rozdziały/artykuły/hasła w wydawnictwach zwartych'
@@ -218,10 +206,7 @@ class Chapter(models.Model):
 
 
 class Article(models.Model):
-    authors = models.ManyToManyField(Author,
-                                     related_name='articles_as_author',
-                                     verbose_name='Autorstwo',
-                                     blank=True)
+    authors = models.ManyToManyField(Author, related_name='articles_as_author', verbose_name='Autorstwo', blank=True)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
     # editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
     #                                   blank=True, null=True)
@@ -248,11 +233,11 @@ class Article(models.Model):
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
-    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole wypełniane automatycznie)',
+    description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',
                                    blank=True, null=True)
     # following field is needed to simplify bibliography_search_view():
     published_year = models.CharField(max_length=100,
-                                      verbose_name="Rok wydania periodyku (pole wypełniane automatycznie)",
+                                      verbose_name="Rok wydania periodyku (pole automatyczne)",
                                       blank=True, null=True)
 
     def __str__(self):
@@ -279,14 +264,27 @@ class Article(models.Model):
 
         return format_html(f'{description}')
 
-    def save(self, *args, **kwargs):
-        super(Article, self).save(*args, **kwargs)
-        self.description = self.__str__()
-        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
-        self.published_year = self.periodical.published_year
-        super(Article, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name = '3. Artykuł w periodyku'
         verbose_name_plural = '3. Artykuły w periodykach'
         ordering = ['sorting_name']
+
+
+def save_again(sender, instance, **kwargs):
+    """Saves sender instance again to populate fields based on m2m fields of the same model"""
+    instance.description = instance.__str__()
+    instance.sorting_name = replace_special_chars(remove_tags(instance.__str__()))
+    if isinstance(instance, Chapter):
+        instance.published_year = instance.encompassing_bibliographic_unit.published_year
+    elif isinstance(instance, Article):
+        instance.sorting_name = replace_special_chars(remove_tags(instance.__str__()))
+        instance.published_year = instance.periodical.published_year
+    instance.save()
+
+
+m2m_changed.connect(save_again, sender=Book.authors.through)
+m2m_changed.connect(save_again, sender=Book.editors.through)
+m2m_changed.connect(save_again, sender=Book.translators.through)
+m2m_changed.connect(save_again, sender=Book.published_locations.through)
+m2m_changed.connect(save_again, sender=Chapter.authors.through)
+m2m_changed.connect(save_again, sender=Article.authors.through)

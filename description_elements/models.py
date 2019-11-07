@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models.signals import m2m_changed
 from django.utils.html import format_html
+
 from publications_db.utils import replace_special_chars, remove_tags
 
 
@@ -142,12 +144,19 @@ class EncompassingBibliographicUnit(models.Model):
 
         return format_html(f'{description}')
 
-    def save(self, *args, **kwargs):
-        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
-        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
-        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name = '5. Wydawnictwo zwarte nadrzędne'
         verbose_name_plural = '5. Wydawnictwa zwarte nadrzędne'
         ordering = ['sorting_name']
+
+
+def save_again(sender, instance, **kwargs):
+    """Saves sender instance again to populate fields based on m2m fields of the same model"""
+    instance.sorting_name = replace_special_chars(remove_tags(instance.__str__()))
+    instance.save()
+
+
+m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.authors.through)
+m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.editors.through)
+m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.translators.through)
+m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.published_locations.through)
