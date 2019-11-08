@@ -187,7 +187,7 @@ class Chapter(models.Model):
         else:
             u_year = ' [błąd instrukcji warunkowej!]'
 
-        unit = f', w: {u_authors}' \
+        unit = f', [w:] {u_authors}' \
             f'{u_title}' \
             f'{vol}{u_editors_abbrev}{u_editors}' \
             f'{u_translators_abbrev}{u_translators}' \
