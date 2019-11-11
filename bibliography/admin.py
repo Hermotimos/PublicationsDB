@@ -73,14 +73,17 @@ class ArticleAdminForm(forms.ModelForm):
 
 class BookAdmin(admin.ModelAdmin):
     form = BookAdminForm
+    search_fields = ['description']
 
 
 class ChapterAdmin(admin.ModelAdmin):
     form = ChapterAdminForm
+    search_fields = ['description']
 
 
 class ArticlelAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
+    search_fields = ['description']
 
 
 admin.site.register(Book, BookAdmin)
