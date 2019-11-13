@@ -34,10 +34,10 @@ ul {
 
 .content-section {
   background: #e2e5e7;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
+  padding: 10px 10px;
+
   border-radius: 3px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .article-title {
@@ -119,4 +119,79 @@ h6.left {
 
 p.operator {
         margin-bottom: 0px;
+}
+
+
+
+
+/* BIBLIOGRAPHY SEARCH TABS */
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.tabs{
+    width: 1200px;
+    display: block;
+    margin: 40px auto;
+    position: relative;
+}
+
+.tabs .tab{
+    float: left;
+    display: block;
+}
+
+.tabs .tab>input[type="radio"] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.tabs .tab>label {
+    display: block;
+    padding: 6px 21px;
+    font-size: 12px;
+
+    cursor: pointer;
+    position: relative;
+    color: #FFF;
+    background: #4A83FD;
+}
+
+.tabs .content {
+    z-index: 0;/* or display: none; */
+    overflow: hidden;
+    width: 900px;
+    padding: 3px;
+    position: absolute;
+    top: 27px;
+    left: 0;
+    background: #303030;
+
+    opacity:0;
+    transition: opacity 400ms ease-out;
+}
+
+.tabs>.tab>[id^="tab"]:checked + label {
+    top: 0;
+    background: #303030;
+    color: #F5F5F5;
+}
+
+.tabs>.tab>[id^="tab"]:checked ~ [id^="tab-content"] {
+    z-index: 1;/* or display: block; */
+
+    opacity: 1;
+    transition: opacity 400ms ease-out;
+}
+
+/* Added to avoid tab overlapping results: */
+
+div.results {
+        padding-top: 560px;
 }

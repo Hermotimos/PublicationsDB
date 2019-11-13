@@ -1,0 +1,52 @@
+
+<div class="content-section">
+    <form method="GET" action="">
+        
+        <br>
+        <div>
+            <input type="text" name="search1" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}" required/>
+            <select id="option1" name="option1">
+                <option value="all">Pełny opis</option>
+                <option value="author">Nazwisko autora</option>
+                <option value="editor">Nazwisko redaktora</option>
+                <option value="title">Tytuł</option>
+                <option value="year">Rok wydania</option>
+            </select>
+        </div>
+        <div class="mt-2 mb-0">
+            <label>Operator logiczny:</label>
+            <select id="operator" name="operator">
+                <option value="none">---</option>
+                <option value="and">AND</option>
+                <option value="or">OR</option>
+                <option value="not">AND NOT</option>
+            </select>
+        </div>
+        <div>
+            <input type="text" name="search2" placeholder="Szukane słowo/fraza" value="{{ request.GET.search2 }}"/>
+            <select id="option2" name="option2">
+                <option value="all">Pełny opis</option>
+                <option value="author">Nazwisko autora</option>
+                <option value="editor">Nazwisko redaktora</option>
+                <option value="title">Tytuł</option>
+                <option value="year">Rok wydania</option>
+            </select>
+        </div>
+        <br>
+        
+        <p> Wybierz kategorie, aby zawęzić zakres tematyczny wyszukiwania:</p>
+        <select name="categories" size ="10" multiple>
+            {% for key, value in categories3.items %}
+                <option value="{{ key }}">&#10023; {{ value }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <small>Aby wybrać wiele opcji przytrzymaj na klawiaturze Ctrl (Windows) / Command (Mac).</small>
+        <br><br>
+        
+        <button class="btn btn-dark" type="submit">Wyszukaj</button>
+        <a href="{% url 'bibliography:search' %}" class="btn btn-dark text-right">Nowe wyszukiwanie</a>
+        
+    </form>
+</div>
+
