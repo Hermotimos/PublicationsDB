@@ -3,7 +3,7 @@ from django.db.models.signals import m2m_changed
 from django.utils.html import format_html
 
 from categories.models import CategoryLevelThree
-from description_elements.models import Author, Translator, Location, EncompassingBibliographicUnit, Periodical
+from description_elements.models import Author, Translator, Location, Keyword, EncompassingBibliographicUnit, Periodical
 from publications_db.utils import replace_special_chars, remove_tags
 
 
@@ -35,6 +35,8 @@ class Book(models.Model):
                                        related_name='books',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
+    keywords = models.ManyToManyField(Keyword, related_name='books', verbose_name='Wyrażenia kluczowe')
+
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
     description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',
@@ -125,6 +127,8 @@ class Chapter(models.Model):
                                        related_name='chapters',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
+    keywords = models.ManyToManyField(Keyword, related_name='chapters', verbose_name='Wyrażenia kluczowe')
+
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
     description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',
@@ -238,6 +242,8 @@ class Article(models.Model):
                                        related_name='articles',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
+    keywords = models.ManyToManyField(Keyword, related_name='articles', verbose_name='Wyrażenia kluczowe')
+
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
     description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',

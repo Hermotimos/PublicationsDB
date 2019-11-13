@@ -14,6 +14,7 @@ class BookAdminForm(forms.ModelForm):
             'translators': forms.SelectMultiple(attrs={'size': 20}),
             'published_locations': forms.SelectMultiple(attrs={'size': 20}),
             'cat_lvl_3': forms.SelectMultiple(attrs={'size': 20}),
+            'keywords': forms.SelectMultiple(attrs={'size': 20}),
 
             'title': forms.TextInput(attrs={'size': 80}),
             'annotation': forms.Textarea(attrs={'rows': 2, 'cols': 50}),
@@ -38,6 +39,7 @@ class ChapterAdminForm(forms.ModelForm):
             'editors': forms.SelectMultiple(attrs={'size': 20}),
             'translators': forms.SelectMultiple(attrs={'size': 20}),
             'cat_lvl_3': forms.SelectMultiple(attrs={'size': 20}),
+            'keywords': forms.SelectMultiple(attrs={'size': 20}),
 
             'title': forms.TextInput(attrs={'size': 80}),
             'annotation': forms.Textarea(attrs={'rows': 2, 'cols': 50}),
@@ -60,6 +62,7 @@ class ArticleAdminForm(forms.ModelForm):
             'editors': forms.SelectMultiple(attrs={'size': 20}),
             'translators': forms.SelectMultiple(attrs={'size': 20}),
             'cat_lvl_3': forms.SelectMultiple(attrs={'size': 20}),
+            'keywords': forms.SelectMultiple(attrs={'size': 20}),
 
             'title': forms.TextInput(attrs={'size': 80}),
             'annotation': forms.Textarea(attrs={'rows': 2, 'cols': 50}),

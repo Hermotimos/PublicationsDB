@@ -39,7 +39,19 @@ class Location(models.Model):
     class Meta:
         verbose_name = '3. Miejscowość'
         verbose_name_plural = '3. Miejscowości'
-        ordering = ['name', ]
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Wyrażenie kluczowe')
+
+    class Meta:
+        verbose_name = '4. Wyrażenie kluczowe'
+        verbose_name_plural = '4. Wyrażenia kluczowe'
+        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -68,8 +80,8 @@ class Periodical(models.Model):
         super(Periodical, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = '4. Periodyk'
-        verbose_name_plural = '4. Periodyki'
+        verbose_name = '5. Periodyk'
+        verbose_name_plural = '5. Periodyki'
         unique_together = ['title', 'published_year', 'vol_info_lvl_1', 'vol_info_lvl_2', 'vol_info_lvl_3']
         ordering = ['sorting_name']
 
@@ -145,8 +157,8 @@ class EncompassingBibliographicUnit(models.Model):
         return format_html(f'{description}')
 
     class Meta:
-        verbose_name = '5. Wydawnictwo zwarte nadrzędne'
-        verbose_name_plural = '5. Wydawnictwa zwarte nadrzędne'
+        verbose_name = '6. Wydawnictwo zwarte nadrzędne'
+        verbose_name_plural = '6. Wydawnictwa zwarte nadrzędne'
         ordering = ['sorting_name']
 
 
