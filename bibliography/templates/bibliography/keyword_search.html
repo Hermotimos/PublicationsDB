@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="content-section">
+    <form method="GET" action="">
+        
+        <br>
+        <div>
+            <input type="text" name="search3" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}" required/>
+            <select id="option3" name="option1">
+                <option value="all">Pełny opis</option>
+                <option value="author">Nazwisko autora</option>
+                <option value="editor">Nazwisko redaktora</option>
+                <option value="title">Tytuł</option>
+                <option value="year">Rok wydania</option>
+            </select>
+        </div>
 
-</body>
-</html>
+        <br>
+        
+        <p>Zaznacz wiele wyrażeń, aby wyszukać przez więcej niż jedno wyrażenie kluczowe:</p>
+        <select name="keywords" size ="10" multiple>
+            {% for key, value in categories3.items %}
+                <option value="{{ key }}">&#10023; {{ value }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <small>Aby wybrać wiele opcji przytrzymaj na klawiaturze Ctrl (Windows) / Command (Mac).</small>
+        <br><br>
+        
+        <button name="button2" class="btn btn-dark" type="submit" value="sumbit2">Wyszukaj</button>
+        <a href="{% url 'bibliography:search' %}" class="btn btn-dark text-right">Nowe wyszukiwanie</a>
+        
+    </form>
+</div>
