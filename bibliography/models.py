@@ -68,16 +68,15 @@ class Book(models.Model):
         else:
             locations = ''
 
-        if self.published_year and self.published_locations.all().count() >= 1:
+        if self.published_year and self.published_locations.all().count() > 0:
             year = f' {self.published_year}'
         elif self.published_year and self.published_locations.all().count() == 0:
             year = f', {self.published_year}'
-        elif not self.published_year and self.published_locations.all().count() >= 1:
+        elif not self.published_year and self.published_locations.all().count() > 0:
             year = ' [b.r.]'
-        elif not self.published_year and self.published_locations.all().count() == 0:
-            year = ', [b.m.], [b.r.]'
         else:
-            year = ' [błąd instrukcji warunkowej!]'
+            # i.e.: not self.published_year and self.published_locations.all().count() == 0:
+            year = ', [b.m.], [b.r.]'
 
         description = f'{authors}' \
             f'{title}' \
@@ -180,16 +179,15 @@ class Chapter(models.Model):
         else:
             u_locations = ''
 
-        if unit.published_year and unit.published_locations.all().count() >= 1:
+        if unit.published_year and unit.published_locations.all().count() > 0:
             u_year = f' {unit.published_year}'
         elif unit.published_year and unit.published_locations.all().count() == 0:
             u_year = f', {unit.published_year}'
-        elif not unit.published_year and unit.published_locations.all().count() >= 1:
+        elif not unit.published_year and unit.published_locations.all().count() > 0:
             u_year = ' [b.r.]'
-        elif not unit.published_year and unit.published_locations.all().count() == 0:
-            u_year = ', [b.m.], [b.r.]'
         else:
-            u_year = ' [błąd instrukcji warunkowej!]'
+            # i.e.: not unit.published_year and unit.published_locations.all().count() == 0:
+            u_year = ', [b.m.], [b.r.]'
 
         unit = f', [w:] {u_authors}' \
             f'{u_title}' \
