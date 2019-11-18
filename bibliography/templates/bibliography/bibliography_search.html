@@ -6,14 +6,18 @@
 <div>
     <ul class="tabs" xmlns="http://www.w3.org/1999/html">
         <li class="tab">
-            <input type="radio" name="tabs" checked="checked" id="tab1" />
+            <input type="radio" name="tabs" checked="checked" id="tab1"/>
             <label for="tab1">WYSZUKIWANIE TEKSTOWE I TEMATYCZNE</label>
             <div id="tab-content1" class="content">
                 {% include 'bibliography/text_search.html' %}
             </div>
         </li>
         <li class="tab">
-            <input type="radio" name="tabs" id="tab2" />
+            {% if is_tab_2 %}
+                <input type="radio" name="tabs" checked="checked" id="tab2"/>
+            {% else %}
+                <input type="radio" name="tabs" id="tab2"/>
+            {% endif %}
             <label for="tab2">WYSZUKIWANIE PRZEZ WYRAŻENIA KLUCZOWE</label>
             <div id="tab-content2" class="content">
             {% include 'bibliography/keyword_search.html' %}
@@ -32,7 +36,7 @@
         {% if results %}
             <ul>
             {% for result in results %}
-                <li class="description">{{ result.description|safe }}</li>
+                <li class="description-1">{{ result.description|safe }}</li>
             {% endfor %}
             </ul>
         {% else %}

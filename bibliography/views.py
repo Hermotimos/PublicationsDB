@@ -359,6 +359,7 @@ def bibliography_search_view(request):
         'categories3_dict': categories3_dict,
         'query_text': query_text,
         'keywords_dict': keywords_dict,
+        'is_tab_2': search3 or is_keywords,
     }
     return render(request, 'bibliography/bibliography_search.html', context)
 

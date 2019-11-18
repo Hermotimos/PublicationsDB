@@ -3,7 +3,12 @@
         
         <br>
         <div>
-            <input type="text" name="search3" placeholder="Wyrażenie kluczowe" value="{{ request.GET.search1 }}"/>
+            <input name="search3" placeholder="Wyrażenie kluczowe" list="keywords" value="{{ request.GET.search3 }}" />
+            <datalist id="keywords">
+                {% for key, value in keywords_dict.items %}
+                    <option value="{{ value }}">
+                {% endfor %}
+            </datalist>
         </div>
         <br>
         
