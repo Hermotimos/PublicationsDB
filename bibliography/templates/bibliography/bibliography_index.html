@@ -12,18 +12,18 @@
             <!--  COLLAPSIBLE LVL 2  -->
             {% for cat2 in index|dict_lookup:cat1 %}
                 {% if cat2.name != '---' %}
-                    <h6 class="pl-15"><b class="hover-blue cat2" data-toggle="collapse" data-target="#{{ cat2.name }}">{{ cat2.name }}</b></h6>
+                    <h6 class="indent-2"><b class="hover-blue cat2" data-toggle="collapse" data-target="#{{ cat2.name }}">{{ cat2.name }}</b></h6>
                     <div id="{{ cat2.name }}" class="panel-collapse collapse in">
                         
                         <!--  COLLAPSIBLE LVL 3  -->
                         {% for cat3 in index|dict_lookup:cat1|dict_lookup:cat2 %}
                             {% if cat3.name != '---' %}
-                                <h6 class="left"><b class="hover-blue" data-toggle="collapse" data-target="#{{ cat3.name }}">{{ cat3.name }}</b></h6>
+                                <h6 class="indent-3"><b class="hover-blue" data-toggle="collapse" data-target="#{{ cat3.name }}">{{ cat3.name }}</b></h6>
                                 <div id="{{ cat3.name }}" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                         <ul>
                                         {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                            <li class="description">{{ unit.description|safe }}</li>
+                                            <li class="description-3">{{ unit.description|safe }}</li>
                                         {% endfor %}
                                         </ul>
                                         <br>
@@ -34,7 +34,7 @@
                             {% else %}
                                 <ul>
                                 {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                    <li class="description">{{ unit.description|safe }}</li>
+                                    <li  class="description-2">{{ unit.description|safe }}</li>
                                 {% endfor %}
                                 </ul>
                                 <br>
@@ -50,7 +50,7 @@
                         {% if cat3.name != '---' %}<h6><b>{{ cat3.name }}</b></h6>{% endif %}
                             <ul>
                             {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                <li class="description">{{ unit.description|safe }}</li>
+                                <li class="description-1">{{ unit.description|safe }}</li>
                             {% endfor %}
                             </ul>
                     {% endfor %}
