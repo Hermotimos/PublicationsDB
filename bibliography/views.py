@@ -114,7 +114,7 @@ def bibliography_search_view(request):
     is_categories = True if categories else False
 
     categories_text = '' if not is_categories \
-        else f'Zawęź wyszukiwanie do wybranych kategorii: ' \
+        else f'<b>Zawęź wyszukiwanie do wybranych kategorii:</b> ' \
         f'{"; ".join(value for key, value in categories3_dict.items() if str(key) in categories)}'
 
     # keywords search
@@ -123,7 +123,7 @@ def bibliography_search_view(request):
     is_keywords = True if keywords else False
 
     keywords_text = '' if not is_keywords \
-        else f'Zawęź wyszukiwanie do opisów należących do wybranych wyrażeń kluczowych: ' \
+        else f'<b>Zawęź wyszukiwanie do opisów należących do wybranych wyrażeń kluczowych:</b> ' \
         f'{"; ".join(value for key, value in keywords_dict.items() if str(key) in keywords)}'
 
     if is_categories:
@@ -226,7 +226,7 @@ def bibliography_search_view(request):
                     articles = [obj for obj in articles_2]
                     descriptions = books + chapters + articles
 
-                    query_text = f'Wyszukaj opisy spełniające oba warunki: ' \
+                    query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
                         f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}"' \
                         f'\n{categories_text}'
 
@@ -263,7 +263,7 @@ def bibliography_search_view(request):
                     articles = [obj for obj in articles_2]
                     descriptions = books + chapters + articles
 
-                    query_text = f'Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków: ' \
+                    query_text = f'<b>Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków:</b> ' \
                         f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}"' \
                         f'\n{categories_text}'
 
@@ -300,7 +300,7 @@ def bibliography_search_view(request):
                     articles = [obj for obj in articles_2]
                     descriptions = books + chapters + articles
 
-                    query_text = f'Wyszukaj opisy spełniające oba warunki: ' \
+                    query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
                         f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}"' \
                         f'\n{categories_text}'
 
@@ -311,7 +311,7 @@ def bibliography_search_view(request):
                     articles = [obj for obj in articles_1]
                     descriptions = books + chapters + articles
 
-                    query_text = f'Wyszukaj opisy spełniające warunek: "{search1}" w polu "{option1_text}"' \
+                    query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}"' \
                         f'\n{categories_text}'
 
     # SECOND FORM: SEARCH BY KEYWORDS
@@ -333,7 +333,7 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_1]
                 descriptions = books + chapters + articles
 
-                query_text = f'Wyszukaj opisy dla wyrażenia kluczowego: "{search3}"' \
+                query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}"' \
                     f'\n{keywords_text}'
 
             elif not search3:
