@@ -178,7 +178,7 @@ p.operator {
     z-index: 0;/* or display: none; */
     overflow: hidden;
     width: 900px;
-    padding: 3px;
+    padding: 2px;
     position: absolute;
     top: 27px;
     left: 0;

@@ -335,8 +335,7 @@ def bibliography_search_view(request):
                 query_text = f'Wyszukaj opisy dla wyrażenia kluczowego: "{search3}"'
 
             elif search3 and is_keywords:
-                query_text = f'Wyszukaj opisy dla wyrażenia kluczowego: "{search3}"' \
-                    f'{keywords_text}'
+                query_text = f'Wyszukaj opisy dla wyrażenia kluczowego: "{search3}"{keywords_text}'
 
             else:
                 # i.e. elif not search3 and is_keywords
