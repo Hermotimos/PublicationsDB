@@ -35,7 +35,7 @@ class Book(models.Model):
                                        related_name='books',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
-    keywords = models.ManyToManyField(Keyword, related_name='books', verbose_name='Wyrażenia kluczowe')
+    keywords = models.ManyToManyField(Keyword, related_name='books', verbose_name='Wyrażenia kluczowe', blank=True)
 
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
@@ -126,7 +126,7 @@ class Chapter(models.Model):
                                        related_name='chapters',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
-    keywords = models.ManyToManyField(Keyword, related_name='chapters', verbose_name='Wyrażenia kluczowe')
+    keywords = models.ManyToManyField(Keyword, related_name='chapters', verbose_name='Wyrażenia kluczowe', blank=True)
 
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
@@ -240,7 +240,7 @@ class Article(models.Model):
                                        related_name='articles',
                                        verbose_name='Kategorie i podkategorie')
     annotation = models.CharField(max_length=1000, verbose_name='Uwagi', blank=True, null=True)
-    keywords = models.ManyToManyField(Keyword, related_name='articles', verbose_name='Wyrażenia kluczowe')
+    keywords = models.ManyToManyField(Keyword, related_name='articles', verbose_name='Wyrażenia kluczowe', blank=True)
 
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
