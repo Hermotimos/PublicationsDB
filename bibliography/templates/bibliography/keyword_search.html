@@ -3,21 +3,13 @@
         
         <br>
         <div>
-            <input type="text" name="search3" placeholder="Szukane słowo/fraza" value="{{ request.GET.search1 }}" required/>
-            <select id="option3" name="option1">
-                <option value="all">Pełny opis</option>
-                <option value="author">Nazwisko autora</option>
-                <option value="editor">Nazwisko redaktora</option>
-                <option value="title">Tytuł</option>
-                <option value="year">Rok wydania</option>
-            </select>
+            <input type="text" name="search3" placeholder="Wyrażenie kluczowe" value="{{ request.GET.search1 }}"/>
         </div>
-
         <br>
         
         <p>Zaznacz wiele wyrażeń, aby wyszukać przez więcej niż jedno wyrażenie kluczowe:</p>
         <select name="keywords" size ="10" multiple>
-            {% for key, value in categories3.items %}
+            {% for key, value in keywords_dict.items %}
                 <option value="{{ key }}">&#10023; {{ value }}</option>
             {% endfor %}
         </select>

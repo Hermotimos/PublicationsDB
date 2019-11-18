@@ -36,7 +36,7 @@
         
         <p> Wybierz kategorie, aby zawęzić zakres tematyczny wyszukiwania:</p>
         <select name="categories" size ="10" multiple>
-            {% for key, value in categories3.items %}
+            {% for key, value in categories3_dict.items %}
                 <option value="{{ key }}">&#10023; {{ value }}</option>
             {% endfor %}
         </select>

@@ -99,30 +99,47 @@ def bibliography_index_view(request):
 @query_debugger
 def bibliography_search_view(request):
     is_searching = is_valid_search = False
-    categories3 = {obj.id: obj.formatted_name for obj in CategoryLevelThree.objects.all()}
-    keywords = {obj.id: obj.name for obj in Keyword.objects.all()}
+    categories3_dict = {obj.id: obj.formatted_name for obj in CategoryLevelThree.objects.all()}
+    keywords_dict = {obj.id: obj.name for obj in Keyword.objects.all()}
     descriptions = []
     query_text = ''
 
+    # text and subject search
     search1 = request.GET.get('search1')
-    search2 = request.GET.get('search2')
     option1 = request.GET.get('option1')
-    option2 = request.GET.get('option2')
     operator = request.GET.get('operator')
-
+    search2 = request.GET.get('search2')
+    option2 = request.GET.get('option2')
     categories = request.GET.getlist('categories')
     is_categories = True if categories else False
+
     categories_text = '' if not is_categories \
         else f'\nZawęź wyszukiwanie do wybranych kategorii: ' \
-        f'{"; ".join(value for key, value in categories3.items() if str(key) in categories)}'
+        f'{"; ".join(value for key, value in categories3_dict.items() if str(key) in categories)}'
+
+    # keywords search
+    search3 = request.GET.get('search3')
+    keywords = request.GET.getlist('keywords')
+    is_keywords = True if keywords else False
+
+    keywords_text = '' if not is_keywords \
+        else f'\nZawęź wyszukiwanie do opisów należących do wybranych wyrażeń kluczowych: ' \
+        f'{"; ".join(value for key, value in keywords_dict.items() if str(key) in keywords)}'
 
     if is_categories:
-        books_1 = books_2 = Book.objects.all().filter(cat_lvl_3__id__in=categories).\
-            prefetch_related('authors').distinct()
-        chapters_1 = chapters_2 = Chapter.objects.all().filter(cat_lvl_3__id__in=categories).\
-            prefetch_related('authors').distinct()
-        articles_1 = articles_2 = Article.objects.all().filter(cat_lvl_3__id__in=categories).\
-            prefetch_related('authors').distinct()
+        books_1 = books_2 = \
+            Book.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
+        chapters_1 = chapters_2 = \
+            Chapter.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
+        articles_1 = articles_2 = \
+            Article.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
+    elif is_keywords:
+        books_1 = books_2 = \
+            Book.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
+        chapters_1 = chapters_2 = \
+            Chapter.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
+        articles_1 = articles_2 = \
+            Article.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
     else:
         books_1 = books_2 = Book.objects.all().prefetch_related('authors')
         chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
@@ -282,7 +299,8 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'Wyszukaj opisy spełniające oba warunki: ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}"{categories_text}'
+                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" ' \
+                        f'w polu "{option2_text}"{categories_text}'
 
                 # CASE 3.4: search1 and not search2 and not operator:
                 else:
@@ -291,12 +309,45 @@ def bibliography_search_view(request):
                     articles = [obj for obj in articles_1]
                     descriptions = books + chapters + articles
 
-                    query_text = f'Wyszukaj opisy spełniające warunek: "{search1}" w polu "{option1_text}"{categories_text}'
+                    query_text = f'Wyszukaj opisy spełniające warunek: "{search1}" ' \
+                        f'w polu "{option1_text}"{categories_text}'
 
     # SECOND FORM: SEARCH BY KEYWORDS
     elif request.GET.get('button2'):
-        pass # TODO
+        is_searching = True
 
+        if not search3 and not is_keywords:
+            query_text = f'<b>Nie wybrano żadnego wyrażenia kluczowego.</b>'
+
+        else:
+            is_valid_search = True
+
+            if search3 and not is_keywords:
+                books_1 = books_1.filter(keywords__name=search3)
+                chapters_1 = chapters_1.filter(keywords__name=search3)
+                articles_1 = articles_1.filter(keywords__name=search3)
+
+                books = [obj for obj in books_1]
+                chapters = [obj for obj in chapters_1]
+                articles = [obj for obj in articles_1]
+                descriptions = books + chapters + articles
+
+                query_text = f'Wyszukaj opisy dla wyrażenia kluczowego: "{search3}"'
+
+            elif search3 and is_keywords:
+                query_text = f'Wyszukaj opisy dla wyrażenia kluczowego: "{search3}"' \
+                    f'{keywords_text}'
+
+            else:
+                # i.e. elif not search3 and is_keywords
+                books = [obj for obj in books_1]
+                chapters = [obj for obj in chapters_1]
+                articles = [obj for obj in articles_1]
+                descriptions = books + chapters + articles
+
+                query_text = f'{keywords_text}'
+
+    # NO FORM BY FIRST RENDERING OF SEARCH PAGE
     else:
         pass
 
@@ -305,9 +356,9 @@ def bibliography_search_view(request):
         'results': sorted(descriptions, key=lambda desc: replace_special_chars(desc.sorting_name)),
         'is_valid_search': is_valid_search,
         'is_searching': is_searching,
-        'categories3': categories3,
+        'categories3_dict': categories3_dict,
         'query_text': query_text,
-
+        'keywords_dict': keywords_dict,
     }
     return render(request, 'bibliography/bibliography_search.html', context)
 
