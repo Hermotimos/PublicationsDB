@@ -380,6 +380,8 @@ def bibliography_reload_view(request):
         obj.save()
     for obj in Location.objects.all():
         obj.save()
+    for obj in Keyword.objects.all():
+        obj.save()
 
     for obj in EncompassingBibliographicUnit.objects.all():
         obj.save()
