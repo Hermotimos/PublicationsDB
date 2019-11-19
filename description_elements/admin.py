@@ -3,17 +3,17 @@ from .models import Author, Translator, Location, Keyword, EncompassingBibliogra
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    exclude = []
+    exclude = ['sorting_name']
     search_fields = ['first_names', 'last_name']
 
 
 class TranslatorAdmin(admin.ModelAdmin):
-    exclude = []
+    exclude = ['sorting_name']
     search_fields = ['first_names', 'last_name']
 
 
 class KeywordAdmin(admin.ModelAdmin):
-    exclude = []
+    exclude = ['sorting_name']
     list_display = ['id', 'name']
     list_display_links = ['id']
     list_editable = ['name']
@@ -21,7 +21,7 @@ class KeywordAdmin(admin.ModelAdmin):
 
 
 class LocationAdmin(admin.ModelAdmin):
-    exclude = []
+    exclude = ['sorting_name']
     search_fields = ['name']
 
 

@@ -27,7 +27,7 @@ class Author(models.Model):
 
 
 class Translator(models.Model):
-    first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona')
+    first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona', blank=True, null=True)
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
                                     blank=True, null=True)
