@@ -46,7 +46,7 @@ class Location(models.Model):
 
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Wyrażenie kluczowe')
+    name = models.CharField(max_length=100, verbose_name='Wyrażenie kluczowe', unique=True)
 
     class Meta:
         verbose_name = '4. Wyrażenie kluczowe'
