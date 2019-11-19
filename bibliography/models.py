@@ -263,7 +263,7 @@ class Article(models.Model):
         elif not self.title:
             title = ', '
         else:
-            title = self.title
+            title = f'<i>{self.title}</i>'
 
         pages = f', {self.periodical_pages}' if self.periodical_pages else ''
         annotation = f' [{self.annotation}]' if self.annotation else ''
