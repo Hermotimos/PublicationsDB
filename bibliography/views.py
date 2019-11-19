@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from bibliography.models import Book, Chapter, Article
 from bibliography.utils import query_debugger
 from categories.models import CategoryLevelOne, CategoryLevelTwo, CategoryLevelThree
-from description_elements.models import Keyword, EncompassingBibliographicUnit, Periodical
+from description_elements.models import Author, Translator, Location, Keyword, EncompassingBibliographicUnit, Periodical
 from publications_db.utils import replace_special_chars
 
 
@@ -372,6 +372,13 @@ def bibliography_reload_view(request):
     for obj in CategoryLevelTwo.objects.all():
         obj.save()
     for obj in CategoryLevelThree.objects.all():
+        obj.save()
+
+    for obj in Author.objects.all():
+        obj.save()
+    for obj in Translator.objects.all():
+        obj.save()
+    for obj in Location.objects.all():
         obj.save()
 
     for obj in EncompassingBibliographicUnit.objects.all():

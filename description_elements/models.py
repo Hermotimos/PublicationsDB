@@ -8,61 +8,81 @@ from publications_db.utils import replace_special_chars, remove_tags
 class Author(models.Model):
     first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona', blank=True, null=True)
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
-    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
-    #                                 blank=True, null=True)
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+                                    blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.last_name} {self.first_names}' if self.first_names else self.last_name
+
+    def save(self, *args, **kwargs):
+        super(Author, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(Author, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '1. Autor/Redaktor'
         verbose_name_plural = '1. Autorzy i redaktorzy'
-        ordering = ['last_name', ]
+        ordering = ['sorting_name']
         unique_together = ['first_names', 'last_name']
-
-    def __str__(self):
-        return f'{self.last_name} {self.first_names}' if self.first_names else self.last_name
 
 
 class Translator(models.Model):
     first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona')
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
-    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
-    #                                 blank=True, null=True)
-
-    class Meta:
-        verbose_name = '2. Tłumacz'
-        verbose_name_plural = '2. Tłumacze'
-        ordering = ['last_name', ]
-        unique_together = ['first_names', 'last_name']
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+                                    blank=True, null=True)
 
     def __str__(self):
         return f'{self.last_name} {self.first_names}'
 
+    def save(self, *args, **kwargs):
+        super(Translator, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(Translator, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = '2. Tłumacz'
+        verbose_name_plural = '2. Tłumacze'
+        ordering = ['sorting_name']
+        unique_together = ['first_names', 'last_name']
+
 
 class Location(models.Model):
     name = models.CharField(max_length=100, verbose_name="Miejscowość", unique=True)
-    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
-    #                                 blank=True, null=True)
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+                                    blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        super(Location, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(Location, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '3. Miejscowość'
         verbose_name_plural = '3. Miejscowości'
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
+        ordering = ['sorting_name']
 
 
 class Keyword(models.Model):
     name = models.CharField(max_length=100, verbose_name='Wyrażenie kluczowe', unique=True)
-    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
-    #                                 blank=True, null=True)
+    sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+                                    blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        super(Keyword, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(Keyword, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = '4. Wyrażenie kluczowe'
         verbose_name_plural = '4. Wyrażenia kluczowe'
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
+        ordering = ['sorting_name']
 
 
 class Periodical(models.Model):
