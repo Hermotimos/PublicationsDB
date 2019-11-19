@@ -8,6 +8,8 @@ from publications_db.utils import replace_special_chars, remove_tags
 class Author(models.Model):
     first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona', blank=True, null=True)
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
+    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+    #                                 blank=True, null=True)
 
     class Meta:
         verbose_name = '1. Autor/Redaktor'
@@ -22,6 +24,8 @@ class Author(models.Model):
 class Translator(models.Model):
     first_names = models.CharField(max_length=100, verbose_name='Imię/Imiona')
     last_name = models.CharField(max_length=100, verbose_name='Nazwisko')
+    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+    #                                 blank=True, null=True)
 
     class Meta:
         verbose_name = '2. Tłumacz'
@@ -35,6 +39,8 @@ class Translator(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=100, verbose_name="Miejscowość", unique=True)
+    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+    #                                 blank=True, null=True)
 
     class Meta:
         verbose_name = '3. Miejscowość'
@@ -47,6 +53,8 @@ class Location(models.Model):
 
 class Keyword(models.Model):
     name = models.CharField(max_length=100, verbose_name='Wyrażenie kluczowe', unique=True)
+    # sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (pole automatyczne)',
+    #                                 blank=True, null=True)
 
     class Meta:
         verbose_name = '4. Wyrażenie kluczowe'
