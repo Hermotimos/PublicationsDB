@@ -134,7 +134,7 @@ class EncompassingBibliographicUnit(models.Model):
                                          blank=True)
 
     # edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
-    volumes = models.CharField(max_length=100, verbose_name='Tomy', blank=True, null=True)
+    # volumes = models.CharField(max_length=100, verbose_name='Tomy', blank=True, null=True)
     published_locations = models.ManyToManyField(Location,
                                                  related_name='encompassing_bib_units',
                                                  verbose_name='Miejsce/miejsca wydania',
@@ -156,7 +156,7 @@ class EncompassingBibliographicUnit(models.Model):
             title = self.title
 
         # ed = f', {self.edition}' if self.edition else ''
-        vols = f', {self.volumes}' if self.volumes else ''
+        # vols = f', {self.volumes}' if self.volumes else ''
 
         if self.published_locations.all().count() == 1:
             locations = f', {self.published_locations.first()}'
@@ -180,7 +180,7 @@ class EncompassingBibliographicUnit(models.Model):
             f'<i>{title}</i>' \
             f'{editors_abbrev}{editors}' \
             f'{translators}' \
-            f'{vols}{locations}{year}'
+            f'{locations}{year}'
 
         return format_html(f'{description}')
 
