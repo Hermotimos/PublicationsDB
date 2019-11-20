@@ -59,7 +59,7 @@ class Book(models.Model):
 
         # ed = f', {self.edition}' if self.edition else ''
         vols = f', {self.volumes}' if self.volumes else ''
-        annotation = f' [{self.annotation}]' if self.annotation else ''
+        # annotation = f' [{self.annotation}]' if self.annotation else ''
 
         if self.published_locations.all().count() == 1:
             locations = f', {self.published_locations.first()}'
@@ -82,7 +82,7 @@ class Book(models.Model):
             f'{title}' \
             f'{editors_abbrev}{editors}' \
             f'{translators_abbrev}{translators}' \
-            f'{vols}{locations}{year}.{annotation}'
+            f'{vols}{locations}{year}.'
 
         return format_html(f'{description}')
 
@@ -154,7 +154,7 @@ class Chapter(models.Model):
 
         vol = f', {self.in_volume}' if self.in_volume else ''
         pages = f', {self.encompassing_bibliographic_unit_pages}' if self.encompassing_bibliographic_unit_pages else ''
-        annotation = f' [{self.annotation}]' if self.annotation else ''
+        # annotation = f' [{self.annotation}]' if self.annotation else ''
 
         # PART 2: elements considering encompassing bibliographic unit:
         unit = self.encompassing_bibliographic_unit
@@ -195,7 +195,7 @@ class Chapter(models.Model):
             f'{u_translators_abbrev}{u_translators}' \
             f'{u_locations}{u_year}'
 
-        description = f'{authors}{title}{unit}{pages}.{annotation}'
+        description = f'{authors}{title}{unit}{pages}.'
         # f'{editors_abbrev}{editors}' \
         # f'{translators_abbrev}{translators}' \
 
@@ -266,10 +266,10 @@ class Article(models.Model):
             title = f'<i>{self.title}</i>'
 
         pages = f', {self.periodical_pages}' if self.periodical_pages else ''
-        annotation = f' [{self.annotation}]' if self.annotation else ''
+        # annotation = f' [{self.annotation}]' if self.annotation else ''
         periodical = f', {self.periodical}'
 
-        description = f'{authors}{title}{periodical}{pages}.{annotation}'
+        description = f'{authors}{title}{periodical}{pages}.'
         # f'{editors_abbrev}{editors}' \
         # f'{translators_abbrev}{translators}' \
 

@@ -25,7 +25,13 @@
                                     <div class="panel-body">
                                         <ul>
                                         {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                            <li class="description-3">{{ unit.description|safe }}</li>
+                                            <li class="description-3">
+                                                {{ unit.description|safe }}
+                                                {% if unit.annotation %}
+                                                    <b class="hover-blue" data-toggle="collapse" data-target="#{{ unit.id }}">UWAGI</b>
+                                                    <div id="{{ unit.id }}" class="panel-collapse collapse">[{{ unit.annotation }}]</div>
+                                                {% endif %}
+                                            </li>
                                         {% endfor %}
                                         </ul>
                                         <br>
@@ -36,7 +42,13 @@
                             {% else %}
                                 <ul>
                                 {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                    <li  class="description-2">{{ unit.description|safe }}</li>
+                                    <li class="description-2">
+                                        {{ unit.description|safe }}
+                                        {% if unit.annotation %}
+                                            <b class="hover-blue" data-toggle="collapse" data-target="#{{ unit.id }}">UWAGI</b>
+                                            <div id="{{ unit.id }}" class="panel-collapse collapse">[{{ unit.annotation }}]</div>
+                                        {% endif %}
+                                    </li>
                                 {% endfor %}
                                 </ul>
                                 <br>
@@ -52,7 +64,13 @@
                         {% if cat3.name != '---' %}<h6><b>{{ cat3.name }}</b></h6>{% endif %}
                             <ul>
                             {% for unit in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
-                                <li class="description-1">{{ unit.description|safe }}</li>
+                                <li class="description-1">
+                                    {{ unit.description|safe }}
+                                    {% if unit.annotation %}
+                                        <b class="hover-blue" data-toggle="collapse" data-target="#{{ unit.id }}">UWAGI</b>
+                                        <div id="{{ unit.id }}" class="panel-collapse collapse">[{{ unit.annotation }}]</div>
+                                    {% endif %}
+                                </li>
                             {% endfor %}
                             </ul>
                     {% endfor %}
