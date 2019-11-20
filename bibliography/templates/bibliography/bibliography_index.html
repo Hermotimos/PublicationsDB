@@ -3,7 +3,9 @@
 {% load static %}
 
 {% block content %}
-    <br><br>
+    <br>
+    <h3>{{ page_title }}</h3>
+    <br>
     <!--  COLLAPSIBLE LVL 1  -->
     {% for cat1 in index %}
         <h5><b class="hover-blue cat1" data-toggle="collapse" data-target="#{{ cat1.name }}">{{ cat1.name }}</b></h5>

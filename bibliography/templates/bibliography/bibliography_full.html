@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<h1> fsdssd</h1>
-
 {% block content %}
-    <br><br>
+    <br>
+    <h3>{{ page_title }}</h3>
+    <br>
     {% for result in results %}
         <li class="description-1">{{ result.description|safe }}</li>
     {% endfor %}
