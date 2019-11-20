@@ -6,8 +6,8 @@ from django import forms
 class BookAdminForm(forms.ModelForm):
     class Meta:
         model = Book
-        exclude = []
-        # exclude = ['sorting_name', 'description', ]
+        # exclude = []
+        exclude = ['sorting_name', 'description', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
             'editors': forms.SelectMultiple(attrs={'size': 20}),
@@ -32,8 +32,8 @@ class BookAdminForm(forms.ModelForm):
 class ChapterAdminForm(forms.ModelForm):
     class Meta:
         model = Chapter
-        exclude = []
-        # exclude = ['sorting_name', 'description', 'published_year', ]
+        # exclude = []
+        exclude = ['sorting_name', 'description', 'published_year', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
             'editors': forms.SelectMultiple(attrs={'size': 20}),
@@ -55,8 +55,8 @@ class ChapterAdminForm(forms.ModelForm):
 class ArticleAdminForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = []
-        # exclude = ['sorting_name', 'description', 'published_year', ]
+        # exclude = []
+        exclude = ['sorting_name', 'description', 'published_year', ]
         widgets = {
             'authors': forms.SelectMultiple(attrs={'size': 20}),
             'editors': forms.SelectMultiple(attrs={'size': 20}),
@@ -84,11 +84,11 @@ class ChapterAdmin(admin.ModelAdmin):
     search_fields = ['description']
 
 
-class ArticlelAdmin(admin.ModelAdmin):
+class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
     search_fields = ['description']
 
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(Chapter, ChapterAdmin)
-admin.site.register(Article, ArticlelAdmin)
+admin.site.register(Article, ArticleAdmin)
