@@ -78,10 +78,8 @@ class Book(models.Model):
             # i.e.: not self.published_year and self.published_locations.all().count() == 0:
             year = ', [b.m.], [b.r.]'
 
-        description = f'{authors}' \
-            f'{title}' \
-            f'{editors_abbrev}{editors}' \
-            f'{translators_abbrev}{translators}' \
+        description = f'{authors}{title}' \
+            f'{editors_abbrev}{editors}{translators_abbrev}{translators}' \
             f'{vols}{locations}{year}.'
 
         return format_html(f'{description}')
@@ -189,10 +187,8 @@ class Chapter(models.Model):
             # i.e.: not unit.published_year and unit.published_locations.all().count() == 0:
             u_year = ', [b.m.], [b.r.]'
 
-        unit = f', [w:] {u_authors}' \
-            f'{u_title}' \
-            f'{vol}{u_editors_abbrev}{u_editors}' \
-            f'{u_translators_abbrev}{u_translators}' \
+        unit = f', [w:] {u_authors}{u_title}' \
+            f'{vol}{u_editors_abbrev}{u_editors}{u_translators_abbrev}{u_translators}' \
             f'{u_locations}{u_year}'
 
         description = f'{authors}{title}{unit}{pages}.'
