@@ -6,13 +6,7 @@
     <h3>{{ page_title }}</h3>
     <br>
     {% for result in results %}
-        <li class="description-1">
-            {{ result.description|safe }}
-            {% if result.annotation %}
-                <b class="blue" data-toggle="collapse" data-target="#{{ result.id }}">UWAGI</b>
-                <div id="{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
-            {% endif %}
-        </li>
+        <li class="description-1">{{ result.description|safe }}</li>
     {% endfor %}
     <br>
 {% endblock content %}
