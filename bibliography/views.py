@@ -228,8 +228,8 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}"' \
-                        f'\n{categories_text}'
+                        f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}".' \
+                        f'\n{categories_text}.'
 
                 # CASE 3.2: search1 and search2 and 'OR' operator:
                 elif search1 and search2 and operator == 'or':
@@ -265,8 +265,8 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'<b>Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}"' \
-                        f'\n{categories_text}'
+                        f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}".' \
+                        f'\n{categories_text}.'
 
                 # CASE 3.3: search1 and search2 and 'AND NOT' operator:
                 elif search1 and search2 and operator == 'not':
@@ -302,8 +302,8 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}"' \
-                        f'\n{categories_text}'
+                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}".' \
+                        f'\n{categories_text}.'
 
                 # CASE 3.4: search1 and not search2 and not operator:
                 else:
@@ -312,8 +312,8 @@ def bibliography_search_view(request):
                     articles = [obj for obj in articles_1]
                     descriptions = books + chapters + articles
 
-                    query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}"' \
-                        f'\n{categories_text}'
+                    query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}".' \
+                        f'\n{categories_text}.'
 
     # SECOND FORM: SEARCH BY KEYWORDS
     elif request.GET.get('button2'):
@@ -334,8 +334,8 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_1]
                 descriptions = books + chapters + articles
 
-                query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}"' \
-                    f'\n{keywords_text}'
+                query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".' \
+                    f'\n{keywords_text}.'
 
             elif not search3:
                 books = [obj for obj in books_1]
@@ -343,7 +343,7 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_1]
                 descriptions = books + chapters + articles
 
-                query_text = f'{keywords_text}'
+                query_text = f'{keywords_text}.'
 
     # NO FORM BY FIRST RENDERING OF SEARCH PAGE
     else:
