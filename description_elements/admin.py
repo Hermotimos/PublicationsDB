@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django import forms
+
 from .models import Author, Translator, Location, Keyword, EncompassingBibliographicUnit, Periodical
 
 
@@ -25,7 +27,21 @@ class LocationAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
+class EncompassingBibliographicUnitAdminForm(forms.ModelForm):
+    class Meta:
+        model = EncompassingBibliographicUnit
+        # exclude = []
+        exclude = ['sorting_name', 'description']
+        widgets = {
+            'authors': forms.SelectMultiple(attrs={'size': 20}),
+
+            'translators': forms.SelectMultiple(attrs={'size': 20}),
+            'translators_abbrev': forms.TextInput(attrs={'rows': 1, 'cols': 5}),
+        }
+
+
 class EncompassingBibliographicUnitAdmin(admin.ModelAdmin):
+    form = EncompassingBibliographicUnitAdminForm
     exclude = ['sorting_name']
 
 
