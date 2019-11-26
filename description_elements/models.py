@@ -86,7 +86,7 @@ class Keyword(models.Model):
 
 
 class Periodical(models.Model):
-    title = models.CharField(max_length=1000, verbose_name='Tytuł periodyku', blank=True, null=True)
+    title = models.CharField(max_length=1000, verbose_name='Tytuł periodyku')
     published_year = models.CharField(max_length=20, verbose_name='Rok wydania', blank=True, null=True)
     vol_info_lvl_1 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 1', blank=True, null=True)
     vol_info_lvl_2 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 2', blank=True, null=True)
@@ -119,7 +119,7 @@ class EncompassingBibliographicUnit(models.Model):
                                      related_name='encompassing_bib_units_as_author',
                                      verbose_name='Autorstwo',
                                      blank=True)
-    title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
+    title = models.CharField(max_length=1000, verbose_name='Tytuł')
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
     editors = models.ManyToManyField(Author,
