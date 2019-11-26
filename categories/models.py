@@ -37,7 +37,7 @@ class CategoryLevelTwo(models.Model):
         verbose_name = 'Kategoria poz. 2'
         verbose_name_plural = 'Kategorie poz. 2'
         ordering = ['cat_lvl_1', 'name']
-        unique_together = ['formatted_name']
+        unique_together = ['cat_lvl_1', 'name']
 
     def __str__(self):
         return f'{self.cat_lvl_1} / {self.name}'
@@ -76,7 +76,7 @@ class CategoryLevelThree(models.Model):
         verbose_name = 'Kategoria poz. 3'
         verbose_name_plural = 'Kategorie poz. 3'
         ordering = ['cat_lvl_2', 'name']
-        unique_together = ['formatted_name']
+        unique_together = ['cat_lvl_2', 'name']
 
     def __str__(self):
         return f'{self.cat_lvl_2} / {self.name}'
