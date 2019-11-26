@@ -2,7 +2,7 @@ from django.db import models
 
 
 class CategoryLevelOne(models.Model):
-    name = models.CharField(max_length=1000, verbose_name='Kategoria poz. 1')
+    name = models.CharField(max_length=80, verbose_name='Kategoria poz. 1 (max. 80 znaków)', unique=True)
 
     class Meta:
         verbose_name = 'Kategoria poz. 1'
@@ -30,13 +30,14 @@ class CategoryLevelTwo(models.Model):
                                   related_name='categories2',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 1')
-    name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 2')
-    formatted_name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 2 pełna nazwa')
+    name = models.CharField(max_length=80, default='---', verbose_name='Kategoria poz. 2 (max. 80 znaków)')
+    formatted_name = models.CharField(max_length=255, default='---', verbose_name='Kategoria poz. 2 pełna nazwa')
 
     class Meta:
         verbose_name = 'Kategoria poz. 2'
         verbose_name_plural = 'Kategorie poz. 2'
         ordering = ['cat_lvl_1', 'name']
+        unique_together = ['formatted_name']
 
     def __str__(self):
         return f'{self.cat_lvl_1} / {self.name}'
@@ -68,13 +69,14 @@ class CategoryLevelThree(models.Model):
                                   related_name='categories3',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 2')
-    name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 3')
-    formatted_name = models.CharField(max_length=1000, default='---', verbose_name='Kategoria poz. 3 pełna nazwa')
+    name = models.CharField(max_length=95, default='---', verbose_name='Kategoria poz. 3 (max. 95 znaków)')
+    formatted_name = models.CharField(max_length=255, default='---', verbose_name='Kategoria poz. 3 pełna nazwa')
 
     class Meta:
         verbose_name = 'Kategoria poz. 3'
         verbose_name_plural = 'Kategorie poz. 3'
         ordering = ['cat_lvl_2', 'name']
+        unique_together = ['formatted_name']
 
     def __str__(self):
         return f'{self.cat_lvl_2} / {self.name}'
