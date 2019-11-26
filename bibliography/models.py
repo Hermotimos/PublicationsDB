@@ -98,7 +98,7 @@ class Chapter(models.Model):
                                                         related_name='dependent_bibliographic_units',
                                                         verbose_name='Opublikowane w: (wydawnictwo zwarte)',
                                                         on_delete=models.PROTECT)
-    volume = models.CharField(max_length=100, verbose_name='Tom (np. "t. 2")', blank=True, null=True)
+    in_volume = models.CharField(max_length=100, verbose_name='Tom (np. "t. 2")', blank=True, null=True)
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
     editors = models.ManyToManyField(Author,
@@ -135,7 +135,7 @@ class Chapter(models.Model):
         else:
             title = f'<i>{self.title}</i>'
 
-        volume = f', {self.volume}' if self.volume else ''
+        volume = f', {self.in_volume}' if self.in_volume else ''
 
         if self.published_locations.all().count() == 1:
             locations = f', {self.published_locations.first()}'

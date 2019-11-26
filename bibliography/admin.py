@@ -41,7 +41,7 @@ class ChapterAdminForm(forms.ModelForm):
             'annotation': forms.Textarea(attrs={'rows': 5, 'cols': 50}),
 
             'editors_abbrev': forms.TextInput(attrs={'rows': 1, 'cols': 5}),
-            'volume': forms.TextInput(attrs={'rows': 1, 'cols': 5}),
+            'in_volume': forms.TextInput(attrs={'rows': 1, 'cols': 5}),
         }
 
 
