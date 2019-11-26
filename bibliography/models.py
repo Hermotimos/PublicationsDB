@@ -22,14 +22,12 @@ class Book(models.Model):
                                          related_name='books_as_translator',
                                          verbose_name='Tłumaczenie',
                                          blank=True)
-
     published_locations = models.ManyToManyField(Location,
                                                  related_name='books',
                                                  verbose_name='Miejsce/miejsca wydania',
                                                  blank=True)
     published_year = models.CharField(max_length=100, verbose_name="Rok wydania", blank=True, null=True)
     volumes = models.CharField(max_length=100, verbose_name='Tomy (np. "t. 1-2")', blank=True, null=True)
-    # edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='books',
@@ -46,7 +44,6 @@ class Book(models.Model):
         authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
         editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
         translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
-
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
@@ -57,9 +54,7 @@ class Book(models.Model):
         else:
             title = f'<i>{self.title}</i>'
 
-        # ed = f', {self.edition}' if self.edition else ''
         vols = f', {self.volumes}' if self.volumes else ''
-        # annotation = f' [{self.annotation}]' if self.annotation else ''
 
         if self.published_locations.all().count() == 1:
             locations = f', {self.published_locations.first()}'
@@ -99,19 +94,6 @@ class Book(models.Model):
 class Chapter(models.Model):
     authors = models.ManyToManyField(Author, related_name='chapters_as_author', verbose_name='Autorstwo', blank=True)
     title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
-    # editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
-    #                                   blank=True, null=True)
-    # editors = models.ManyToManyField(Author,
-    #                                  related_name='chapters_as_editor',
-    #                                  verbose_name='Redakcja/Opracowanie itp.',
-    #                                  blank=True)
-    # translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
-    #                                       blank=True, null=True)
-    # translators = models.ManyToManyField(Translator,
-    #                                      related_name='chapters_as_translator',
-    #                                      verbose_name='Tłumaczenie',
-    #                                      blank=True)
-
     encompassing_bibliographic_unit = models.ForeignKey(EncompassingBibliographicUnit,
                                                         related_name='dependent_bibliographic_units',
                                                         verbose_name='Opublikowane w: (wydawnictwo zwarte)',
@@ -138,10 +120,6 @@ class Chapter(models.Model):
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
         authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
-        # editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        # translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
-        # editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
-        # translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', <i>{self.title}</i>'
@@ -152,14 +130,12 @@ class Chapter(models.Model):
 
         vol = f', {self.in_volume}' if self.in_volume else ''
         pages = f', {self.encompassing_bibliographic_unit_pages}' if self.encompassing_bibliographic_unit_pages else ''
-        # annotation = f' [{self.annotation}]' if self.annotation else ''
 
         # PART 2: elements considering encompassing bibliographic unit:
         unit = self.encompassing_bibliographic_unit
         u_authors = ', '.join(f' {a.first_names} {a.last_name}' for a in unit.authors.all()) if unit.authors.all() else ''
         u_translators = f' {", ".join(str(t) for t in unit.translators.all())}' if unit.translators.all() else ''
         u_editors = ', '.join(f' {a.first_names} {a.last_name}' for a in unit.editors.all()) if unit.editors.all() else ''
-
         u_editors_abbrev = f', {unit.editors_abbrev}' if unit.editors_abbrev else ''
         u_translators_abbrev = f', {unit.translators_abbrev}' if unit.translators_abbrev else ''
 
@@ -167,8 +143,6 @@ class Chapter(models.Model):
             u_title = f', <i>{unit.title}</i>'
         else:
             u_title = f'<i>{unit.title}</i>'
-
-        # u_ed = f', {unit.edition}' if unit.edition else ''
 
         if unit.published_locations.all().count() == 1:
             u_locations = f', {unit.published_locations.first()}'
@@ -192,9 +166,6 @@ class Chapter(models.Model):
             f'{u_locations}{u_year}'
 
         description = f'{authors}{title}{unit}{pages}.'
-        # f'{editors_abbrev}{editors}' \
-        # f'{translators_abbrev}{translators}' \
-
         return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
@@ -213,24 +184,10 @@ class Chapter(models.Model):
 class Article(models.Model):
     authors = models.ManyToManyField(Author, related_name='articles_as_author', verbose_name='Autorstwo', blank=True)
     title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
-    # editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
-    #                                   blank=True, null=True)
-    # editors = models.ManyToManyField(Author,
-    #                                  related_name='articles_as_editor',
-    #                                  verbose_name='Redakcja/Opracowanie itp.',
-    #                                  blank=True)
-    # translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
-    #                                       blank=True, null=True)
-    # translators = models.ManyToManyField(Translator,
-    #                                      related_name='articles_as_translator',
-    #                                      verbose_name='Tłumaczenie',
-    #                                      blank=True)
-
     periodical = models.ForeignKey(Periodical,
                                    related_name='contained_articles',
                                    verbose_name='Opublikowane w: (periodyk)',
                                    on_delete=models.PROTECT)
-    periodical_pages = models.CharField(max_length=100, verbose_name='Strony (np. "str. 7-77")', blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='articles',
@@ -249,10 +206,6 @@ class Article(models.Model):
 
     def __str__(self):
         authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
-        # editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        # translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
-        # editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
-        # translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', <i>{self.title}</i>'
@@ -261,14 +214,9 @@ class Article(models.Model):
         else:
             title = f'<i>{self.title}</i>'
 
-        pages = f', {self.periodical_pages}' if self.periodical_pages else ''
-        # annotation = f' [{self.annotation}]' if self.annotation else ''
         periodical = f', {self.periodical}'
 
-        description = f'{authors}{title}{periodical}{pages}.'
-        # f'{editors_abbrev}{editors}' \
-        # f'{translators_abbrev}{translators}' \
-
+        description = f'{authors}{title}{periodical}.'
         return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
