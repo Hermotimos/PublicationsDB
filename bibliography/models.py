@@ -9,7 +9,7 @@ from publications_db.utils import replace_special_chars, remove_tags
 
 class Book(models.Model):
     authors = models.ManyToManyField(Author, related_name='books_as_author', verbose_name='Autorstwo', blank=True)
-    title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
+    title = models.CharField(max_length=1000, verbose_name='Tytuł')
     editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
                                       blank=True, null=True)
     editors = models.ManyToManyField(Author,
@@ -93,7 +93,7 @@ class Book(models.Model):
 
 class Chapter(models.Model):
     authors = models.ManyToManyField(Author, related_name='chapters_as_author', verbose_name='Autorstwo', blank=True)
-    title = models.CharField(max_length=1000, verbose_name="Tytuł", blank=True, null=True)
+    title = models.CharField(max_length=1000, verbose_name="Tytuł")
     encompassing_bibliographic_unit = models.ForeignKey(EncompassingBibliographicUnit,
                                                         related_name='dependent_bibliographic_units',
                                                         verbose_name='Opublikowane w: (wydawnictwo zwarte)',
@@ -180,7 +180,7 @@ class Chapter(models.Model):
 
 class Article(models.Model):
     authors = models.ManyToManyField(Author, related_name='articles_as_author', verbose_name='Autorstwo', blank=True)
-    title = models.CharField(max_length=1000, verbose_name='Tytuł', blank=True, null=True)
+    title = models.CharField(max_length=1000, verbose_name='Tytuł')
     periodical = models.ForeignKey(Periodical,
                                    related_name='contained_articles',
                                    verbose_name='Opublikowane w: (periodyk)',
