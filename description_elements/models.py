@@ -86,11 +86,11 @@ class Keyword(models.Model):
 
 
 class Periodical(models.Model):
-    title = models.CharField(max_length=1000, verbose_name='Tytuł periodyku')
+    title = models.CharField(max_length=500, verbose_name='Tytuł periodyku')
     published_year = models.CharField(max_length=20, verbose_name='Rok wydania', blank=True, null=True)
-    vol_info_lvl_1 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 1', blank=True, null=True)
-    vol_info_lvl_2 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 2', blank=True, null=True)
-    vol_info_lvl_3 = models.CharField(max_length=30, verbose_name='Numeracja wolumenu poziom 3', blank=True, null=True)
+    vol_info_lvl_1 = models.CharField(max_length=20, verbose_name='Numeracja wolumenu poziom 1', blank=True, null=True)
+    vol_info_lvl_2 = models.CharField(max_length=20, verbose_name='Numeracja wolumenu poziom 2', blank=True, null=True)
+    vol_info_lvl_3 = models.CharField(max_length=20, verbose_name='Numeracja wolumenu poziom 3', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
 
