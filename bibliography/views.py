@@ -36,10 +36,6 @@ def bibliography_full_view(request):
 
 @query_debugger
 def bibliography_index_view(request):
-    # VERSION 1: shows all categories and subcategories regardless whether they contain any descriptions or not
-    # Number of Queries : 53
-    # Finished in : 0.11s
-
     cat1_qs = CategoryLevelOne.objects.all().prefetch_related('categories2')
     index = {}
     for cat1 in cat1_qs:
@@ -54,41 +50,6 @@ def bibliography_index_view(request):
                 ] for cat3 in cat2.categories3.all().prefetch_related('books', 'chapters', 'articles')
             } for cat2 in cat1.categories2.all()
         }
-
-    # VERSION 2 [VERY COSTLY]: shows only categories and subcategories containing at least 1 description
-    # Number of Queries: 376
-    # Finished in: 0.36s
-
-    # def is_not_empty_cat3(category3):
-    #     """Returns 0 for False if category is empty, else >0 for True if not empty"""
-    #     return category3.books.count() \
-    #         + category3.chapters.count() \
-    #         + category3.articles.count()
-    #
-    # def is_not_empty_cat2(category2):
-    #     for cat3 in category2.categories3.all():
-    #         if is_not_empty_cat3(cat3):
-    #             return True
-    #     return False
-    #
-    # def is_not_empty_cat1(category1):
-    #     for cat2 in category1.categories2.all():
-    #         if is_not_empty_cat2(cat2):
-    #             return True
-    #     return False
-    #
-    # index = {
-    #     cat1: {
-    #         cat2: {
-    #             cat3: [
-    #                 unit for unit in
-    #                 list(cat3.books.all())
-    #                 + list(cat3.chapters.all())
-    #                 + list(cat3.articles.all())
-    #             ] for cat3 in cat2.categories3.all() if is_not_empty_cat3(cat3)
-    #         } for cat2 in cat1.categories2.all() if is_not_empty_cat2(cat2)
-    #     } for cat1 in CategoryLevelOne.objects.all() if is_not_empty_cat1(cat1)
-    # }
 
     context = {
         'page_title': 'Indeks tematyczny',
