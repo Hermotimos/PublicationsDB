@@ -99,8 +99,6 @@ class Chapter(models.Model):
                                                         verbose_name='Opublikowane w: (wydawnictwo zwarte)',
                                                         on_delete=models.PROTECT)
     in_volume = models.CharField(max_length=100, verbose_name='Tom (np. "t. 2")', blank=True, null=True)
-    encompassing_bibliographic_unit_pages = models.CharField(max_length=100, verbose_name='Strony (np. "s. 7-77")',
-                                                             blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='chapters',
@@ -129,7 +127,6 @@ class Chapter(models.Model):
             title = f'<i>{self.title}</i>'
 
         vol = f', {self.in_volume}' if self.in_volume else ''
-        pages = f', {self.encompassing_bibliographic_unit_pages}' if self.encompassing_bibliographic_unit_pages else ''
 
         # PART 2: elements considering encompassing bibliographic unit:
         unit = self.encompassing_bibliographic_unit
@@ -165,7 +162,7 @@ class Chapter(models.Model):
             f'{vol}{u_editors_abbrev}{u_editors}{u_translators_abbrev}{u_translators}' \
             f'{u_locations}{u_year}'
 
-        description = f'{authors}{title}{unit}{pages}.'
+        description = f'{authors}{title}{unit}.'
         return format_html(f'{description}')
 
     def save(self, *args, **kwargs):
