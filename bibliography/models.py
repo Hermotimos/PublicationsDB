@@ -98,7 +98,18 @@ class Chapter(models.Model):
                                                         related_name='dependent_bibliographic_units',
                                                         verbose_name='Opublikowane w: (wydawnictwo zwarte)',
                                                         on_delete=models.PROTECT)
-    in_volume = models.CharField(max_length=100, verbose_name='Tom (np. "t. 2")', blank=True, null=True)
+    volume = models.CharField(max_length=100, verbose_name='Tom (np. "t. 2")', blank=True, null=True)
+    editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
+                                      blank=True, null=True)
+    editors = models.ManyToManyField(Author,
+                                     related_name='encompassing_bib_units_as_editor',
+                                     verbose_name='Redakcja/Opracowanie',
+                                     blank=True)
+    published_locations = models.ManyToManyField(Location,
+                                                 related_name='encompassing_bib_units',
+                                                 verbose_name='Miejsce/miejsca wydania',
+                                                 blank=True)
+    published_year = models.CharField(max_length=100, verbose_name='Rok wydania', blank=True, null=True)
 
     cat_lvl_3 = models.ManyToManyField(CategoryLevelThree,
                                        related_name='chapters',
@@ -110,14 +121,12 @@ class Chapter(models.Model):
                                     blank=True, null=True)
     description = models.CharField(max_length=1000, verbose_name='Opis bibliograficzny (pole automatyczne)',
                                    blank=True, null=True)
-    # following field is needed to simplify bibliography_search_view():
-    published_year = models.CharField(max_length=100,
-                                      verbose_name="Rok wydania wydawnictwa nadrzędnego (pole automatyczne)",
-                                      blank=True, null=True)
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
         authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
+        editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
+        editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', <i>{self.title}</i>'
@@ -126,14 +135,29 @@ class Chapter(models.Model):
         else:
             title = f'<i>{self.title}</i>'
 
-        vol = f', {self.in_volume}' if self.in_volume else ''
+        volume = f', {self.volume}' if self.volume else ''
+
+        if self.published_locations.all().count() == 1:
+            locations = f', {self.published_locations.first()}'
+        elif self.published_locations.all().count() > 1:
+            locations = f', {"-".join(str(l) for l in self.published_locations.all())}'
+        else:
+            locations = ''
+
+        if self.published_year and self.published_locations.all().count() > 0:
+            year = f' {self.published_year}'
+        elif self.published_year and self.published_locations.all().count() == 0:
+            year = f', {self.published_year}'
+        elif not self.published_year and self.published_locations.all().count() > 0:
+            year = ' [b.r.]'
+        else:
+            # i.e.: not self.published_year and self.published_locations.all().count() == 0:
+            year = ', [b.m.], [b.r.]'
 
         # PART 2: elements considering encompassing bibliographic unit:
         unit = self.encompassing_bibliographic_unit
         u_authors = ', '.join(f' {a.first_names} {a.last_name}' for a in unit.authors.all()) if unit.authors.all() else ''
         u_translators = f' {", ".join(str(t) for t in unit.translators.all())}' if unit.translators.all() else ''
-        u_editors = ', '.join(f' {a.first_names} {a.last_name}' for a in unit.editors.all()) if unit.editors.all() else ''
-        u_editors_abbrev = f', {unit.editors_abbrev}' if unit.editors_abbrev else ''
         u_translators_abbrev = f', {unit.translators_abbrev}' if unit.translators_abbrev else ''
 
         if unit.title and unit.authors.all().count() > 0:
@@ -141,26 +165,9 @@ class Chapter(models.Model):
         else:
             u_title = f'<i>{unit.title}</i>'
 
-        if unit.published_locations.all().count() == 1:
-            u_locations = f', {unit.published_locations.first()}'
-        elif unit.published_locations.all().count() > 1:
-            u_locations = f', {"-".join(str(l) for l in unit.published_locations.all())}'
-        else:
-            u_locations = ''
-
-        if unit.published_year and unit.published_locations.all().count() > 0:
-            u_year = f' {unit.published_year}'
-        elif unit.published_year and unit.published_locations.all().count() == 0:
-            u_year = f', {unit.published_year}'
-        elif not unit.published_year and unit.published_locations.all().count() > 0:
-            u_year = ' [b.r.]'
-        else:
-            # i.e.: not unit.published_year and unit.published_locations.all().count() == 0:
-            u_year = ', [b.m.], [b.r.]'
-
         unit = f', [w:] {u_authors}{u_title}' \
-            f'{vol}{u_editors_abbrev}{u_editors}{u_translators_abbrev}{u_translators}' \
-            f'{u_locations}{u_year}'
+            f'{volume}{editors_abbrev}{editors}{u_translators_abbrev}{u_translators}' \
+            f'{locations}{year}'
 
         description = f'{authors}{title}{unit}.'
         return format_html(f'{description}')
@@ -169,7 +176,6 @@ class Chapter(models.Model):
         super(Chapter, self).save(*args, **kwargs)
         self.description = self.__str__()
         self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
-        self.published_year = self.encompassing_bibliographic_unit.published_year
         super(Chapter, self).save(*args, **kwargs)
 
     class Meta:
@@ -239,4 +245,6 @@ m2m_changed.connect(save_again, sender=Book.editors.through)
 m2m_changed.connect(save_again, sender=Book.translators.through)
 m2m_changed.connect(save_again, sender=Book.published_locations.through)
 m2m_changed.connect(save_again, sender=Chapter.authors.through)
+m2m_changed.connect(save_again, sender=Chapter.editors.through)
+m2m_changed.connect(save_again, sender=Chapter.published_locations.through)
 m2m_changed.connect(save_again, sender=Article.authors.through)

@@ -120,12 +120,6 @@ class EncompassingBibliographicUnit(models.Model):
                                      verbose_name='Autorstwo',
                                      blank=True)
     title = models.CharField(max_length=1000, verbose_name='Tytuł')
-    editors_abbrev = models.CharField(max_length=100, verbose_name='Skrót redakcji/opracowania itp. (np. red.)',
-                                      blank=True, null=True)
-    editors = models.ManyToManyField(Author,
-                                     related_name='encompassing_bib_units_as_editor',
-                                     verbose_name='Redakcja/Opracowanie itp.',
-                                     blank=True)
     translators_abbrev = models.CharField(max_length=100, verbose_name='Skrót tłumaczenia (np. tłum.)',
                                           blank=True, null=True)
     translators = models.ManyToManyField(Translator,
@@ -133,55 +127,20 @@ class EncompassingBibliographicUnit(models.Model):
                                          verbose_name='Tłumaczenie',
                                          blank=True)
 
-    # edition = models.CharField(max_length=100, verbose_name='Wydanie', blank=True, null=True)
-    # volumes = models.CharField(max_length=100, verbose_name='Tomy', blank=True, null=True)
-    published_locations = models.ManyToManyField(Location,
-                                                 related_name='encompassing_bib_units',
-                                                 verbose_name='Miejsce/miejsca wydania',
-                                                 blank=True)
-    published_year = models.CharField(max_length=100, verbose_name='Rok wydania', blank=True, null=True)
     sorting_name = models.CharField(max_length=1000, verbose_name='Nazwa sortująca (wypełniana automatycznie)',
                                     blank=True, null=True)
 
     def __str__(self):
         authors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.authors.all()) if self.authors.all() else ''
-        editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
         translators = f', {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
-
-        editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
+        translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', {self.title}'
         else:
             title = self.title
 
-        # ed = f', {self.edition}' if self.edition else ''
-        # vols = f', {self.volumes}' if self.volumes else ''
-
-        if self.published_locations.all().count() == 1:
-            locations = f', {self.published_locations.first()}'
-        elif self.published_locations.all().count() > 1:
-            locations = f', {"-".join(str(l) for l in self.published_locations.all())}'
-        else:
-            locations = ''
-
-        if self.published_year and self.published_locations.all().count() >= 1:
-            year = f' {self.published_year}'
-        elif self.published_year and self.published_locations.all().count() == 0:
-            year = f', {self.published_year}'
-        elif not self.published_year and self.published_locations.all().count() >= 1:
-            year = ' [brw]'
-        elif not self.published_year and self.published_locations.all().count() == 0:
-            year = ', [b.m.], [b.r.]'
-        else:
-            year = ' [błąd instrukcji warunkowej!]'
-
-        description = f'{authors}' \
-            f'<i>{title}</i>' \
-            f'{editors_abbrev}{editors}' \
-            f'{translators}' \
-            f'{locations}{year}'
-
+        description = f'{authors}<i>{title}</i>{translators_abbrev}{translators}'
         return format_html(f'{description}')
 
     class Meta:
@@ -197,6 +156,4 @@ def save_again(sender, instance, **kwargs):
 
 
 m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.authors.through)
-m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.editors.through)
 m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.translators.through)
-m2m_changed.connect(save_again, sender=EncompassingBibliographicUnit.published_locations.through)
