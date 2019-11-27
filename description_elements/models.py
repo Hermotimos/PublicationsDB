@@ -143,6 +143,11 @@ class EncompassingBibliographicUnit(models.Model):
         description = f'{authors}<i>{title}</i>{translators_abbrev}{translators}'
         return format_html(f'{description}')
 
+    def save(self, *args, **kwargs):
+        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
+        self.sorting_name = replace_special_chars(remove_tags(self.__str__()))
+        super(EncompassingBibliographicUnit, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = '6. Wydawnictwo zwarte nadrzędne'
         verbose_name_plural = '6. Wydawnictwa zwarte nadrzędne'
