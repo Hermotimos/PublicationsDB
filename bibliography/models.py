@@ -208,7 +208,7 @@ class Article(models.Model):
                                       blank=True, null=True)
 
     def __str__(self):
-        authors = ', '.join(f' {a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
+        authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', <i>{self.title}</i>'

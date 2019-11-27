@@ -9,8 +9,12 @@ def remove_tags(text):
 def replace_special_chars(text):
     chars = (
         # DIACRITICS ETC
-        (' ', ''), ('[', ''), (']', ''), ('"', ''), ('„', ''), ('”', ''),
-        # (',', ''), ('.', ''), (':', ''), (';', ''), ('(', ''), (')', ''), ('-', ''),
+        ('[', ''), (']', ''), ('"', ''), ('„', ''), ('”', ''),
+        (',', ' '),     # diacritics before letters (comma changed to whitespace to enforce this)
+        ('.', ''),      # ignores periods in titles
+        # (' ', ''),
+        #  (':', ''), (';', ''), ('(', ''), (')', ''), ('-', ''),
+
 
         # basic chars having variations in special chars below
         ('a', 'aa'), ('c', 'cc'), ('e', 'ee'), ('i', 'ii'), ('l', 'll'), ('n', 'nn'), ('o', 'oo'),  ('u', 'uu'),
@@ -32,7 +36,6 @@ def replace_special_chars(text):
 
         # another_language
         # ('', ''), ('', ''), ('', ''), ('', ''), ('', ''), ('', ''), ('', ''), ('', ''),
-
     )
 
     text = text.lower()
