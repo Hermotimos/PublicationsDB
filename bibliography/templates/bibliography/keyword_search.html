@@ -6,8 +6,8 @@
                 <div>
                     <input list="keywords1" name="search3" placeholder="Wyrażenie kluczowe" size="83" value="{{ request.GET.search3 }}" required/>
                     <datalist id="keywords1">
-                        {% for key, value in keywords_dict.items %}
-                            <option value="{{ value }}">
+                        {% for key, val in keywords_dict.items %}
+                            <option value="{{ val }}">{{ val }}</option>
                         {% endfor %}
                     </datalist>
                 </div>
@@ -35,17 +35,5 @@
                 <a href="{% url 'bibliography:search' %}" class="btn btn-dark text-right">Nowe wyszukiwanie</a>
             </div>
         </div>
-        
-<!--        <p>Zaznacz wiele wyrażeń, aby wyszukać przez więcej niż jedno wyrażenie kluczowe:</p>-->
-<!--        <select name="keywords" size ="10" multiple>-->
-<!--            {% for key, value in keywords_dict.items %}-->
-<!--                <option value="{{ key }}">&#10023; {{ value }}</option>-->
-<!--            {% endfor %}-->
-<!--        </select>-->
-<!--        <br>-->
-<!--        <small>Aby wybrać wiele opcji przytrzymaj na klawiaturze Ctrl (Windows) / Command (Mac).</small>-->
-<!--        <br><br>-->
-        
-    
     </form>
 </div>
