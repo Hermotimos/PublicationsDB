@@ -53,7 +53,7 @@ def bibliography_search_view(request):
     descriptions = []
     query_text = ''
 
-    # text and subject search
+    # text search
     search1 = request.GET.get('search1')
     option1 = request.GET.get('option1')
     operator1 = request.GET.get('operator1')
@@ -66,12 +66,13 @@ def bibliography_search_view(request):
     #     else f'<b>Zawęź wyszukiwanie do wybranych kategorii:</b> ' \
     #     f'{"; ".join(value for key, value in categories3_dict.items() if str(key) in categories)}'
 
-
     # keywords search
     search3 = request.GET.get('search3')
+    operator2 = request.GET.get('operator2')
     search4 = request.GET.get('search4')
-    keywords1 = request.GET.getlist('keywords1')
-    is_keywords1 = True if keywords1 else False
+
+    # keywords1 = request.GET.getlist('keywords1')
+    # is_keywords1 = True if keywords1 else False
 
 
     # keywords_text = '' if not is_keywords \
@@ -102,198 +103,242 @@ def bibliography_search_view(request):
 
     # # FIRST FORM: SEARCH BY TEXT
     if request.GET.get('button1'):
-        if search1:
-            is_searching = True
+        is_searching = True
 
-            # CASE 1: search1 and search2 but no operator1 given:
-            if search1 and search2 and operator1 == 'none':
-                query_text = f'<b>Podano dwa warunki wyszukiwania, ale nie podano operatora logicznego.\n' \
-                    f'Wybierz operator1 logiczny, aby określić zależność między warunkami wyszukiwania.</b>'
+        # CASE 1: invalid search i.e. search1 and search2 but no operator1 given:
+        if search1 and search2 and operator1 == 'none':
+            query_text = f'<b>Podano dwa warunki wyszukiwania, ale nie podano operatora logicznego.\n' \
+                f'Wybierz operator logiczny, aby określić zależność między warunkami wyszukiwania.</b>'
 
-            # CASE 2: valid search = search1 not empty and (operator1 and search2 OR no operator1 and no search2):
-            elif search1 and operator1 != 'none' and not search2:
-                query_text = f'<b>Podano jeden warunek wyszukiwania oraz operator logiczny, ' \
-                    f'ale nie podano drugiego warunku.\n' \
-                    f'Wybierając operator logiczny uzupełnij również drugi warunek wyszukiwania.</b>'
+        # CASE 2: invalid search i.e. search1 not empty and operator1 given but no search2 :
+        elif search1 and operator1 != 'none' and not search2:
+            query_text = f'<b>Podano jeden warunek wyszukiwania oraz operator logiczny, ' \
+                f'ale nie podano drugiego warunku.\n' \
+                f'Wybierając operator logiczny uzupełnij również drugi warunek wyszukiwania.</b>'
 
-            # CASE 3: valid search = search1 not empty and (operator1 and search2 are both either filled or empty):
-            elif search1:
-                is_valid_search = True
-                option1_text = option2_text = ''
+        # CASE 3: valid search i.e. search1 not empty and (operator1 and search2 are both either filled or empty):
+        elif search1:
+            is_valid_search = True
+            option1_text = option2_text = ''
 
-                # Preparation of query1 results:
-                if option1 == 'all':
-                    books_1 = books_1.filter(description__icontains=search1)
-                    chapters_1 = chapters_1.filter(description__icontains=search1)
-                    articles_1 = articles_1.filter(description__icontains=search1)
-                    option1_text = 'Pełny opis'
-                elif option1 == 'author':
-                    books_1 = books_1.filter(authors__last_name__icontains=search1)
-                    chapters_1 = chapters_1.filter(authors__last_name__icontains=search1)
-                    articles_1 = articles_1.filter(authors__last_name__icontains=search1)
-                    option1_text = 'Imię/nazwisko autora'
+            # Preparation of search1 results:
+            if option1 == 'all':
+                books_1 = books_1.filter(description__icontains=search1)
+                chapters_1 = chapters_1.filter(description__icontains=search1)
+                articles_1 = articles_1.filter(description__icontains=search1)
+                option1_text = 'Pełny opis'
+            elif option1 == 'author':
+                books_1 = books_1.filter(authors__last_name__icontains=search1)
+                chapters_1 = chapters_1.filter(authors__last_name__icontains=search1)
+                articles_1 = articles_1.filter(authors__last_name__icontains=search1)
+                option1_text = 'Imię/nazwisko autora'
+            elif option1 == 'editor':
+                books_1 = books_1.filter(editors__last_name__icontains=search1)
+                chapters_1 = chapters_1.filter(editors__last_name__icontains=search1)
+                articles_1 = articles_1.none()
+                option1_text = 'Imię/nazwisko redaktora'
+            elif option1 == 'title':
+                books_1 = books_1.filter(title__icontains=search1)
+                chapters_1 = chapters_1.filter(title__icontains=search1)
+                articles_1 = articles_1.filter(title__icontains=search1)
+                option1_text = 'Tytuł'
+            elif option1 == 'year':
+                books_1 = books_1.filter(published_year__icontains=search1)
+                chapters_1 = chapters_1.filter(published_year__icontains=search1)
+                articles_1 = articles_1.filter(published_year__icontains=search1)
+                option1_text = 'Rok wydania'
+
+            # CASE 3.1: search1 and search2 and 'AND' operator1:
+            if search1 and search2 and operator1 == 'and':
+                if option2 == 'all':
+                    books_2 = books_1.filter(description__icontains=search2)
+                    chapters_2 = chapters_1.filter(description__icontains=search2)
+                    articles_2 = articles_1.filter(description__icontains=search2)
+                    option2_text = 'Pełny opis'
+                elif option2 == 'author':
+                    books_2 = books_1.filter(authors__last_name__icontains=search2)
+                    chapters_2 = chapters_1.filter(authors__last_name__icontains=search2)
+                    articles_2 = articles_1.filter(authors__last_name__icontains=search2)
+                    option2_text = 'Imię/nazwisko autora'
                 elif option1 == 'editor':
-                    books_1 = books_1.filter(editors__last_name__icontains=search1)
-                    chapters_1 = chapters_1.filter(editors__last_name__icontains=search1)
-                    articles_1 = articles_1.none()
-                    option1_text = 'Imię/nazwisko redaktora'
-                elif option1 == 'title':
-                    books_1 = books_1.filter(title__icontains=search1)
-                    chapters_1 = chapters_1.filter(title__icontains=search1)
-                    articles_1 = articles_1.filter(title__icontains=search1)
-                    option1_text = 'Tytuł'
-                elif option1 == 'year':
-                    books_1 = books_1.filter(published_year__icontains=search1)
-                    chapters_1 = chapters_1.filter(published_year__icontains=search1)
-                    articles_1 = articles_1.filter(published_year__icontains=search1)
-                    option1_text = 'Rok wydania'
+                    books_2 = books_1.filter(editors__last_name__icontains=search2)
+                    chapters_2 = chapters_1.filter(editors__last_name__icontains=search2)
+                    articles_2 = articles_1.none()
+                    option2_text = 'Imię/nazwisko redaktora'
+                elif option2 == 'title':
+                    books_2 = books_1.filter(title__icontains=search2)
+                    chapters_2 = chapters_1.filter(title__icontains=search2)
+                    articles_2 = articles_1.filter(title__icontains=search2)
+                    option2_text = 'Tytuł'
+                elif option2 == 'year':
+                    books_2 = books_1.filter(published_year__icontains=search2)
+                    chapters_2 = chapters_1.filter(published_year__icontains=search2)
+                    articles_2 = articles_1.filter(published_year__icontains=search2)
+                    option2_text = 'Rok wydania'
 
-                # CASE 3.1: search1 and search2 and 'AND' operator1:
-                if search1 and search2 and operator1 == 'and':
-                    if option2 == 'all':
-                        books_2 = books_1.filter(description__icontains=search2)
-                        chapters_2 = chapters_1.filter(description__icontains=search2)
-                        articles_2 = articles_1.filter(description__icontains=search2)
-                        option2_text = 'Pełny opis'
-                    elif option2 == 'author':
-                        books_2 = books_1.filter(authors__last_name__icontains=search2)
-                        chapters_2 = chapters_1.filter(authors__last_name__icontains=search2)
-                        articles_2 = articles_1.filter(authors__last_name__icontains=search2)
-                        option2_text = 'Imię/nazwisko autora'
-                    elif option1 == 'editor':
-                        books_2 = books_1.filter(editors__last_name__icontains=search2)
-                        chapters_2 = chapters_1.filter(editors__last_name__icontains=search2)
-                        articles_2 = articles_1.none()
-                        option2_text = 'Imię/nazwisko redaktora'
-                    elif option2 == 'title':
-                        books_2 = books_1.filter(title__icontains=search2)
-                        chapters_2 = chapters_1.filter(title__icontains=search2)
-                        articles_2 = articles_1.filter(title__icontains=search2)
-                        option2_text = 'Tytuł'
-                    elif option2 == 'year':
-                        books_2 = books_1.filter(published_year__icontains=search2)
-                        chapters_2 = chapters_1.filter(published_year__icontains=search2)
-                        articles_2 = articles_1.filter(published_year__icontains=search2)
-                        option2_text = 'Rok wydania'
+                books = [obj for obj in books_2]
+                chapters = [obj for obj in chapters_2]
+                articles = [obj for obj in articles_2]
+                descriptions = books + chapters + articles
 
-                    books = [obj for obj in books_2]
-                    chapters = [obj for obj in chapters_2]
-                    articles = [obj for obj in articles_2]
-                    descriptions = books + chapters + articles
+                query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
+                    f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}".'
 
-                    query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}".'
+            # CASE 3.2: search1 and search2 and 'OR' operator1:
+            elif search1 and search2 and operator1 == 'or':
+                if option2 == 'all':
+                    books_2 = books_2.filter(description__icontains=search2).union(books_1)
+                    chapters_2 = chapters_2.filter(description__icontains=search2).union(chapters_1)
+                    articles_2 = articles_2.filter(description__icontains=search2).union(articles_1)
+                    option2_text = 'Pełny opis'
+                elif option2 == 'author':
+                    books_2 = books_2.filter(authors__last_name__icontains=search2).union(books_1)
+                    chapters_2 = chapters_2.filter(authors__last_name__icontains=search2).union(chapters_1)
+                    articles_2 = articles_2.filter(authors__last_name__icontains=search2).union(articles_1)
+                    option2_text = 'Imię/nazwisko autora'
+                elif option2 == 'editor':
+                    books_2 = books_2.filter(editors__last_name__icontains=search2).union(books_1)
+                    chapters_2 = chapters_1.filter(editors__last_name__icontains=search2).union(chapters_1)
+                    articles_2 = articles_1         # is equal to: articles_1.none().union(articles_1)
+                    option2_text = 'Imię/nazwisko redaktora'
+                elif option2 == 'title':
+                    books_2 = books_2.filter(title__icontains=search2).union(books_1)
+                    chapters_2 = chapters_2.filter(title__icontains=search2).union(chapters_1)
+                    articles_2 = articles_2.filter(title__icontains=search2).union(articles_1)
+                    option2_text = 'Tytuł'
+                elif option2 == 'year':
+                    books_2 = books_2.filter(published_year__icontains=search2).union(books_1)
+                    chapters_2 = chapters_2.filter(published_year__icontains=search2).union(chapters_1)
+                    articles_2 = articles_2.filter(published_year__icontains=search2).union(articles_1)
+                    option2_text = 'Rok wydania'
 
-                # CASE 3.2: search1 and search2 and 'OR' operator1:
-                elif search1 and search2 and operator1 == 'or':
-                    if option2 == 'all':
-                        books_2 = books_2.filter(description__icontains=search2).union(books_1)
-                        chapters_2 = chapters_2.filter(description__icontains=search2).union(chapters_1)
-                        articles_2 = articles_2.filter(description__icontains=search2).union(articles_1)
-                        option2_text = 'Pełny opis'
-                    elif option2 == 'author':
-                        books_2 = books_2.filter(authors__last_name__icontains=search2).union(books_1)
-                        chapters_2 = chapters_2.filter(authors__last_name__icontains=search2).union(chapters_1)
-                        articles_2 = articles_2.filter(authors__last_name__icontains=search2).union(articles_1)
-                        option2_text = 'Imię/nazwisko autora'
-                    elif option2 == 'editor':
-                        books_2 = books_2.filter(editors__last_name__icontains=search2).union(books_1)
-                        chapters_2 = chapters_1.filter(editors__last_name__icontains=search2).union(chapters_1)
-                        articles_2 = articles_1         # is equal to: articles_1.none().union(articles_1)
-                        option2_text = 'Imię/nazwisko redaktora'
-                    elif option2 == 'title':
-                        books_2 = books_2.filter(title__icontains=search2).union(books_1)
-                        chapters_2 = chapters_2.filter(title__icontains=search2).union(chapters_1)
-                        articles_2 = articles_2.filter(title__icontains=search2).union(articles_1)
-                        option2_text = 'Tytuł'
-                    elif option2 == 'year':
-                        books_2 = books_2.filter(published_year__icontains=search2).union(books_1)
-                        chapters_2 = chapters_2.filter(published_year__icontains=search2).union(chapters_1)
-                        articles_2 = articles_2.filter(published_year__icontains=search2).union(articles_1)
-                        option2_text = 'Rok wydania'
+                books = [obj for obj in books_2]
+                chapters = [obj for obj in chapters_2]
+                articles = [obj for obj in articles_2]
+                descriptions = books + chapters + articles
 
-                    books = [obj for obj in books_2]
-                    chapters = [obj for obj in chapters_2]
-                    articles = [obj for obj in articles_2]
-                    descriptions = books + chapters + articles
+                query_text = f'<b>Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków:</b> ' \
+                    f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}".'
 
-                    query_text = f'<b>Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}".'
+            # CASE 3.3: search1 and search2 and 'AND NOT' operator1:
+            elif search1 and search2 and operator1 == 'not':
+                if option2 == 'all':
+                    books_2 = books_1.exclude(description__icontains=search2)
+                    chapters_2 = chapters_1.exclude(description__icontains=search2)
+                    articles_2 = articles_1.exclude(description__icontains=search2)
+                    option2_text = 'Pełny opis'
+                elif option2 == 'author':
+                    books_2 = books_1.exclude(authors__last_name__icontains=search2)
+                    chapters_2 = chapters_1.exclude(authors__last_name__icontains=search2)
+                    articles_2 = articles_1.exclude(authors__last_name__icontains=search2)
+                    option2_text = 'Imię/nazwisko autora'
+                elif option2 == 'editor':
+                    books_2 = books_1.exclude(editors__last_name__icontains=search2)
+                    chapters_2 = chapters_1.exclude(editors__last_name__icontains=search2)
+                    articles_2 = articles_1       # is equal to articles_a.exclude()
+                    option2_text = 'Imię/nazwisko redaktora'
+                elif option2 == 'title':
+                    books_2 = books_1.exclude(title__icontains=search2)
+                    chapters_2 = chapters_1.exclude(title__icontains=search2)
+                    articles_2 = articles_1.exclude(title__icontains=search2)
+                    option2_text = 'Tytuł'
+                elif option2 == 'year':
+                    books_2 = books_1.exclude(published_year__icontains=search2)
+                    chapters_2 = chapters_1.exclude(published_year__icontains=search2)
+                    articles_2 = articles_1.exclude(published_year__icontains=search2)
+                    option2_text = 'Rok wydania'
 
-                # CASE 3.3: search1 and search2 and 'AND NOT' operator1:
-                elif search1 and search2 and operator1 == 'not':
-                    if option2 == 'all':
-                        books_2 = books_1.exclude(description__icontains=search2)
-                        chapters_2 = chapters_1.exclude(description__icontains=search2)
-                        articles_2 = articles_1.exclude(description__icontains=search2)
-                        option2_text = 'Pełny opis'
-                    elif option2 == 'author':
-                        books_2 = books_1.exclude(authors__last_name__icontains=search2)
-                        chapters_2 = chapters_1.exclude(authors__last_name__icontains=search2)
-                        articles_2 = articles_1.exclude(authors__last_name__icontains=search2)
-                        option2_text = 'Imię/nazwisko autora'
-                    elif option2 == 'editor':
-                        books_2 = books_1.exclude(editors__last_name__icontains=search2)
-                        chapters_2 = chapters_1.exclude(editors__last_name__icontains=search2)
-                        articles_2 = articles_1       # is equal to articles_a.exclude()
-                        option2_text = 'Imię/nazwisko redaktora'
-                    elif option2 == 'title':
-                        books_2 = books_1.exclude(title__icontains=search2)
-                        chapters_2 = chapters_1.exclude(title__icontains=search2)
-                        articles_2 = articles_1.exclude(title__icontains=search2)
-                        option2_text = 'Tytuł'
-                    elif option2 == 'year':
-                        books_2 = books_1.exclude(published_year__icontains=search2)
-                        chapters_2 = chapters_1.exclude(published_year__icontains=search2)
-                        articles_2 = articles_1.exclude(published_year__icontains=search2)
-                        option2_text = 'Rok wydania'
+                books = [obj for obj in books_2]
+                chapters = [obj for obj in chapters_2]
+                articles = [obj for obj in articles_2]
+                descriptions = books + chapters + articles
 
-                    books = [obj for obj in books_2]
-                    chapters = [obj for obj in chapters_2]
-                    articles = [obj for obj in articles_2]
-                    descriptions = books + chapters + articles
+                query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
+                    f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}".'
 
-                    query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}".'
+            # CASE 3.4: search1 and not search2 and not operator1:
+            else:
+                books = [obj for obj in books_1]
+                chapters = [obj for obj in chapters_1]
+                articles = [obj for obj in articles_1]
+                descriptions = books + chapters + articles
 
-                # CASE 3.4: search1 and not search2 and not operator1:
-                else:
-                    books = [obj for obj in books_1]
-                    chapters = [obj for obj in chapters_1]
-                    articles = [obj for obj in articles_1]
-                    descriptions = books + chapters + articles
-
-                    query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}".'
+                query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}".'
 
     # SECOND FORM: SEARCH BY KEYWORDS
     elif request.GET.get('button2'):
         is_searching = True
 
-        # TODO shape it like first tab search
-        if not search3 and not is_keywords:
-            query_text = f'<b>Nie wybrano żadnego wyrażenia kluczowego.</b>'
-        else:
+        # CASE 1: invalid search i.e. search3 and search4 but no operator2 given:
+        if search3 and search4 and operator2 == 'none':
+            query_text = f'<b>Wybrano dwa wyrażenia kluczowe, ale nie podano operatora logicznego.\n' \
+                f'Wybierz operator logiczny, aby określić zależność między wyrażeniami kluczowymi.</b>'
+
+        # CASE 2: invalid search i.e. search3 not empty and operator2 given but no search4 :
+        elif search3 and operator2 != 'none' and not search4:
+            query_text = f'<b>Wybrano jedno wyrażenie kluczowe oraz operator logiczny, ' \
+                f'ale nie wybrano drugiego wyrażenia.\n' \
+                f'Wybierając operator logiczny uzupełnij również drugie wyrażenie kluczowe.</b>'
+
+        # CASE 3: valid search i.e. search1 not empty and (operator1 and search2 are both either filled or empty):
+        elif search3:
             is_valid_search = True
 
-            if search3:
-                books_1 = books_1.filter(keywords__name=search3)
-                chapters_1 = chapters_1.filter(keywords__name=search3)
-                articles_1 = articles_1.filter(keywords__name=search3)
+            # Preparation of search3 results:
+            books_1 = books_1.filter(keywords__name=search3)
+            chapters_1 = chapters_1.filter(keywords__name=search3)
+            articles_1 = articles_1.filter(keywords__name=search3)
 
+            # CASE 3.1: search3 and search4 and 'AND' operator2:
+            if search3 and search4 and operator2 == 'and':
+                books_2 = books_1.filter(keywords__name=search4)
+                chapters_2 = chapters_1.filter(keywords__name=search4)
+                articles_2 = articles_1.filter(keywords__name=search4)
+
+                books = [obj for obj in books_2]
+                chapters = [obj for obj in chapters_2]
+                articles = [obj for obj in articles_2]
+                descriptions = books + chapters + articles
+
+                query_text = f'<b>Wyszukaj opisy związane jednocześnie z dwoma wyrażeniami kluczowymi:</b> ' \
+                    f'"{search3}" ORAZ "{search4}".'
+
+            # CASE 3.2: search3 and search4 and 'OR' operator2:
+            elif search3 and search4 and operator2 == 'or':
+                books_2 = books_2.filter(keywords__name=search4).union(books_1)
+                chapters_2 = chapters_2.filter(keywords__name=search4).union(chapters_1)
+                articles_2 = articles_2.filter(keywords__name=search4).union(articles_1)
+
+                books = [obj for obj in books_2]
+                chapters = [obj for obj in chapters_2]
+                articles = [obj for obj in articles_2]
+                descriptions = books + chapters + articles
+
+                query_text = f'<b>Wyszukaj opisy związane z jednym z dwóch wyrażeń kluczowych:</b> ' \
+                    f'"{search3}" LUB "{search4}".'
+
+            # CASE 3.3: search3 and search4 and 'AND NOT' operator2:
+            elif search3 and search4 and operator2 == 'not':
+                books_2 = books_1.exclude(keywords__name=search4)
+                chapters_2 = chapters_1.exclude(keywords__name=search4)
+                articles_2 = articles_1.exclude(keywords__name=search4)
+
+                books = [obj for obj in books_2]
+                chapters = [obj for obj in chapters_2]
+                articles = [obj for obj in articles_2]
+                descriptions = books + chapters + articles
+
+                query_text = f'<b>Wyszukaj opisy związane związane z pierwszym wyrażeniem kluczowym, ' \
+                    f'ale niezwiązane z drugim:</b> "{search3}" ORAZ "{search4}".'
+
+            # CASE 3.4: search3 and not search4 and not operator2:
+            else:
                 books = [obj for obj in books_1]
                 chapters = [obj for obj in chapters_1]
                 articles = [obj for obj in articles_1]
                 descriptions = books + chapters + articles
 
                 query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".'
-
-            # elif not search3:
-            #     books = [obj for obj in books_1]
-            #     chapters = [obj for obj in chapters_1]
-            #     articles = [obj for obj in articles_1]
-            #     descriptions = books + chapters + articles
-            #
-            #     query_text = f'{keywords_text}.'
 
     # NO FORM BY FIRST RENDERING OF SEARCH PAGE
     else:
@@ -307,7 +352,7 @@ def bibliography_search_view(request):
         'categories3_dict': categories3_dict,
         'query_text': query_text,
         'keywords_dict': keywords_dict,
-        'is_tab_2': search3, # TODO or search4
+        'is_tab_2': search3,
     }
     return render(request, 'bibliography/bibliography_search.html', context)
 
