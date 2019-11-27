@@ -7,19 +7,6 @@ from description_elements.models import Author, Translator, Location, Keyword, E
 from publications_db.utils import replace_special_chars
 
 
-def bibliography_main_view(request):
-    books = [obj for obj in Book.objects.all()]
-    chapters = [obj for obj in Chapter.objects.all()]
-    articles = [obj for obj in Article.objects.all()]
-    results = books + chapters + articles
-
-    context = {
-        'page_title': 'Strona główna',
-        'results': sorted(results, key=lambda desc: replace_special_chars(desc.sorting_name)),
-    }
-    return render(request, 'bibliography/bibliography_main.html', context)
-
-
 @query_debugger
 def bibliography_full_view(request):
     books = [obj for obj in Book.objects.all()]
