@@ -38,12 +38,14 @@ class CategoryLevelThreeAdminForm(forms.ModelForm):
 class CategoryLevelOneAdmin(admin.ModelAdmin):
     inlines = [CategoryLevelTwoInline, ]
     list_display = ['name']
+    search_fields = ['name']
 
 
 class CategoryLevelTwoAdmin(admin.ModelAdmin):
     form = CategoryLevelTwoAdminForm
     inlines = [CategoryLevelThreeInline, ]
     list_display = ['get_cat_lvl_2_str', 'get_cat_lvl_1_name', 'get_cat_lvl_2_name']
+    search_fields = ['formatted_name']
 
     def get_cat_lvl_2_str(self, obj):
         return obj
@@ -62,6 +64,7 @@ class CategoryLevelTwoAdmin(admin.ModelAdmin):
 class CategoryLevelThreeAdmin(admin.ModelAdmin):
     form = CategoryLevelThreeAdminForm
     list_display = ['get_cat_lvl_3_str', 'get_cat_lvl_1_name', 'get_cat_lvl_2_name', 'get_cat_lvl_3_name']
+    search_fields = ['formatted_name']
 
     def get_cat_lvl_3_str(self, obj):
         return obj
