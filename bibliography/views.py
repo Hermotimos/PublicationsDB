@@ -71,7 +71,7 @@ def bibliography_search_view(request):
     articles_1 = Article.objects.all()
     articles_2 = Article.objects.all()
 
-    # # FIRST FORM: SEARCH BY TEXT
+    # TAB 1: TEXT SEARCH
     if request.GET.get('button1'):
         is_searching = True
 
@@ -235,7 +235,7 @@ def bibliography_search_view(request):
 
                 query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}".'
 
-    # SECOND FORM: SEARCH BY KEYWORDS
+    # TAB 2: KEYWORD SEARCH
     elif request.GET.get('button2'):
         is_searching = True
 
@@ -310,7 +310,7 @@ def bibliography_search_view(request):
 
                 query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".'
 
-    # NO FORM BY FIRST RENDERING OF SEARCH PAGE
+    # NO FORM BY FIRST RENDERING OF bibliography_search.html PAGE
     else:
         pass
 
