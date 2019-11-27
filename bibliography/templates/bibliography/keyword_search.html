@@ -3,7 +3,7 @@
         
         <br>
         <div>
-            <input list="keywords1" name="search3" placeholder="Wyrażenie kluczowe" size="60" value="{{ request.GET.search3 }}" />
+            <input list="keywords1" name="search3" placeholder="Wyrażenie kluczowe" size="83" value="{{ request.GET.search3 }}" />
             <datalist id="keywords1">
                 {% for key, value in keywords_dict.items %}
                     <option value="{{ value }}">
@@ -20,7 +20,7 @@
             </select>
         </div>
         <div>
-            <input list="keywords2" name="search4" placeholder="Wyrażenie kluczowe" size="60" value="{{ request.GET.search4 }}" />
+            <input list="keywords2" name="search4" placeholder="Wyrażenie kluczowe" size="83" value="{{ request.GET.search4 }}" />
             <datalist id="keywords2">
                 {% for key, value in keywords_dict.items %}
                     <option value="{{ value }}">

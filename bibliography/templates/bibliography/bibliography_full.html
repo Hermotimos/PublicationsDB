@@ -5,9 +5,11 @@
     <br>
     <h3>{{ page_title }}</h3>
     <br>
-    {% for result in results %}
-        <li class="description-1">{{ result.description|safe }}</li>
-    {% endfor %}
+    <ul>
+        {% for result in results %}
+            <li class="description-1">{{ result.description|safe }}</li>
+        {% endfor %}
+    </ul>
     <br>
 {% endblock content %}
 

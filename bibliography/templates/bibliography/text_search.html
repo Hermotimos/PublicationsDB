@@ -4,11 +4,11 @@
         
         <br>
         <div>
-            <input type="text" name="search1" placeholder="Szukane słowo/fraza (uwzględnia małe/wielkie litery)" size="60" value="{{ request.GET.search1 }}" required/>
+            <input type="text" name="search1" placeholder="Szukane słowo/fraza (uwzględnia małe/wielkie litery)" size="55" value="{{ request.GET.search1 }}" required/>
             <select id="option1" name="option1">
                 <option value="all">Pełny opis</option>
-                <option value="author">Nazwisko autora</option>
-                <option value="editor">Nazwisko redaktora</option>
+                <option value="author">Imię/nazwisko autora</option>
+                <option value="editor">Imię/nazwisko redaktora</option>
                 <option value="title">Tytuł</option>
                 <option value="year">Rok wydania</option>
             </select>
@@ -23,11 +23,11 @@
             </select>
         </div>
         <div>
-            <input type="text" name="search2" placeholder="Szukane słowo/fraza (uwzględnia małe/wielkie litery)" size="60" value="{{ request.GET.search2 }}"/>
+            <input type="text" name="search2" placeholder="Szukane słowo/fraza (uwzględnia małe/wielkie litery)" size="55" value="{{ request.GET.search2 }}"/>
             <select id="option2" name="option2">
                 <option value="all">Pełny opis</option>
-                <option value="author">Nazwisko autora</option>
-                <option value="editor">Nazwisko redaktora</option>
+                <option value="author">Imię/nazwisko autora</option>
+                <option value="editor">Imię/nazwisko redaktora</option>
                 <option value="title">Tytuł</option>
                 <option value="year">Rok wydania</option>
             </select>
