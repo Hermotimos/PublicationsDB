@@ -28,8 +28,8 @@
                                             <li class="description-3">
                                                 {{ result.description|safe }}
                                                 {% if result.annotation %}
-                                                    <b class="blue" data-toggle="collapse" data-target="#{{ result.id }}">UWAGI</b>
-                                                    <div id="{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
+                                                    <b class="blue" data-toggle="collapse" data-target="#{{ cat3 }}_{{ result.id }}">UWAGI</b>
+                                                    <div id="{{ cat3 }}_{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                                 {% endif %}
                                             </li>
                                         {% endfor %}
@@ -46,8 +46,8 @@
                                         {{ result.description|safe }}
                                         {% if result.annotation %}
                                             <!-- forloop.counter|add:'1000000' to avoid duplicate ids in document -->
-                                            <b class="blue" data-toggle="collapse" data-target="#{{ forloop.counter|add:'1000000' }}">UWAGI</b>
-                                            <div id="{{ forloop.counter|add:'1000000' }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
+                                            <b class="blue" data-toggle="collapse" data-target="#{{ cat3 }}_{{ result.id }}">UWAGI</b>
+                                            <div id="{{ cat3 }}_{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                         {% endif %}
                                     </li>
                                 {% endfor %}
@@ -69,8 +69,8 @@
                                     {{ result.description|safe }}
                                     {% if result.annotation %}
                                         <!-- forloop.counter|add:'-1000000' to avoid duplicate ids in document -->
-                                        <b class="blue" data-toggle="collapse" data-target="#{{ forloop.counter|add:'-1000000' }}">UWAGI</b>
-                                        <div id="{{ forloop.counter|add:'-1000000' }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
+                                        <b class="blue" data-toggle="collapse" data-target="#{{ cat3 }}_{{ result.id }}">UWAGI</b>
+                                        <div id="{{ cat3 }}_{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                     {% endif %}
                                 </li>
                             {% endfor %}
