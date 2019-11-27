@@ -45,8 +45,9 @@
                                     <li class="description-2">
                                         {{ result.description|safe }}
                                         {% if result.annotation %}
-                                            <b class="blue" data-toggle="collapse" data-target="#{{ result.id }}">UWAGI</b>
-                                            <div id="{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
+                                            <!-- forloop.counter|add:'1000000' to avoid duplicate ids in document -->
+                                            <b class="blue" data-toggle="collapse" data-target="#{{ forloop.counter|add:'1000000' }}">UWAGI</b>
+                                            <div id="{{ forloop.counter|add:'1000000' }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                         {% endif %}
                                     </li>
                                 {% endfor %}
@@ -67,8 +68,9 @@
                                 <li class="description-1">
                                     {{ result.description|safe }}
                                     {% if result.annotation %}
-                                        <b class="blue" data-toggle="collapse" data-target="#{{ result.id }}">UWAGI</b>
-                                        <div id="{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
+                                        <!-- forloop.counter|add:'-1000000' to avoid duplicate ids in document -->
+                                        <b class="blue" data-toggle="collapse" data-target="#{{ forloop.counter|add:'-1000000' }}">UWAGI</b>
+                                        <div id="{{ forloop.counter|add:'-1000000' }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                     {% endif %}
                                 </li>
                             {% endfor %}
