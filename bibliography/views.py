@@ -56,61 +56,67 @@ def bibliography_search_view(request):
     # text and subject search
     search1 = request.GET.get('search1')
     option1 = request.GET.get('option1')
-    operator = request.GET.get('operator')
+    operator1 = request.GET.get('operator1')
     search2 = request.GET.get('search2')
     option2 = request.GET.get('option2')
-    categories = request.GET.getlist('categories')
-    is_categories = True if categories else False
+    # categories = request.GET.getlist('categories')
+    # is_categories = True if categories else False
 
-    categories_text = '' if not is_categories \
-        else f'<b>Zawęź wyszukiwanie do wybranych kategorii:</b> ' \
-        f'{"; ".join(value for key, value in categories3_dict.items() if str(key) in categories)}'
+    # categories_text = '' if not is_categories \
+    #     else f'<b>Zawęź wyszukiwanie do wybranych kategorii:</b> ' \
+    #     f'{"; ".join(value for key, value in categories3_dict.items() if str(key) in categories)}'
+
 
     # keywords search
     search3 = request.GET.get('search3')
-    keywords = request.GET.getlist('keywords')
-    is_keywords = True if keywords else False
+    search4 = request.GET.get('search4')
+    keywords1 = request.GET.getlist('keywords1')
+    is_keywords1 = True if keywords1 else False
 
-    keywords_text = '' if not is_keywords \
-        else f'<b>Zawęź wyszukiwanie do opisów należących do wybranych wyrażeń kluczowych:</b> ' \
-        f'{"; ".join(value for key, value in keywords_dict.items() if str(key) in keywords)}'
 
-    if is_categories:
-        books_1 = books_2 = \
-            Book.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
-        chapters_1 = chapters_2 = \
-            Chapter.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
-        articles_1 = articles_2 = \
-            Article.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
-    elif is_keywords:
-        books_1 = books_2 = \
-            Book.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
-        chapters_1 = chapters_2 = \
-            Chapter.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
-        articles_1 = articles_2 = \
-            Article.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
-    else:
-        books_1 = books_2 = Book.objects.all().prefetch_related('authors')
-        chapters_1 = chapters_2 = Chapter.objects.all().prefetch_related('authors')
-        articles_1 = articles_2 = Article.objects.all().prefetch_related('authors')
+    # keywords_text = '' if not is_keywords \
+    #     else f'<b>Zawęź wyszukiwanie do opisów należących do wybranych wyrażeń kluczowych:</b> ' \
+    #     f'{"; ".join(value for key, value in keywords_dict.items() if str(key) in keywords)}'
 
-    # # FIRST FORM: SEARCH BY TEXT AND CATEGORIES
+    # if is_categories:
+    #     books_1 = books_2 = \
+    #         Book.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
+    #     chapters_1 = chapters_2 = \
+    #         Chapter.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
+    #     articles_1 = articles_2 = \
+    #         Article.objects.all().filter(cat_lvl_3__id__in=categories).prefetch_related('authors').distinct()
+    # elif is_keywords:
+    #     books_1 = books_2 = \
+    #         Book.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
+    #     chapters_1 = chapters_2 = \
+    #         Chapter.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
+    #     articles_1 = articles_2 = \
+    #         Article.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
+    # else:
+    books_1 = Book.objects.all().prefetch_related('authors')
+    books_2 = Book.objects.all().prefetch_related('authors')
+    chapters_1 = Chapter.objects.all().prefetch_related('authors')
+    chapters_2 = Chapter.objects.all().prefetch_related('authors')
+    articles_1 = Article.objects.all().prefetch_related('authors')
+    articles_2 = Article.objects.all().prefetch_related('authors')
+
+    # # FIRST FORM: SEARCH BY TEXT
     if request.GET.get('button1'):
         if search1:
             is_searching = True
 
-            # CASE 1: search1 and search2 but no operator given:
-            if search1 and search2 and operator == 'none':
+            # CASE 1: search1 and search2 but no operator1 given:
+            if search1 and search2 and operator1 == 'none':
                 query_text = f'<b>Podano dwa warunki wyszukiwania, ale nie podano operatora logicznego.\n' \
-                    f'Wybierz operator logiczny, aby określić zależność między warunkami wyszukiwania.</b>'
+                    f'Wybierz operator1 logiczny, aby określić zależność między warunkami wyszukiwania.</b>'
 
-            # CASE 2: valid search = search1 not empty and (operator and search2 OR no operator and no search2):
-            elif search1 and operator != 'none' and not search2:
+            # CASE 2: valid search = search1 not empty and (operator1 and search2 OR no operator1 and no search2):
+            elif search1 and operator1 != 'none' and not search2:
                 query_text = f'<b>Podano jeden warunek wyszukiwania oraz operator logiczny, ' \
                     f'ale nie podano drugiego warunku.\n' \
                     f'Wybierając operator logiczny uzupełnij również drugi warunek wyszukiwania.</b>'
 
-            # CASE 3: valid search = search1 not empty and (operator and search2 are both either filled or empty):
+            # CASE 3: valid search = search1 not empty and (operator1 and search2 are both either filled or empty):
             elif search1:
                 is_valid_search = True
                 option1_text = option2_text = ''
@@ -125,12 +131,12 @@ def bibliography_search_view(request):
                     books_1 = books_1.filter(authors__last_name__icontains=search1)
                     chapters_1 = chapters_1.filter(authors__last_name__icontains=search1)
                     articles_1 = articles_1.filter(authors__last_name__icontains=search1)
-                    option1_text = 'Autor'
+                    option1_text = 'Imię/nazwisko autora'
                 elif option1 == 'editor':
                     books_1 = books_1.filter(editors__last_name__icontains=search1)
-                    chapters_1 = chapters_1.none()
-                    articles_1 = chapters_1.none()
-                    option1_text = 'Redaktor'
+                    chapters_1 = chapters_1.filter(editors__last_name__icontains=search1)
+                    articles_1 = articles_1.none()
+                    option1_text = 'Imię/nazwisko redaktora'
                 elif option1 == 'title':
                     books_1 = books_1.filter(title__icontains=search1)
                     chapters_1 = chapters_1.filter(title__icontains=search1)
@@ -142,8 +148,8 @@ def bibliography_search_view(request):
                     articles_1 = articles_1.filter(published_year__icontains=search1)
                     option1_text = 'Rok wydania'
 
-                # CASE 3.1: search1 and search2 and 'AND' operator:
-                if search1 and search2 and operator == 'and':
+                # CASE 3.1: search1 and search2 and 'AND' operator1:
+                if search1 and search2 and operator1 == 'and':
                     if option2 == 'all':
                         books_2 = books_1.filter(description__icontains=search2)
                         chapters_2 = chapters_1.filter(description__icontains=search2)
@@ -153,12 +159,12 @@ def bibliography_search_view(request):
                         books_2 = books_1.filter(authors__last_name__icontains=search2)
                         chapters_2 = chapters_1.filter(authors__last_name__icontains=search2)
                         articles_2 = articles_1.filter(authors__last_name__icontains=search2)
-                        option2_text = 'Autor'
+                        option2_text = 'Imię/nazwisko autora'
                     elif option1 == 'editor':
                         books_2 = books_1.filter(editors__last_name__icontains=search2)
-                        chapters_2 = chapters_1.none()
-                        articles_2 = chapters_1.none()
-                        option2_text = 'Redaktor'
+                        chapters_2 = chapters_1.filter(editors__last_name__icontains=search2)
+                        articles_2 = articles_1.none()
+                        option2_text = 'Imię/nazwisko redaktora'
                     elif option2 == 'title':
                         books_2 = books_1.filter(title__icontains=search2)
                         chapters_2 = chapters_1.filter(title__icontains=search2)
@@ -176,11 +182,10 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}".' \
-                        f'\n{categories_text}.'
+                        f'"{search1}" w polu "{option1_text}" ORAZ "{search2}" w polu "{option2_text}".'
 
-                # CASE 3.2: search1 and search2 and 'OR' operator:
-                elif search1 and search2 and operator == 'or':
+                # CASE 3.2: search1 and search2 and 'OR' operator1:
+                elif search1 and search2 and operator1 == 'or':
                     if option2 == 'all':
                         books_2 = books_2.filter(description__icontains=search2).union(books_1)
                         chapters_2 = chapters_2.filter(description__icontains=search2).union(chapters_1)
@@ -190,12 +195,12 @@ def bibliography_search_view(request):
                         books_2 = books_2.filter(authors__last_name__icontains=search2).union(books_1)
                         chapters_2 = chapters_2.filter(authors__last_name__icontains=search2).union(chapters_1)
                         articles_2 = articles_2.filter(authors__last_name__icontains=search2).union(articles_1)
-                        option2_text = 'Autor'
+                        option2_text = 'Imię/nazwisko autora'
                     elif option2 == 'editor':
                         books_2 = books_2.filter(editors__last_name__icontains=search2).union(books_1)
-                        chapters_2 = chapters_1.none()
-                        articles_2 = chapters_1.none()
-                        option2_text = 'Redaktor'
+                        chapters_2 = chapters_1.filter(editors__last_name__icontains=search2).union(chapters_1)
+                        articles_2 = articles_1         # is equal to: articles_1.none().union(articles_1)
+                        option2_text = 'Imię/nazwisko redaktora'
                     elif option2 == 'title':
                         books_2 = books_2.filter(title__icontains=search2).union(books_1)
                         chapters_2 = chapters_2.filter(title__icontains=search2).union(chapters_1)
@@ -213,11 +218,10 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'<b>Wyszukaj opisy spełniające co najmnniej jeden z dwóch warunków:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}".' \
-                        f'\n{categories_text}.'
+                        f'"{search1}" w polu "{option1_text}" LUB "{search2}" w polu "{option2_text}".'
 
-                # CASE 3.3: search1 and search2 and 'AND NOT' operator:
-                elif search1 and search2 and operator == 'not':
+                # CASE 3.3: search1 and search2 and 'AND NOT' operator1:
+                elif search1 and search2 and operator1 == 'not':
                     if option2 == 'all':
                         books_2 = books_1.exclude(description__icontains=search2)
                         chapters_2 = chapters_1.exclude(description__icontains=search2)
@@ -227,12 +231,12 @@ def bibliography_search_view(request):
                         books_2 = books_1.exclude(authors__last_name__icontains=search2)
                         chapters_2 = chapters_1.exclude(authors__last_name__icontains=search2)
                         articles_2 = articles_1.exclude(authors__last_name__icontains=search2)
-                        option2_text = 'Autor'
+                        option2_text = 'Imię/nazwisko autora'
                     elif option2 == 'editor':
                         books_2 = books_1.exclude(editors__last_name__icontains=search2)
-                        chapters_2 = chapters_1.none()
-                        articles_2 = chapters_1.none()
-                        option2_text = 'Redaktor'
+                        chapters_2 = chapters_1.exclude(editors__last_name__icontains=search2)
+                        articles_2 = articles_1       # is equal to articles_a.exclude()
+                        option2_text = 'Imię/nazwisko redaktora'
                     elif option2 == 'title':
                         books_2 = books_1.exclude(title__icontains=search2)
                         chapters_2 = chapters_1.exclude(title__icontains=search2)
@@ -250,23 +254,22 @@ def bibliography_search_view(request):
                     descriptions = books + chapters + articles
 
                     query_text = f'<b>Wyszukaj opisy spełniające oba warunki:</b> ' \
-                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}".' \
-                        f'\n{categories_text}.'
+                        f'"{search1}" w polu "{option1_text}" ORAZ BRAK "{search2}" w polu "{option2_text}".'
 
-                # CASE 3.4: search1 and not search2 and not operator:
+                # CASE 3.4: search1 and not search2 and not operator1:
                 else:
                     books = [obj for obj in books_1]
                     chapters = [obj for obj in chapters_1]
                     articles = [obj for obj in articles_1]
                     descriptions = books + chapters + articles
 
-                    query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}".' \
-                        f'\n{categories_text}.'
+                    query_text = f'<b>Wyszukaj opisy spełniające warunek:</b> "{search1}" w polu "{option1_text}".'
 
     # SECOND FORM: SEARCH BY KEYWORDS
     elif request.GET.get('button2'):
         is_searching = True
 
+        # TODO shape it like first tab search
         if not search3 and not is_keywords:
             query_text = f'<b>Nie wybrano żadnego wyrażenia kluczowego.</b>'
         else:
@@ -282,16 +285,15 @@ def bibliography_search_view(request):
                 articles = [obj for obj in articles_1]
                 descriptions = books + chapters + articles
 
-                query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".' \
-                    f'\n{keywords_text}.'
+                query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".'
 
-            elif not search3:
-                books = [obj for obj in books_1]
-                chapters = [obj for obj in chapters_1]
-                articles = [obj for obj in articles_1]
-                descriptions = books + chapters + articles
-
-                query_text = f'{keywords_text}.'
+            # elif not search3:
+            #     books = [obj for obj in books_1]
+            #     chapters = [obj for obj in chapters_1]
+            #     articles = [obj for obj in articles_1]
+            #     descriptions = books + chapters + articles
+            #
+            #     query_text = f'{keywords_text}.'
 
     # NO FORM BY FIRST RENDERING OF SEARCH PAGE
     else:
@@ -305,7 +307,7 @@ def bibliography_search_view(request):
         'categories3_dict': categories3_dict,
         'query_text': query_text,
         'keywords_dict': keywords_dict,
-        'is_tab_2': search3 or is_keywords,
+        'is_tab_2': search3, # TODO or search4
     }
     return render(request, 'bibliography/bibliography_search.html', context)
 
