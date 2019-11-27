@@ -148,68 +148,87 @@ p.operator {
 
 /* BIBLIOGRAPHY SEARCH TABS */
 
+div.search {
+        padding-top: 1px;
+}
 
 * {
-    margin: 0;
-    padding: 0;
+        margin: 0;
+        padding: 0;
 }
 
 .tabs {
-    width: 1200px;
-    display: block;
-    margin: 40px auto;
-    position: relative;
+        width: 1200px;
+        display: block;
+        margin: 40px auto;
+        position: relative;
 }
 
 .tabs .tab {
-    float: left;
-    display: block;
+        float: left;
+        display: block;
 }
 
 .tabs .tab>input[type="radio"] {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
 }
 
 .tabs .tab>label {
-    display: block;
-    padding: 6px 21px;
-    font-size: 12px;
-    cursor: pointer;
-    position: relative;
-    background: #303030;
-    color: #F5F5F5;
+        display: block;
+        padding: 6px 21px;
+        font-size: 12px;
+        cursor: pointer;
+        position: relative;
+        background: #303030;
+        color: #F5F5F5;
 }
 
 .tabs .content {
-    z-index: 0;/* or display: none; */
-    overflow: hidden;
-    width: 900px;
-    padding: 2px;
-    position: absolute;
-    top: 27px;
-    left: 0;
-    background: #303030;
-    opacity:0;
-    transition: opacity 400ms ease-out;
+        z-index: 0;/* or display: none; */
+        overflow: hidden;
+        width: 850px;
+        padding: 2px;
+        position: absolute;
+        top: 27px;
+        left: 0;
+        background: #303030;
+        opacity:0;
+        transition: opacity 400ms ease-out;
 }
 
 .tabs>.tab>[id^="tab"]:checked + label {
-    top: 0;
-
+        top: 0;
         color: #FFF;
-    background: #4A83FD;
+        background: #4A83FD;
 }
 
 .tabs>.tab>[id^="tab"]:checked ~ [id^="tab-content"] {
-    z-index: 1;/* or display: block; */
-    opacity: 1;
-    transition: opacity 400ms ease-out;
+        z-index: 1;/* or display: block; */
+        opacity: 1;
+        transition: opacity 400ms ease-out;
 }
 
-/* Added to avoid tab overlapping results: */
 
+/* OWN CUSTOMIZATION */
+
+/* Added to avoid tab overlapping results: */
 div.results {
         padding-top: 300px;
+}
+
+.row {
+        margin: 0px;
+}
+
+@media screen and (max-width: 800px) {
+        .column {
+        width: 100%;
+        }
+}
+
+div.middle {
+        padding-left: 10px;
+        padding-top: 27px;
 }
