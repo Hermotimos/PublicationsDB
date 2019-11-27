@@ -178,8 +178,8 @@ p.operator {
     font-size: 12px;
     cursor: pointer;
     position: relative;
-    color: #FFF;
-    background: #4A83FD;
+    background: #303030;
+    color: #F5F5F5;
 }
 
 .tabs .content {
@@ -197,8 +197,9 @@ p.operator {
 
 .tabs>.tab>[id^="tab"]:checked + label {
     top: 0;
-    background: #303030;
-    color: #F5F5F5;
+
+        color: #FFF;
+    background: #4A83FD;
 }
 
 .tabs>.tab>[id^="tab"]:checked ~ [id^="tab-content"] {
