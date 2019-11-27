@@ -94,12 +94,12 @@ def bibliography_search_view(request):
     #     articles_1 = articles_2 = \
     #         Article.objects.all().filter(keywords__id__in=keywords).prefetch_related('authors').distinct()
     # else:
-    books_1 = Book.objects.all().prefetch_related('authors')
-    books_2 = Book.objects.all().prefetch_related('authors')
-    chapters_1 = Chapter.objects.all().prefetch_related('authors')
-    chapters_2 = Chapter.objects.all().prefetch_related('authors')
-    articles_1 = Article.objects.all().prefetch_related('authors')
-    articles_2 = Article.objects.all().prefetch_related('authors')
+    books_1 = Book.objects.all()
+    books_2 = Book.objects.all()
+    chapters_1 = Chapter.objects.all()
+    chapters_2 = Chapter.objects.all()
+    articles_1 = Article.objects.all()
+    articles_2 = Article.objects.all()
 
     # # FIRST FORM: SEARCH BY TEXT
     if request.GET.get('button1'):
@@ -289,56 +289,56 @@ def bibliography_search_view(request):
             chapters_1 = chapters_1.filter(keywords__name=search3)
             articles_1 = articles_1.filter(keywords__name=search3)
 
-            # CASE 3.1: search3 and search4 and 'AND' operator2:
-            if search3 and search4 and operator2 == 'and':
-                books_2 = books_1.filter(keywords__name=search4)
-                chapters_2 = chapters_1.filter(keywords__name=search4)
-                articles_2 = articles_1.filter(keywords__name=search4)
+            # # CASE 3.1: search3 and search4 and 'AND' operator2:
+            # if search3 and search4 and operator2 == 'and':
+            #     books_2 = books_1.filter(keywords__name=search4)
+            #     chapters_2 = chapters_1.filter(keywords__name=search4)
+            #     articles_2 = articles_1.filter(keywords__name=search4)
+            #
+            #     books = [obj for obj in books_2]
+            #     chapters = [obj for obj in chapters_2]
+            #     articles = [obj for obj in articles_2]
+            #     descriptions = books + chapters + articles
+            #
+            #     query_text = f'<b>Wyszukaj opisy związane jednocześnie z dwoma wyrażeniami kluczowymi:</b> ' \
+            #         f'"{search3}" ORAZ "{search4}".'
+            #
+            # # CASE 3.2: search3 and search4 and 'OR' operator2:
+            # elif search3 and search4 and operator2 == 'or':
+            #     books_2 = books_2.filter(keywords__name=search4).union(books_1)
+            #     chapters_2 = chapters_2.filter(keywords__name=search4).union(chapters_1)
+            #     articles_2 = articles_2.filter(keywords__name=search4).union(articles_1)
+            #
+            #     books = [obj for obj in books_2]
+            #     chapters = [obj for obj in chapters_2]
+            #     articles = [obj for obj in articles_2]
+            #     descriptions = books + chapters + articles
+            #
+            #     query_text = f'<b>Wyszukaj opisy związane z jednym z dwóch wyrażeń kluczowych:</b> ' \
+            #         f'"{search3}" LUB "{search4}".'
+            #
+            # # CASE 3.3: search3 and search4 and 'AND NOT' operator2:
+            # elif search3 and search4 and operator2 == 'not':
+            #     books_2 = books_1.exclude(keywords__name=search4)
+            #     chapters_2 = chapters_1.exclude(keywords__name=search4)
+            #     articles_2 = articles_1.exclude(keywords__name=search4)
+            #
+            #     books = [obj for obj in books_2]
+            #     chapters = [obj for obj in chapters_2]
+            #     articles = [obj for obj in articles_2]
+            #     descriptions = books + chapters + articles
+            #
+            #     query_text = f'<b>Wyszukaj opisy związane związane z pierwszym wyrażeniem kluczowym, ' \
+            #         f'ale niezwiązane z drugim:</b> "{search3}" ORAZ "{search4}".'
 
-                books = [obj for obj in books_2]
-                chapters = [obj for obj in chapters_2]
-                articles = [obj for obj in articles_2]
-                descriptions = books + chapters + articles
+            # # CASE 3.4: search3 and not search4 and not operator2:
+            # else:
+            books = [obj for obj in books_1]
+            chapters = [obj for obj in chapters_1]
+            articles = [obj for obj in articles_1]
+            descriptions = books + chapters + articles
 
-                query_text = f'<b>Wyszukaj opisy związane jednocześnie z dwoma wyrażeniami kluczowymi:</b> ' \
-                    f'"{search3}" ORAZ "{search4}".'
-
-            # CASE 3.2: search3 and search4 and 'OR' operator2:
-            elif search3 and search4 and operator2 == 'or':
-                books_2 = books_2.filter(keywords__name=search4).union(books_1)
-                chapters_2 = chapters_2.filter(keywords__name=search4).union(chapters_1)
-                articles_2 = articles_2.filter(keywords__name=search4).union(articles_1)
-
-                books = [obj for obj in books_2]
-                chapters = [obj for obj in chapters_2]
-                articles = [obj for obj in articles_2]
-                descriptions = books + chapters + articles
-
-                query_text = f'<b>Wyszukaj opisy związane z jednym z dwóch wyrażeń kluczowych:</b> ' \
-                    f'"{search3}" LUB "{search4}".'
-
-            # CASE 3.3: search3 and search4 and 'AND NOT' operator2:
-            elif search3 and search4 and operator2 == 'not':
-                books_2 = books_1.exclude(keywords__name=search4)
-                chapters_2 = chapters_1.exclude(keywords__name=search4)
-                articles_2 = articles_1.exclude(keywords__name=search4)
-
-                books = [obj for obj in books_2]
-                chapters = [obj for obj in chapters_2]
-                articles = [obj for obj in articles_2]
-                descriptions = books + chapters + articles
-
-                query_text = f'<b>Wyszukaj opisy związane związane z pierwszym wyrażeniem kluczowym, ' \
-                    f'ale niezwiązane z drugim:</b> "{search3}" ORAZ "{search4}".'
-
-            # CASE 3.4: search3 and not search4 and not operator2:
-            else:
-                books = [obj for obj in books_1]
-                chapters = [obj for obj in chapters_1]
-                articles = [obj for obj in articles_1]
-                descriptions = books + chapters + articles
-
-                query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".'
+            query_text = f'<b>Wyszukaj opisy dla wyrażenia kluczowego:</b> "{search3}".'
 
     # NO FORM BY FIRST RENDERING OF SEARCH PAGE
     else:
