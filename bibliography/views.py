@@ -339,4 +339,4 @@ def bibliography_reload_view(request):
     for obj in Periodical.objects.all():
         obj.save()
 
-    return redirect('bibliography:main')
+    return redirect('bibliography:search')
