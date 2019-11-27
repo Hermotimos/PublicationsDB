@@ -26,7 +26,6 @@ class BookAdminForm(forms.ModelForm):
                                                          label='Miejsce/miejsca wydania')
     cat_lvl_3 = forms.ModelMultipleChoiceField(queryset=CategoryLevelThree.objects.all(),
                                                widget=FilteredSelectMultiple('Kategorie i podkategorie', False),
-                                               required=False,
                                                label='Kategorie i podkategorie')
     keywords = forms.ModelMultipleChoiceField(queryset=Keyword.objects.all(),
                                               widget=FilteredSelectMultiple('Wyrażenia kluczowe', False),
@@ -62,7 +61,6 @@ class ChapterAdminForm(forms.ModelForm):
                                                          label='Miejsce/miejsca wydania')
     cat_lvl_3 = forms.ModelMultipleChoiceField(queryset=CategoryLevelThree.objects.all(),
                                                widget=FilteredSelectMultiple('Kategorie i podkategorie', False),
-                                               required=False,
                                                label='Kategorie i podkategorie')
     keywords = forms.ModelMultipleChoiceField(queryset=Keyword.objects.all(),
                                               widget=FilteredSelectMultiple('Wyrażenia kluczowe', False),
@@ -89,7 +87,6 @@ class ArticleAdminForm(forms.ModelForm):
                                              label='Autor/Autorzy')
     cat_lvl_3 = forms.ModelMultipleChoiceField(queryset=CategoryLevelThree.objects.all(),
                                                widget=FilteredSelectMultiple('Kategorie i podkategorie', False),
-                                               required=False,
                                                label='Kategorie i podkategorie')
     keywords = forms.ModelMultipleChoiceField(queryset=Keyword.objects.all(),
                                               widget=FilteredSelectMultiple('Wyrażenia kluczowe', False),
