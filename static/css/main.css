@@ -143,8 +143,21 @@ p.operator {
         margin-bottom: 0px;
 }
 
+.table-bordered td, .table-bordered th {
+        border: 1px solid black;
+}
 
+.table-bordered thead {
+        background: #cccccc;
+}
 
+.fixed-table-loading {
+        display: none;
+}
+
+div.search {
+        padding-bottom: 5px;
+}
 
 /* BIBLIOGRAPHY SEARCH TABS */
 
