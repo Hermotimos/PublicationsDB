@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <br>
+    <h3>{{ page_title }}</h3>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Konto</th>
+                <th>Czynność</th>
+                <th>Rodzaj obiektu</th>
+                <th>Obiekt w formie po dodaniu/zmianie ALBO bezpośrednio przed usunięciem</th>
+            </tr>
+        </thead>
+        {% for l in logs %}
+        <tr>
+            <td class="p-1"><small>{{ l.action_time|date:'d-M-Y, H:i' }}</small></td>
+            <td class="p-1">{{ l.user }}</td>
+            <td class="p-1">
+                {% if l.action_flag == 1 %}
+                    <small>DODANO</small>
+                {% elif l.action_flag == 2 %}
+                    <small>ZMIENIONO</small>
+                {% elif l.action_flag == 3 %}
+                    <small>USUNIĘTO</small>
+                {% endif %}
+            </td>
+            <td class="p-1">{{ content_types_dict|dict_lookup:l.content_type_id }}</td>
+            <td class="p-1">{{ l.object_repr }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    <br>
+{% endblock content %}

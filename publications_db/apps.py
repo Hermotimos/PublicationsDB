@@ -1,6 +1,11 @@
+from activity_log.apps import ActivityLogConfig
 from categories.apps import CategoriesConfig
 from bibliography.apps import BibliographyConfig
 from description_elements.apps import DescriptionElementsConfig
+
+
+class DziennikAktywnosciConfig(ActivityLogConfig):
+    verbose_name = 'III. Kategorie'
 
 
 class KategorieConfig(CategoriesConfig):
