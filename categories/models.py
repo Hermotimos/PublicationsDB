@@ -2,7 +2,7 @@ from django.db import models
 
 
 class CategoryLevelOne(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Kategoria poz. 1 (max. 80 znaków)', unique=True)
+    name = models.CharField(max_length=50, verbose_name='Kategoria poz. 1 (max. 50 znaków)', unique=True)
 
     class Meta:
         verbose_name = 'Kategoria poz. 1'
@@ -30,7 +30,7 @@ class CategoryLevelTwo(models.Model):
                                   related_name='categories2',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 1')
-    name = models.CharField(max_length=255, default='---', verbose_name='Kategoria poz. 2 (max. 80 znaków)')
+    name = models.CharField(max_length=100, default='---', verbose_name='Kategoria poz. 2 (max. 100 znaków)')
     formatted_name = models.CharField(max_length=255, default='---', verbose_name='Kategoria poz. 2 pełna nazwa')
 
     class Meta:
@@ -69,7 +69,7 @@ class CategoryLevelThree(models.Model):
                                   related_name='categories3',
                                   on_delete=models.CASCADE,
                                   verbose_name='Kategoria poz. 2')
-    name = models.CharField(max_length=255, default='---', verbose_name='Kategoria poz. 3 (max. 95 znaków)')
+    name = models.CharField(max_length=105, default='---', verbose_name='Kategoria poz. 3 (max. 105 znaków)')
     formatted_name = models.CharField(max_length=255, default='---', verbose_name='Kategoria poz. 3 pełna nazwa')
 
     class Meta:
