@@ -29,13 +29,13 @@ def bibliography_index_view(request):
         index[cat1] = {
             cat2: {
                 cat3: [
-                    unit for unit in sorted(
+                    result for result in sorted(
                         list(cat3.books.all())
                         + list(cat3.chapters.all())
                         + list(cat3.articles.all()),
-                        key=lambda desc: replace_special_chars(desc.sorting_name))
-                ] for cat3 in cat2.categories3.all().prefetch_related('books', 'chapters', 'articles')
-            } for cat2 in cat1.categories2.all()
+                        key=lambda result: replace_special_chars(result.sorting_name))
+                ] for cat3 in cat2.categories3.all()
+            } for cat2 in cat1.categories2.all().prefetch_related('categories3')
         }
 
     context = {
