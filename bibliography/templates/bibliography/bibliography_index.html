@@ -38,14 +38,13 @@
                                     </div>
                                 </div>
                                 
-                            <!--  IF NO COLLAPSIBLE AT LVL 3  -->
+                            <!--  COLLAPSIBLE LVL 2 IF NO COLLAPSIBLE AT LVL 3  -->
                             {% else %}
                                 <ul>
                                 {% for result in index|dict_lookup:cat1|dict_lookup:cat2|dict_lookup:cat3 %}
                                     <li class="description-2">
                                         {{ result.description|safe }}
                                         {% if result.annotation %}
-                                            <!-- forloop.counter|add:'1000000' to avoid duplicate ids in document -->
                                             <b class="blue" data-toggle="collapse" data-target="#{{ cat3 }}_{{ result.id }}">UWAGI</b>
                                             <div id="{{ cat3 }}_{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                         {% endif %}
@@ -59,7 +58,7 @@
                         {% if index|dict_lookup:cat1|dict_lookup:cat2|length > 1 %}<br>{% endif %}
                     </div>
                     
-                <!--  IF NO COLLAPSIBLE AT LVL 2  -->
+                <!--  COLLAPSIBLE LVL 1 IF NO COLLAPSIBLE AT LVL 2  -->
                 {% else %}
                     {% for cat3 in index|dict_lookup:cat1|dict_lookup:cat2 %}
                         {% if cat3.name != '---' %}<h6><b>{{ cat3.name }}</b></h6>{% endif %}
@@ -68,7 +67,6 @@
                                 <li class="description-1">
                                     {{ result.description|safe }}
                                     {% if result.annotation %}
-                                        <!-- forloop.counter|add:'-1000000' to avoid duplicate ids in document -->
                                         <b class="blue" data-toggle="collapse" data-target="#{{ cat3 }}_{{ result.id }}">UWAGI</b>
                                         <div id="{{ cat3 }}_{{ result.id }}" class="panel-collapse collapse"><small>[{{ result.annotation }}]</small></div>
                                     {% endif %}
