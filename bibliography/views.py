@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from bibliography.models import Book, Chapter, Article
@@ -326,6 +327,7 @@ def bibliography_search_view(request):
     return render(request, 'bibliography/bibliography_search.html', context)
 
 
+@login_required
 def bibliography_reload_view(request):
     for obj in Book.objects.all():
         obj.save()
