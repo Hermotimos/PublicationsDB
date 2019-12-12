@@ -40,7 +40,7 @@
                         <small>INNA AKCJA</small>
                     {% endif %}
                 </td>
-                <td class="p-1">{{ l.object_repr }}</td>
+                <td class="p-1">{{ l.object_repr|safe }}</td>
                 <td class="p-1">{{ content_types_dict|dict_lookup:l.content_type_id }}</td>
             </tr>
             {% endfor %}
