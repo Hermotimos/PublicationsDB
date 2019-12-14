@@ -24,24 +24,24 @@ def bibliography_full_view(request):
 
 @query_debugger
 def bibliography_index_view(request):
-    cat1_qs = CategoryLevelOne.objects.all().prefetch_related('categories2')
+    categories1 = CategoryLevelOne.objects.all().prefetch_related('categories2__categories3')
+    categories3 = CategoryLevelThree.objects.all().prefetch_related('books', 'chapters', 'articles')
     index = {}
-    for cat1 in cat1_qs:
-        index[cat1] = {
-            cat2: {
-                cat3: [
-                    result for result in sorted(
-                        list(cat3.books.all())
-                        + list(cat3.chapters.all())
-                        + list(cat3.articles.all()),
-                        key=lambda result: replace_special_chars(result.sorting_name))
-                ] for cat3 in cat2.categories3.all()
-            } for cat2 in cat1.categories2.all().prefetch_related('categories3')
-        }
+
+    for cat3 in categories3:
+        index[cat3] = [
+            result for result in sorted(
+                list(cat3.books.all())
+                + list(cat3.chapters.all())
+                + list(cat3.articles.all()),
+                key=lambda result: replace_special_chars(result.sorting_name))
+        ]
 
     context = {
         'page_title': 'Indeks tematyczny',
         'index': index,
+        'categories1': categories1,
+
     }
     return render(request, 'bibliography/bibliography_index.html', context)
 
