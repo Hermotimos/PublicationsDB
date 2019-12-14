@@ -327,6 +327,7 @@ def bibliography_search_view(request):
     return render(request, 'bibliography/bibliography_search.html', context)
 
 
+@query_debugger
 @login_required
 def bibliography_reload_view(request):
     for obj in Book.objects.all():
