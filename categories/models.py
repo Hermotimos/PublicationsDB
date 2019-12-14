@@ -17,7 +17,6 @@ class CategoryLevelOne(models.Model):
 
     def save(self, *args, **kwargs):
         super(CategoryLevelOne, self).save(*args, **kwargs)
-
         subcategories = self.categories2.all()
 
         if subcategories.count() == 0:
