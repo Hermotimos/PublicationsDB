@@ -337,6 +337,8 @@ def bibliography_reload_view(request):
     for obj in Article.objects.all():
         obj.save()
 
+    for obj in CategoryLevelOne.objects.all():
+        obj.save()
     for obj in CategoryLevelTwo.objects.all():
         obj.save()
     for obj in CategoryLevelThree.objects.all():
