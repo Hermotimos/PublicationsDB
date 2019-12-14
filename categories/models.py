@@ -97,8 +97,8 @@ class CategoryLevelThree(models.Model):
 
 def create_keyword(sender, instance, **kwargs):
     if instance.cat_lvl_2.cat_lvl_1.name == 'Ludzie KUL':
-        new_kewyword = Keyword(name=instance.name)
-        new_kewyword.save()
+        new_keyword = Keyword(name=instance.name)
+        new_keyword.save()
 
 
 post_save.connect(create_keyword, sender=CategoryLevelThree)
