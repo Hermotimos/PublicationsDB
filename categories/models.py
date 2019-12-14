@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models.signals import post_save
+
+from description_elements.models import Keyword
 
 
 class CategoryLevelOne(models.Model):
@@ -91,3 +94,12 @@ class CategoryLevelThree(models.Model):
             for cat3 in self.cat_lvl_2.categories3.all():
                 if cat3.name == '---':
                     cat3.delete()
+
+
+def create_keyword(sender, instance, **kwargs):
+    if instance.cat_lvl_2.cat_lvl_1.name == 'Ludzie KUL':
+        new_kewyword = Keyword(name=instance.name)
+        new_kewyword.save()
+
+
+post_save.connect(create_keyword, sender=CategoryLevelThree)
