@@ -61,17 +61,15 @@ class Book(models.Model):
         elif self.published_locations.all().count() > 1:
             locations = f', {"-".join(str(l) for l in self.published_locations.all())}'
         else:
-            locations = ''
+            locations = ', [b.m.]'
 
-        if self.published_year and self.published_locations.all().count() > 0:
+        if self.published_year:
             year = f' {self.published_year}'
-        elif self.published_year and self.published_locations.all().count() == 0:
-            year = f', {self.published_year}'
         elif not self.published_year and self.published_locations.all().count() > 0:
             year = ' [b.r.]'
         else:
             # i.e.: not self.published_year and self.published_locations.all().count() == 0:
-            year = ', [b.m.], [b.r.]'
+            year = ', [b.r.]'
 
         description = f'{authors}{title}' \
             f'{editors_abbrev}{editors}{translators_abbrev}{translators}' \
@@ -142,17 +140,15 @@ class Chapter(models.Model):
         elif self.published_locations.all().count() > 1:
             locations = f', {"-".join(str(l) for l in self.published_locations.all())}'
         else:
-            locations = ''
+            locations = ', [b.m.]'
 
-        if self.published_year and self.published_locations.all().count() > 0:
+        if self.published_year:
             year = f' {self.published_year}'
-        elif self.published_year and self.published_locations.all().count() == 0:
-            year = f', {self.published_year}'
         elif not self.published_year and self.published_locations.all().count() > 0:
             year = ' [b.r.]'
         else:
             # i.e.: not self.published_year and self.published_locations.all().count() == 0:
-            year = ', [b.m.], [b.r.]'
+            year = ', [b.r.]'
 
         # PART 2: elements considering encompassing bibliographic unit:
         unit = self.encompassing_bibliographic_unit
