@@ -131,7 +131,8 @@ class EncompassingBibliographicUnit(models.Model):
                                     blank=True, null=True)
 
     def __str__(self):
-        authors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.authors.all()) if self.authors.all() else ''
+        authors = ', '.join(f'{a.first_names} {a.last_name}' for a in self.authors.all()) if self.authors.all() else ''
+
         translators = f', {", ".join(str(t) for t in self.translators.all())}' if self.translators.all() else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
