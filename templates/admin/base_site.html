@@ -8,10 +8,12 @@
 <h1 id="site-name">
     <a href="{% url 'admin:index' %}">Panel administracyjny</a>
     &emsp;
-    <small>
-        <a href="{% url 'activity_log:log' %}">Dziennik aktywności</a>&emsp;
-        <a href="{% url 'bibliography:reload' %}">Przeładuj stronę</a>&emsp;
-    </small>
+    {% if user.is_authenticated %}
+        <small>
+            <a href="{% url 'activity_log:log' %}">Dziennik aktywności</a>&emsp;
+            <a href="{% url 'bibliography:reload' %}">Przeładuj stronę</a>&emsp;
+        </small>
+    {% endif %}
 </h1>
 {% endblock %}
 
