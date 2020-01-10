@@ -33,7 +33,7 @@ class Translator(models.Model):
                                     blank=True, null=True)
 
     def __str__(self):
-        return f'{self.last_name} {self.first_names}'
+        return f'{self.last_name} {self.first_names}' if self.first_names else self.last_name
 
     def save(self, *args, **kwargs):
         super(Translator, self).save(*args, **kwargs)

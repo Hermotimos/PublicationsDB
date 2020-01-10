@@ -41,9 +41,13 @@ class Book(models.Model):
                                    blank=True, null=True)
 
     def __str__(self):
-        authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
-        editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
-        translators = ', '.join(f' {a.first_names} {a.last_name}' for a in self.translators.all()) if self.translators.all() else ''
+        authors = ', '.join(f'{a.last_name}{" " if a.first_names else ""}{a.first_names if a.first_names else ""}'
+                            for a in self.authors.all()) if self.authors.all() else ''
+
+        editors = ', '.join(f' {a.first_names if a.first_names else ""}{" " if a.first_names else ""}{a.last_name}'
+                            for a in self.editors.all()) if self.editors.all() else ''
+        translators = ', '.join(f' {a.first_names if a.first_names else ""}{" " if a.first_names else ""}{a.last_name}'
+                                for a in self.translators.all()) if self.translators.all() else ''
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
         translators_abbrev = f', {self.translators_abbrev}' if self.translators_abbrev else ''
 
@@ -122,8 +126,10 @@ class Chapter(models.Model):
 
     def __str__(self):
         # PART 1: elements considering bibliographic unit being part of a book:
-        authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
-        editors = ', '.join(f' {a.first_names} {a.last_name}' for a in self.editors.all()) if self.editors.all() else ''
+        authors = ', '.join(f'{a.last_name}{" " if a.first_names else ""}{a.first_names if a.first_names else ""}'
+                            for a in self.authors.all()) if self.authors.all() else ''
+        editors = ', '.join(f' {a.first_names if a.first_names else ""}{" " if a.first_names else ""}{a.last_name}'
+                            for a in self.editors.all()) if self.editors.all() else ''
         editors_abbrev = f', {self.editors_abbrev}' if self.editors_abbrev else ''
 
         if self.title and self.authors.all().count() > 0:
@@ -152,7 +158,8 @@ class Chapter(models.Model):
 
         # PART 2: elements considering encompassing bibliographic unit:
         unit = self.encompassing_bibliographic_unit
-        u_authors = ', '.join(f' {a.first_names} {a.last_name}' for a in unit.authors.all()) if unit.authors.all() else ''
+        u_authors = ', '.join(f' {a.first_names if a.first_names else ""}{" " if a.first_names else ""}{a.last_name}'
+                              for a in unit.authors.all()) if unit.authors.all() else ''
         u_translators = f' {", ".join(str(t) for t in unit.translators.all())}' if unit.translators.all() else ''
         u_translators_abbrev = f', {unit.translators_abbrev}' if unit.translators_abbrev else ''
 
@@ -204,7 +211,8 @@ class Article(models.Model):
                                       blank=True, null=True)
 
     def __str__(self):
-        authors = ', '.join(f'{a.last_name} {a.first_names}' for a in self.authors.all()) if self.authors.all() else ''
+        authors = ', '.join(f'{a.last_name}{" " if a.first_names else ""}{a.first_names if a.first_names else ""}'
+                            for a in self.authors.all()) if self.authors.all() else ''
 
         if self.title and self.authors.all().count() > 0:
             title = f', <i>{self.title}</i>'
