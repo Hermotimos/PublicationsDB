@@ -5,7 +5,7 @@ from description_elements.apps import DescriptionElementsConfig
 
 
 class DziennikAktywnosciConfig(ActivityLogConfig):
-    verbose_name = 'III. Kategorie'
+    verbose_name = 'Dziennik aktywności'
 
 
 class KategorieConfig(CategoriesConfig):
