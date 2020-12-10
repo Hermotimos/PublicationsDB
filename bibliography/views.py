@@ -55,15 +55,28 @@ def bibliography_search_view(request):
 
     # text search
     search1 = request.GET.get('search1')
+    search1 = search1.strip() if search1 else None
+    if search1 and search1[0] == search1[-1] == '"':
+        search1 = search1[1:-1]
     option1 = request.GET.get('option1')
+    
     operator1 = request.GET.get('operator1')
+    
     search2 = request.GET.get('search2')
+    search2 = search2.strip() if search2 else None
+    if search2 and search2[0] == search2[-1] == '"':
+        search2 = search2[1:-1]
     option2 = request.GET.get('option2')
 
     # keywords search
     search3 = request.GET.get('search3')
+    search3 = search3.strip() if search3 else None
+    
     operator2 = request.GET.get('operator2')
+    
     search4 = request.GET.get('search4')
+    search4 = search4.strip() if search4 else None
+
 
     books_1 = Book.objects.all()
     books_2 = Book.objects.all()
