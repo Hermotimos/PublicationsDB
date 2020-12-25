@@ -56,7 +56,7 @@ def bibliography_search_view(request):
     # text search
     search1 = request.GET.get('search1')
     search1 = search1.strip() if search1 else None
-    if search1 and search1[0] == search1[-1] == '"':
+    if search1 and search1[0] == search1[-1] and search1[0] in ['"', '\'']:
         search1 = search1[1:-1]
     option1 = request.GET.get('option1')
     
@@ -64,7 +64,7 @@ def bibliography_search_view(request):
     
     search2 = request.GET.get('search2')
     search2 = search2.strip() if search2 else None
-    if search2 and search2[0] == search2[-1] == '"':
+    if search2 and search2[0] == search2[-1] and search2[0] in ['"', '\'']:
         search2 = search2[1:-1]
     option2 = request.GET.get('option2')
 
